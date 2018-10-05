@@ -1,0 +1,599 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1F60C3622168232C00580C99 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3612168232C00580C99 /* AppDelegate.swift */; };
+		1F60C3642168232C00580C99 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3632168232C00580C99 /* ViewController.swift */; };
+		1F60C3672168232C00580C99 /* Gomoku_Zero.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3652168232C00580C99 /* Gomoku_Zero.xcdatamodeld */; };
+		1F60C3692168232D00580C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F60C3682168232D00580C99 /* Assets.xcassets */; };
+		1F60C36C2168232D00580C99 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F60C36A2168232D00580C99 /* Main.storyboard */; };
+		1F60C3782168232E00580C99 /* Gomoku_ZeroTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3772168232E00580C99 /* Gomoku_ZeroTests.swift */; };
+		1F60C3832168232E00580C99 /* Gomoku_ZeroUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3822168232E00580C99 /* Gomoku_ZeroUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1F60C3742168232E00580C99 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1F60C3562168232C00580C99 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1F60C35D2168232C00580C99;
+			remoteInfo = "Gomoku Zero";
+		};
+		1F60C37F2168232E00580C99 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1F60C3562168232C00580C99 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1F60C35D2168232C00580C99;
+			remoteInfo = "Gomoku Zero";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1F60C35E2168232C00580C99 /* Gomoku Zero.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Gomoku Zero.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F60C3612168232C00580C99 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1F60C3632168232C00580C99 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		1F60C3662168232C00580C99 /* Gomoku_Zero.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Gomoku_Zero.xcdatamodel; sourceTree = "<group>"; };
+		1F60C3682168232D00580C99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1F60C36B2168232D00580C99 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1F60C36D2168232E00580C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1F60C36E2168232E00580C99 /* Gomoku_Zero.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Gomoku_Zero.entitlements; sourceTree = "<group>"; };
+		1F60C3732168232E00580C99 /* Gomoku ZeroTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Gomoku ZeroTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F60C3772168232E00580C99 /* Gomoku_ZeroTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gomoku_ZeroTests.swift; sourceTree = "<group>"; };
+		1F60C3792168232E00580C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1F60C37E2168232E00580C99 /* Gomoku ZeroUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Gomoku ZeroUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F60C3822168232E00580C99 /* Gomoku_ZeroUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gomoku_ZeroUITests.swift; sourceTree = "<group>"; };
+		1F60C3842168232E00580C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1F60C35B2168232C00580C99 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1F60C3702168232E00580C99 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1F60C37B2168232E00580C99 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1F60C3552168232C00580C99 = {
+			isa = PBXGroup;
+			children = (
+				1F60C3602168232C00580C99 /* Gomoku Zero */,
+				1F60C3762168232E00580C99 /* Gomoku ZeroTests */,
+				1F60C3812168232E00580C99 /* Gomoku ZeroUITests */,
+				1F60C35F2168232C00580C99 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1F60C35F2168232C00580C99 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1F60C35E2168232C00580C99 /* Gomoku Zero.app */,
+				1F60C3732168232E00580C99 /* Gomoku ZeroTests.xctest */,
+				1F60C37E2168232E00580C99 /* Gomoku ZeroUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1F60C3602168232C00580C99 /* Gomoku Zero */ = {
+			isa = PBXGroup;
+			children = (
+				1F60C3612168232C00580C99 /* AppDelegate.swift */,
+				1F60C3632168232C00580C99 /* ViewController.swift */,
+				1F60C3682168232D00580C99 /* Assets.xcassets */,
+				1F60C36A2168232D00580C99 /* Main.storyboard */,
+				1F60C36D2168232E00580C99 /* Info.plist */,
+				1F60C36E2168232E00580C99 /* Gomoku_Zero.entitlements */,
+				1F60C3652168232C00580C99 /* Gomoku_Zero.xcdatamodeld */,
+			);
+			path = "Gomoku Zero";
+			sourceTree = "<group>";
+		};
+		1F60C3762168232E00580C99 /* Gomoku ZeroTests */ = {
+			isa = PBXGroup;
+			children = (
+				1F60C3772168232E00580C99 /* Gomoku_ZeroTests.swift */,
+				1F60C3792168232E00580C99 /* Info.plist */,
+			);
+			path = "Gomoku ZeroTests";
+			sourceTree = "<group>";
+		};
+		1F60C3812168232E00580C99 /* Gomoku ZeroUITests */ = {
+			isa = PBXGroup;
+			children = (
+				1F60C3822168232E00580C99 /* Gomoku_ZeroUITests.swift */,
+				1F60C3842168232E00580C99 /* Info.plist */,
+			);
+			path = "Gomoku ZeroUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1F60C35D2168232C00580C99 /* Gomoku Zero */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1F60C3872168232E00580C99 /* Build configuration list for PBXNativeTarget "Gomoku Zero" */;
+			buildPhases = (
+				1F60C35A2168232C00580C99 /* Sources */,
+				1F60C35B2168232C00580C99 /* Frameworks */,
+				1F60C35C2168232C00580C99 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Gomoku Zero";
+			productName = "Gomoku Zero";
+			productReference = 1F60C35E2168232C00580C99 /* Gomoku Zero.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1F60C3722168232E00580C99 /* Gomoku ZeroTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1F60C38A2168232E00580C99 /* Build configuration list for PBXNativeTarget "Gomoku ZeroTests" */;
+			buildPhases = (
+				1F60C36F2168232E00580C99 /* Sources */,
+				1F60C3702168232E00580C99 /* Frameworks */,
+				1F60C3712168232E00580C99 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1F60C3752168232E00580C99 /* PBXTargetDependency */,
+			);
+			name = "Gomoku ZeroTests";
+			productName = "Gomoku ZeroTests";
+			productReference = 1F60C3732168232E00580C99 /* Gomoku ZeroTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		1F60C37D2168232E00580C99 /* Gomoku ZeroUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1F60C38D2168232E00580C99 /* Build configuration list for PBXNativeTarget "Gomoku ZeroUITests" */;
+			buildPhases = (
+				1F60C37A2168232E00580C99 /* Sources */,
+				1F60C37B2168232E00580C99 /* Frameworks */,
+				1F60C37C2168232E00580C99 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1F60C3802168232E00580C99 /* PBXTargetDependency */,
+			);
+			name = "Gomoku ZeroUITests";
+			productName = "Gomoku ZeroUITests";
+			productReference = 1F60C37E2168232E00580C99 /* Gomoku ZeroUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1F60C3562168232C00580C99 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1000;
+				LastUpgradeCheck = 1000;
+				ORGANIZATIONNAME = "Jiachen Ren";
+				TargetAttributes = {
+					1F60C35D2168232C00580C99 = {
+						CreatedOnToolsVersion = 10.0;
+					};
+					1F60C3722168232E00580C99 = {
+						CreatedOnToolsVersion = 10.0;
+						TestTargetID = 1F60C35D2168232C00580C99;
+					};
+					1F60C37D2168232E00580C99 = {
+						CreatedOnToolsVersion = 10.0;
+						TestTargetID = 1F60C35D2168232C00580C99;
+					};
+				};
+			};
+			buildConfigurationList = 1F60C3592168232C00580C99 /* Build configuration list for PBXProject "Gomoku Zero" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1F60C3552168232C00580C99;
+			productRefGroup = 1F60C35F2168232C00580C99 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1F60C35D2168232C00580C99 /* Gomoku Zero */,
+				1F60C3722168232E00580C99 /* Gomoku ZeroTests */,
+				1F60C37D2168232E00580C99 /* Gomoku ZeroUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1F60C35C2168232C00580C99 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F60C3692168232D00580C99 /* Assets.xcassets in Resources */,
+				1F60C36C2168232D00580C99 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1F60C3712168232E00580C99 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1F60C37C2168232E00580C99 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1F60C35A2168232C00580C99 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F60C3642168232C00580C99 /* ViewController.swift in Sources */,
+				1F60C3622168232C00580C99 /* AppDelegate.swift in Sources */,
+				1F60C3672168232C00580C99 /* Gomoku_Zero.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1F60C36F2168232E00580C99 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F60C3782168232E00580C99 /* Gomoku_ZeroTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1F60C37A2168232E00580C99 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F60C3832168232E00580C99 /* Gomoku_ZeroUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1F60C3752168232E00580C99 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1F60C35D2168232C00580C99 /* Gomoku Zero */;
+			targetProxy = 1F60C3742168232E00580C99 /* PBXContainerItemProxy */;
+		};
+		1F60C3802168232E00580C99 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1F60C35D2168232C00580C99 /* Gomoku Zero */;
+			targetProxy = 1F60C37F2168232E00580C99 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		1F60C36A2168232D00580C99 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1F60C36B2168232D00580C99 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1F60C3852168232E00580C99 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1F60C3862168232E00580C99 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		1F60C3882168232E00580C99 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Gomoku Zero/Gomoku_Zero.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				INFOPLIST_FILE = "Gomoku Zero/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jiachenren.Gomoku-Zero";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Debug;
+		};
+		1F60C3892168232E00580C99 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Gomoku Zero/Gomoku_Zero.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				INFOPLIST_FILE = "Gomoku Zero/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jiachenren.Gomoku-Zero";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
+		1F60C38B2168232E00580C99 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				INFOPLIST_FILE = "Gomoku ZeroTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jiachenren.Gomoku-ZeroTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Gomoku Zero.app/Contents/MacOS/Gomoku Zero";
+			};
+			name = Debug;
+		};
+		1F60C38C2168232E00580C99 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				INFOPLIST_FILE = "Gomoku ZeroTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jiachenren.Gomoku-ZeroTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Gomoku Zero.app/Contents/MacOS/Gomoku Zero";
+			};
+			name = Release;
+		};
+		1F60C38E2168232E00580C99 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				INFOPLIST_FILE = "Gomoku ZeroUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jiachenren.Gomoku-ZeroUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TEST_TARGET_NAME = "Gomoku Zero";
+			};
+			name = Debug;
+		};
+		1F60C38F2168232E00580C99 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				INFOPLIST_FILE = "Gomoku ZeroUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jiachenren.Gomoku-ZeroUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TEST_TARGET_NAME = "Gomoku Zero";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1F60C3592168232C00580C99 /* Build configuration list for PBXProject "Gomoku Zero" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1F60C3852168232E00580C99 /* Debug */,
+				1F60C3862168232E00580C99 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1F60C3872168232E00580C99 /* Build configuration list for PBXNativeTarget "Gomoku Zero" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1F60C3882168232E00580C99 /* Debug */,
+				1F60C3892168232E00580C99 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1F60C38A2168232E00580C99 /* Build configuration list for PBXNativeTarget "Gomoku ZeroTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1F60C38B2168232E00580C99 /* Debug */,
+				1F60C38C2168232E00580C99 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1F60C38D2168232E00580C99 /* Build configuration list for PBXNativeTarget "Gomoku ZeroUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1F60C38E2168232E00580C99 /* Debug */,
+				1F60C38F2168232E00580C99 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		1F60C3652168232C00580C99 /* Gomoku_Zero.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				1F60C3662168232C00580C99 /* Gomoku_Zero.xcdatamodel */,
+			);
+			currentVersion = 1F60C3662168232C00580C99 /* Gomoku_Zero.xcdatamodel */;
+			path = Gomoku_Zero.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 1F60C3562168232C00580C99 /* Project object */;
+}
