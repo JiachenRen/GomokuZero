@@ -23,7 +23,6 @@ class History {
     func push(_ co: Coordinate) {
         stack.append(co)
         reverted = [Coordinate]() // Clear the history that's been overwritten
-        print(stack)
     }
     
     /**

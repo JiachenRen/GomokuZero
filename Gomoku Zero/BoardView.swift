@@ -73,7 +73,7 @@ public typealias Coordinate = (col: Int, row: Int)
     
     var pendingPieceCo: Coordinate?
     var shouldDrawPendingPiece = true
-    var pendingPieceRect: CGRect {
+    func rect(at: Coordinate) -> CGRect {
         return CGRect(center: onScreen(pendingPieceCo!),
                       size: CGSize(width: pieceRadius * 2, height: pieceRadius * 2))
     }
@@ -89,10 +89,6 @@ public typealias Coordinate = (col: Int, row: Int)
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         self.wantsLayer = true
-        // Drawing code here.
-        
-        
-        
         
         // Draw background wooden texture of the board
 //        boardBackground?.draw(in: dirtyRect)
@@ -107,26 +103,21 @@ public typealias Coordinate = (col: Int, row: Int)
         NSColor.black.withAlphaComponent(0.5).setStroke()
         pathForGrid().stroke()
         
-        // Draw vertices
         drawVertices()
         
         drawPieces()
         
-        if let _ = pendingPieceCo {
-            if mouseInScope && shouldDrawPendingPiece {
-                drawPendingPiece()
-            }
-        }
-        
-        
+        drawPendingPiece()
     }
     
+    /**
+     Convert the absolute position of the mouse to relative coordinate within the bounds
+     - Returns: position of the mouse within bounds
+     */
     private func relPos(evt: NSEvent) -> CGPoint {
         let absPos = evt.locationInWindow
         return CGPoint(x: absPos.x - frame.minX, y: absPos.y - frame.minY)
     }
-    
-    
     
     override func mouseUp(with event: NSEvent) {
         let pos = relPos(evt: event)
@@ -139,22 +130,33 @@ public typealias Coordinate = (col: Int, row: Int)
     
     override func mouseEntered(with event: NSEvent) {
         mouseInScope = true
-        if shouldDrawPendingPiece && pendingPieceCo != nil {
-            setNeedsDisplay(pendingPieceRect) // Optimization
+        if let co = pendingPieceCo, shouldDrawPendingPiece {
+            setNeedsDisplay(rect(at: co)) // Optimization
         }
     }
     
     override func mouseExited(with event: NSEvent) {
         mouseInScope = false
-        if shouldDrawPendingPiece && pendingPieceCo != nil {
-            setNeedsDisplay(pendingPieceRect)
+        if let co = pendingPieceCo, shouldDrawPendingPiece {
+            setNeedsDisplay(rect(at: co)) // Optimization
         }
     }
     
+    /**
+     When the cursor moves within the active board area, erase the old pending move indicator
+     and draw a new one at the new coordinate.
+     */
     override func mouseMoved(with event: NSEvent) {
-        pendingPieceCo = onBoard(relPos(evt: event))
+        let curCo = onBoard(relPos(evt: event))
         if shouldDrawPendingPiece {
-            setNeedsDisplay(bounds) // Might not be the most efficient way
+            if let co = pendingPieceCo {
+                setNeedsDisplay(rect(at: co)) // Erase old pending piece
+                if curCo != co {
+                    // Draw pending piece at new coordinate
+                    setNeedsDisplay(rect(at: curCo))
+                }
+            }
+            pendingPieceCo = curCo // Update pending coordinate
         }
     }
     
@@ -171,17 +173,25 @@ public typealias Coordinate = (col: Int, row: Int)
         self.addTrackingArea(trackingArea)
     }
     
+    /**
+     Draw a half transparent piece at the coordinate that the mouse is hovering over
+     */
     func drawPendingPiece() {
-        if mouseInScope && (pieces == nil || pieces![pendingPieceCo!.row][pendingPieceCo!.col] == .none) {
-            let rect = pendingPieceRect
-            if board.curPlayer == .black {
-                blackWithAlpha?.draw(in: rect)
-            } else {
-                whiteWithAlpha?.draw(in: rect)
+        if let co = pendingPieceCo, mouseInScope {
+            if pieces == nil || pieces![co.row][co.col] == .none { // If the coordinate is not occupied
+                let rect = self.rect(at: co)
+                if board.curPlayer == .black {
+                    blackWithAlpha?.draw(in: rect)
+                } else {
+                    whiteWithAlpha?.draw(in: rect)
+                }
             }
         }
     }
     
+    /**
+     Draw the arrangement of black and white pieces on the board
+     */
     private func drawPieces() {
         guard let pieces = self.pieces else {
             return
@@ -199,6 +209,9 @@ public typealias Coordinate = (col: Int, row: Int)
         }
     }
     
+    /**
+     - Returns: NSBezierPath for the gird lines (default is 19 x 19)
+     */
     private func pathForGrid() -> NSBezierPath {
         let path = NSBezierPath()
         path.move(to: CGPoint(x: cornerOffset, y: cornerOffset))
@@ -216,6 +229,9 @@ public typealias Coordinate = (col: Int, row: Int)
         return path
     }
     
+    /**
+     Draw the 9 strategic points on the go board
+     */
     private func drawVertices() {
         self.vertexColor.setFill()
         BoardView.vertices.map{onScreen($0)}.forEach {
