@@ -10,11 +10,7 @@ import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-
-    var activeBoard: Board {
-        return activeController.board
-    }
-    
+    @IBOutlet weak var boardTextureMenuItem: NSMenuItem!
     
     @IBOutlet weak var darkTextureMenuItem: NSMenuItem!
     @IBOutlet weak var normalTextureMenuItem: NSMenuItem!
@@ -26,6 +22,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             lightTextureMenuItem
         ]
     }
+
+    var activeBoard: Board {
+        return activeController.board
+    }
+    
+    var activeController: ViewController! {
+        return NSApplication.shared.mainWindow?.windowController?.contentViewController as? ViewController
+    }
+    
+    var activeWindowController: BoardWindowController! {
+        return NSApplication.shared.mainWindow?.windowController as? BoardWindowController
+    }
+    
+    var windowControllers: [BoardWindowController] {
+        return NSApplication.shared.windows.map{$0.windowController as? BoardWindowController}
+            .filter{$0 != nil}
+            .map{$0!}
+    }
+    
+    var viewControllers: [ViewController] {
+        return windowControllers.map{$0.viewController}
+    }
+    
     
     @IBAction func textureSelected(_ sender: NSMenuItem) {
         var texture: NSImage! = nil
@@ -44,15 +63,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             normalTextureMenuItem.state = .on
         default: break
         }
-        activeController.boardTextureView.image = texture
+        viewControllers.forEach{$0.boardTextureView.image = texture}
     }
-    
-    
-    var activeController: ViewController! {
-        return NSApplication.shared.mainWindow?.windowController?.contentViewController as? ViewController
-    }
-    
-    @IBOutlet weak var boardTextureMenuItem: NSMenuItem!
     
     @IBAction func restart(_ sender: NSMenuItem) {
         activeBoard.restart()
@@ -67,14 +79,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func save(_ sender: NSMenuItem) {
-        post(saveNotif)
+        activeWindowController.save()
     }
     
     
     
     @IBAction func boardTexture(_ sender: NSMenuItem) {
         let bool = activeController.boardTextureView.isHidden
-        activeController.boardTextureView.isHidden = !bool
+        viewControllers.forEach{$0.boardTextureView.isHidden = !bool}
         boardTextureMenuItem.title = bool ? "Hide Board Texture" : "Show Board Texture"
     }
     

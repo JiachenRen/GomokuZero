@@ -49,7 +49,6 @@
 		1F60C3682168232D00580C99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1F60C36B2168232D00580C99 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1F60C36D2168232E00580C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1F60C36E2168232E00580C99 /* Gomoku_Zero.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Gomoku_Zero.entitlements; sourceTree = "<group>"; };
 		1F60C3732168232E00580C99 /* Gomoku ZeroTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Gomoku ZeroTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F60C3772168232E00580C99 /* Gomoku_ZeroTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gomoku_ZeroTests.swift; sourceTree = "<group>"; };
 		1F60C3792168232E00580C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -150,7 +149,6 @@
 		1F60C39B21685C0D00580C99 /* Others */ = {
 			isa = PBXGroup;
 			children = (
-				1F60C36E2168232E00580C99 /* Gomoku_Zero.entitlements */,
 				1F60C36D2168232E00580C99 /* Info.plist */,
 				1F60C3652168232C00580C99 /* Gomoku_Zero.xcdatamodeld */,
 			);

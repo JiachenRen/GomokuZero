@@ -21,13 +21,9 @@ class BoardWindowController: NSWindowController, NSOpenSavePanelDelegate, ViewCo
     override func windowDidLoad() {
         super.windowDidLoad()
         
-        // Subscribe to notifications
-        observe(saveNotif, #selector(save))
-        
         // Establish communication with ViewController
         viewController.delegate = self
     }
-    
     
     
     @objc func save() {
