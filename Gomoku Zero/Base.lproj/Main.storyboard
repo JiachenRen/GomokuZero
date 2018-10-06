@@ -150,6 +150,34 @@
                                                 <action selector="boardTexture:" target="Voe-Tx-rLC" id="dQK-LQ-eoF"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Textures" id="5qj-3O-g6X">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Textures" id="zdm-K1-X4C">
+                                                <items>
+                                                    <menuItem title="Dark" id="cqz-x0-0VF">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="textureSelected:" target="Voe-Tx-rLC" id="yjv-tS-cfC"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Light" id="DbW-nW-OaP">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="textureSelected:" target="Voe-Tx-rLC" id="DhS-cE-tQ7"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Normal" state="on" id="1nu-uX-OB1">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="textureSelected:" target="Voe-Tx-rLC" id="YvN-TV-RWX"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                            <connections>
+                                                <action selector="textureSelected:" target="Voe-Tx-rLC" id="QGL-eG-o65"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="hB3-LF-h0Y"/>
                                         <menuItem title="Enter Full Screen" keyEquivalent="f" id="4J7-dP-txa">
                                             <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
@@ -206,6 +234,9 @@
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Gomoku_Zero" customModuleProvider="target">
                     <connections>
                         <outlet property="boardTextureMenuItem" destination="dN7-o2-OXe" id="FsG-iw-0DO"/>
+                        <outlet property="darkTextureMenuItem" destination="cqz-x0-0VF" id="RX4-Vd-NV6"/>
+                        <outlet property="lightTextureMenuItem" destination="DbW-nW-OaP" id="9q5-4r-772"/>
+                        <outlet property="normalTextureMenuItem" destination="1nu-uX-OB1" id="lcf-7R-iZK"/>
                     </connections>
                 </customObject>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
@@ -216,8 +247,8 @@
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
             <objects>
-                <windowController id="B8D-0N-5wS" customClass="BoardWindowController" customModule="Gomoku_Zero" customModuleProvider="target" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                <windowController storyboardIdentifier="board-window" id="B8D-0N-5wS" customClass="BoardWindowController" customModule="Gomoku_Zero" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="Zero +" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="480" height="270"/>

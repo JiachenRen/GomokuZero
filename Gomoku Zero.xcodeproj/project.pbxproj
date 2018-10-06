@@ -64,6 +64,7 @@
 		1F60C39E21690DE700580C99 /* BoardWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardWindowController.swift; sourceTree = "<group>"; };
 		1F60C3A021690EFD00580C99 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		1F60C3A821692B0900580C99 /* BoardTextureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTextureView.swift; sourceTree = "<group>"; };
+		1F60C3AB21694C7100580C99 /* Gomoku Zero.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Gomoku Zero.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,18 +115,15 @@
 		1F60C3602168232C00580C99 /* Gomoku Zero */ = {
 			isa = PBXGroup;
 			children = (
+				1F60C3AB21694C7100580C99 /* Gomoku Zero.entitlements */,
 				1F60C3612168232C00580C99 /* AppDelegate.swift */,
 				1F60C39B21685C0D00580C99 /* Others */,
 				1F60C3632168232C00580C99 /* ViewController.swift */,
 				1F60C3682168232D00580C99 /* Assets.xcassets */,
 				1F60C36A2168232D00580C99 /* Main.storyboard */,
 				1F60C3922168265C00580C99 /* BoardView.swift */,
-				1F60C39421682F6C00580C99 /* Piece.swift */,
-				1F60C39621682FE800580C99 /* Board.swift */,
-				1F60C39821685A8B00580C99 /* Utilities.swift */,
-				1F60C39C216863F000580C99 /* History.swift */,
+				1F60C3AA21694A7000580C99 /* Model */,
 				1F60C39E21690DE700580C99 /* BoardWindowController.swift */,
-				1F60C3A021690EFD00580C99 /* Notification.swift */,
 				1F60C3A821692B0900580C99 /* BoardTextureView.swift */,
 			);
 			path = "Gomoku Zero";
@@ -157,6 +155,18 @@
 				1F60C3652168232C00580C99 /* Gomoku_Zero.xcdatamodeld */,
 			);
 			name = Others;
+			sourceTree = "<group>";
+		};
+		1F60C3AA21694A7000580C99 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1F60C3A021690EFD00580C99 /* Notification.swift */,
+				1F60C39421682F6C00580C99 /* Piece.swift */,
+				1F60C39621682FE800580C99 /* Board.swift */,
+				1F60C39821685A8B00580C99 /* Utilities.swift */,
+				1F60C39C216863F000580C99 /* History.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -227,6 +237,11 @@
 				TargetAttributes = {
 					1F60C35D2168232C00580C99 = {
 						CreatedOnToolsVersion = 10.0;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
 					};
 					1F60C3722168232E00580C99 = {
 						CreatedOnToolsVersion = 10.0;
@@ -465,7 +480,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "Gomoku Zero/Gomoku_Zero.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
@@ -484,7 +498,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "Gomoku Zero/Gomoku_Zero.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;

@@ -10,7 +10,11 @@ import Cocoa
 
 @IBDesignable class BoardTextureView: NSView {
 
-    @IBInspectable var image = NSImage(named: "board_dark")
+    @IBInspectable var image = NSImage(named: "board") {
+        didSet {
+            setNeedsDisplay(bounds)
+        }
+    }
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)

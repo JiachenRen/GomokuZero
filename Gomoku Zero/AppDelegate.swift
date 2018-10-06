@@ -11,44 +11,80 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    var board: Board {
-        return Board.sharedInstance
+    var activeBoard: Board {
+        return activeController.board
     }
     
-    var controller: ViewController! {
+    
+    @IBOutlet weak var darkTextureMenuItem: NSMenuItem!
+    @IBOutlet weak var normalTextureMenuItem: NSMenuItem!
+    @IBOutlet weak var lightTextureMenuItem: NSMenuItem!
+    var textureMenuItems: [NSMenuItem?] {
+        return [
+            darkTextureMenuItem,
+            normalTextureMenuItem,
+            lightTextureMenuItem
+        ]
+    }
+    
+    @IBAction func textureSelected(_ sender: NSMenuItem) {
+        var texture: NSImage! = nil
+        for item in textureMenuItems {
+            item?.state = .off
+        }
+        switch sender.title {
+        case "Dark":
+            texture = NSImage(named: "board_dark")
+            darkTextureMenuItem.state = .on
+        case "Light":
+            texture = NSImage(named: "board_light")
+            lightTextureMenuItem.state = .on
+        case "Normal":
+            texture = NSImage(named: "board")
+            normalTextureMenuItem.state = .on
+        default: break
+        }
+        activeController.boardTextureView.image = texture
+    }
+    
+    
+    var activeController: ViewController! {
         return NSApplication.shared.mainWindow?.windowController?.contentViewController as? ViewController
     }
     
     @IBOutlet weak var boardTextureMenuItem: NSMenuItem!
     
     @IBAction func restart(_ sender: NSMenuItem) {
-        board.restart()
+        activeBoard.restart()
     }
     
     @IBAction func undo(_ sender: NSMenuItem) {
-        board.undo()
+        activeBoard.undo()
     }
     
     @IBAction func redo(_ sender: NSMenuItem) {
-        board.redo()
+        activeBoard.redo()
     }
     
     @IBAction func save(_ sender: NSMenuItem) {
         post(saveNotif)
     }
     
+    
+    
     @IBAction func boardTexture(_ sender: NSMenuItem) {
-        let bool = controller.boardTextureView.isHidden
-        controller.boardTextureView.isHidden = !bool
+        let bool = activeController.boardTextureView.isHidden
+        activeController.boardTextureView.isHidden = !bool
         boardTextureMenuItem.title = bool ? "Hide Board Texture" : "Show Board Texture"
     }
     
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
-        boardTextureMenuItem.title = controller.boardTextureView.isHidden ? "Show Board Texture" : "Hide Board Texture"
-//        let myWindowController = NSStoryboard(name: "Main", bundle: nil).instantiateController(withIdentifier: "board-window") as! NSWindowController
-//        myWindowController.showWindow(self)
+        boardTextureMenuItem.title = activeController.boardTextureView.isHidden ? "Show Board Texture" : "Hide Board Texture"
+        let boardWindowController = NSStoryboard(name: "Main", bundle: nil)
+            .instantiateController(withIdentifier: "board-window") as! BoardWindowController
+        boardWindowController.showWindow(self)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
