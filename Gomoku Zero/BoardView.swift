@@ -34,9 +34,17 @@ public typealias Coordinate = (col: Int, row: Int)
 
     /**
      Coordinates in the format of (row, column) of the standard vertices of a go board.
+     For 19 x 19
      */
-    static var vertices: [Coordinate] = {
+    var goVertices: [Coordinate] = {
         return [(3, 3), (15, 3), (3, 15), (15, 15), (9, 9), (9, 15), (15, 9), (9, 3), (3, 9)]
+    }()
+    
+    /**
+     Vertices for 15 x 15
+     */
+    var gomokuVertices: [Coordinate] = {
+        return [(3, 3), (11, 3), (3, 11), (11, 11), (7, 7)]
     }()
 
     var boardWidth: CGFloat {
@@ -97,7 +105,9 @@ public typealias Coordinate = (col: Int, row: Int)
         NSColor.black.withAlphaComponent(0.5).setStroke()
         pathForGrid().stroke()
         
-        drawVertices()
+        if board.dimension == 19 || board.dimension == 15 {
+            drawVertices()
+        }
         
         drawPieces()
         
@@ -243,7 +253,8 @@ public typealias Coordinate = (col: Int, row: Int)
      */
     private func drawVertices() {
         self.vertexColor.setFill()
-        BoardView.vertices.map{onScreen($0)}.forEach {
+        let vertices = board.dimension == 15 ? gomokuVertices : goVertices
+        vertices.map{onScreen($0)}.forEach {
             CGContext.fillCircle(center: $0, radius: vertexRadius)
         }
     }
