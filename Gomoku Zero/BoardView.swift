@@ -163,6 +163,13 @@ public typealias Coordinate = (col: Int, row: Int)
     }
     
     /**
+     Render the board in detail when live resize is finished
+     */
+    override func viewDidEndLiveResize() {
+        setNeedsDisplay(bounds)
+    }
+    
+    /**
      Activates tracking, otherwise mouseMoved, mouseEntered, mouseExited wouldn't be called.
      */
     override func updateTrackingAreas() {
@@ -203,10 +210,15 @@ public typealias Coordinate = (col: Int, row: Int)
             for col in 0..<pieces[row].count {
                 let ctr = onScreen(Coordinate(col: col, row: row))
                 let rect = CGRect(center: ctr, size: CGSize(width: pieceRadius * 2, height: pieceRadius * 2))
-                switch pieces[row][col] {
-                case .black: blackPieceImg?.draw(in: rect)
-                case .white: whitePieceImg?.draw(in: rect)
-                case .none: break
+                if inLiveResize && pieces[row][col] != .none { // Draw an approximation to speed up drawing when resizing
+                    (pieces[row][col] == .white ? NSColor.white : NSColor.black).setFill()
+                    CGContext.fillCircle(center: ctr, radius: pieceRadius)
+                } else {
+                    switch pieces[row][col] {
+                    case .black:blackPieceImg?.draw(in: rect)
+                    case .white:whitePieceImg?.draw(in: rect)
+                    case .none: break
+                    }
                 }
             }
         }
