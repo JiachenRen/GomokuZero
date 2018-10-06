@@ -17,6 +17,7 @@
 		1F60C3932168265C00580C99 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3922168265C00580C99 /* BoardView.swift */; };
 		1F60C39521682F6C00580C99 /* Piece.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39421682F6C00580C99 /* Piece.swift */; };
 		1F60C39721682FE800580C99 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39621682FE800580C99 /* Board.swift */; };
+		1F60C39921685A8B00580C99 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39821685A8B00580C99 /* Utilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		1F60C3922168265C00580C99 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		1F60C39421682F6C00580C99 /* Piece.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Piece.swift; sourceTree = "<group>"; };
 		1F60C39621682FE800580C99 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
+		1F60C39821685A8B00580C99 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +116,7 @@
 				1F60C3922168265C00580C99 /* BoardView.swift */,
 				1F60C39421682F6C00580C99 /* Piece.swift */,
 				1F60C39621682FE800580C99 /* Board.swift */,
+				1F60C39821685A8B00580C99 /* Utilities.swift */,
 			);
 			path = "Gomoku Zero";
 			sourceTree = "<group>";
@@ -268,6 +271,7 @@
 			files = (
 				1F60C3642168232C00580C99 /* ViewController.swift in Sources */,
 				1F60C3932168265C00580C99 /* BoardView.swift in Sources */,
+				1F60C39921685A8B00580C99 /* Utilities.swift in Sources */,
 				1F60C39721682FE800580C99 /* Board.swift in Sources */,
 				1F60C39521682F6C00580C99 /* Piece.swift in Sources */,
 				1F60C3622168232C00580C99 /* AppDelegate.swift in Sources */,

@@ -67,23 +67,3 @@ class Board {
 protocol BoardDelegate {
     func boardDidUpdate(pieces: [[Piece]])
 }
-
-
-extension CGFloat {
-    static func random() -> CGFloat {
-        let dividingConst: UInt32 = 4294967295
-        return CGFloat(arc4random()) / CGFloat(dividingConst)
-    }
-    
-    static func random(min: CGFloat, max: CGFloat) -> CGFloat {
-        var min = min, max = max
-        if (max < min) {swap(&min, &max)}
-        return min + random() * (max - min)
-    }
-    
-    private static func swap(_ a: inout CGFloat, _ b: inout CGFloat){
-        let temp = a
-        a = b
-        b = temp
-    }
-}

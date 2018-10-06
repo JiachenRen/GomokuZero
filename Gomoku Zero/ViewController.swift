@@ -36,8 +36,6 @@ class ViewController: NSViewController, BoardDelegate, BoardViewDelegate {
         // Establish delegation with board view (View)
         boardView.delegate = self
         
-        // Spawn a few psuedo pieces for testing the UI
-//        board.spawnPseudoPieces()
     }
 
     override var representedObject: Any? {

@@ -174,29 +174,3 @@ protocol BoardViewDelegate {
     func didMouseUpOn(co: Coordinate)
 }
 
-extension CGContext {
-    static func point(at point: CGPoint, strokeWeight: CGFloat){
-        let circle = NSBezierPath(ovalIn: CGRect(center: point, size: CGSize(width: strokeWeight, height: strokeWeight)))
-        circle.fill()
-    }
-    static func fillCircle(center: CGPoint, radius: CGFloat) {
-        let circle = NSBezierPath(ovalIn: CGRect(center: center, size: CGSize(width: radius * 2, height: radius * 2)))
-        circle.fill()
-    }
-}
-
-extension CGRect {
-    init(center: CGPoint, size: CGSize){
-        self.init(
-            origin: CGPoint(
-                x: center.x - size.width / 2,
-                y: center.y - size.height / 2
-            ),
-            size: size
-        )
-    }
-    static func fillCircle(center: CGPoint, radius: CGFloat) {
-        let circle = NSBezierPath(ovalIn: CGRect(center: center, size: CGSize(width: radius * 2, height: radius * 2)))
-        circle.fill()
-    }
-}
