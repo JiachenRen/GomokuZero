@@ -27,8 +27,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         board.redo()
     }
     
+    @IBAction func save(_ sender: NSMenuItem) {
+        post(saveNotif)
+    }
+    
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
+//        let myWindowController = NSStoryboard(name: "Main", bundle: nil).instantiateController(withIdentifier: "board-window") as! NSWindowController
+//        myWindowController.showWindow(self)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

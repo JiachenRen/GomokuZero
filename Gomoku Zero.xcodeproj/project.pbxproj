@@ -19,6 +19,8 @@
 		1F60C39721682FE800580C99 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39621682FE800580C99 /* Board.swift */; };
 		1F60C39921685A8B00580C99 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39821685A8B00580C99 /* Utilities.swift */; };
 		1F60C39D216863F000580C99 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39C216863F000580C99 /* History.swift */; };
+		1F60C39F21690DE700580C99 /* BoardWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39E21690DE700580C99 /* BoardWindowController.swift */; };
+		1F60C3A121690EFD00580C99 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3A021690EFD00580C99 /* Notification.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +60,8 @@
 		1F60C39621682FE800580C99 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		1F60C39821685A8B00580C99 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		1F60C39C216863F000580C99 /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
+		1F60C39E21690DE700580C99 /* BoardWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardWindowController.swift; sourceTree = "<group>"; };
+		1F60C3A021690EFD00580C99 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +121,8 @@
 				1F60C39621682FE800580C99 /* Board.swift */,
 				1F60C39821685A8B00580C99 /* Utilities.swift */,
 				1F60C39C216863F000580C99 /* History.swift */,
+				1F60C39E21690DE700580C99 /* BoardWindowController.swift */,
+				1F60C3A021690EFD00580C99 /* Notification.swift */,
 			);
 			path = "Gomoku Zero";
 			sourceTree = "<group>";
@@ -283,8 +289,10 @@
 				1F60C3642168232C00580C99 /* ViewController.swift in Sources */,
 				1F60C3932168265C00580C99 /* BoardView.swift in Sources */,
 				1F60C39D216863F000580C99 /* History.swift in Sources */,
+				1F60C39F21690DE700580C99 /* BoardWindowController.swift in Sources */,
 				1F60C39921685A8B00580C99 /* Utilities.swift in Sources */,
 				1F60C39721682FE800580C99 /* Board.swift in Sources */,
+				1F60C3A121690EFD00580C99 /* Notification.swift in Sources */,
 				1F60C39521682F6C00580C99 /* Piece.swift in Sources */,
 				1F60C3622168232C00580C99 /* AppDelegate.swift in Sources */,
 				1F60C3672168232C00580C99 /* Gomoku_Zero.xcdatamodeld in Sources */,
