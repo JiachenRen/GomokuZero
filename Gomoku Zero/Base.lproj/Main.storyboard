@@ -61,7 +61,7 @@
                                     <items>
                                         <menuItem title="New" keyEquivalent="n" id="Was-JA-tGl">
                                             <connections>
-                                                <action selector="newDocument:" target="Ady-hI-5gd" id="4Si-XN-c54"/>
+                                                <action selector="new:" target="Voe-Tx-rLC" id="EJX-fI-WiM"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Open…" keyEquivalent="o" id="IAo-SY-fd9">
@@ -248,7 +248,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController storyboardIdentifier="board-window" id="B8D-0N-5wS" customClass="BoardWindowController" customModule="Gomoku_Zero" customModuleProvider="target" sceneMemberID="viewController">
-                    <window key="window" title="Zero +" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" title="New Game" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="480" height="270"/>
@@ -270,20 +270,20 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="Gomoku_Zero" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="1035" height="1035"/>
+                        <rect key="frame" x="0.0" y="0.0" width="501" height="501"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="qrm-EM-CxM" customClass="BoardTextureView" customModule="Gomoku_Zero" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="1035" height="1035"/>
+                                <rect key="frame" x="0.0" y="0.0" width="501" height="501"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="qrm-EM-CxM" secondAttribute="height" multiplier="1:1" id="0L9-uB-koI"/>
                                 </constraints>
                             </customView>
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aeL-OY-2am">
-                                <rect key="frame" x="0.0" y="0.0" width="1035" height="1035"/>
+                                <rect key="frame" x="0.0" y="0.0" width="501" height="501"/>
                                 <subviews>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="TJV-jl-2lS" customClass="BoardView" customModule="Gomoku_Zero" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="1035" height="1035"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="501" height="501"/>
                                     </customView>
                                 </subviews>
                                 <constraints>
@@ -316,7 +316,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="237.5" y="1094.5"/>
+            <point key="canvasLocation" x="94" y="809"/>
         </scene>
     </scenes>
 </document>

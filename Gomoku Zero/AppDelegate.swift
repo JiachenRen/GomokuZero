@@ -82,6 +82,48 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         activeWindowController.save()
     }
     
+    @IBAction func new(_ sender: NSMenuItem) {
+        let dim = newGameDialogue()
+        if dim != -1 {
+            let boardWindowController = NSStoryboard(name: "Main", bundle: nil)
+                .instantiateController(withIdentifier: "board-window") as! BoardWindowController
+            boardWindowController.board.dimension = dim
+            boardWindowController.showWindow(self)
+        }
+    }
+    
+
+    func newGameDialogue() -> Int {
+        let msg = NSAlert()
+        msg.addButton(withTitle: "Create")
+        msg.addButton(withTitle: "Cancel")
+        msg.alertStyle = .informational
+        msg.messageText = "Please enter board dimension"
+        msg.window.title = "Create New Game"
+        msg.informativeText = "* board dimension must be between between 10 and 19"
+        
+        let box = NSComboBox(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
+        box.addItems(withObjectValues: ["15x15","19x19"])
+        box.placeholderString = "19 x 19"
+        
+        msg.accessoryView = box
+        let response = msg.runModal()
+        
+        if (response == .alertFirstButtonReturn) {
+            let dimStr = box.stringValue
+            if dimStr == "" { return 19 } else {
+                let idx = box.stringValue.firstIndex(of: "x")
+                if idx == nil {
+                    return Int(dimStr) ?? -1
+                }
+                var num = String(dimStr[..<idx!])
+                num.removeAll{$0 == " "} // Remove spaces
+                return Int(num) ?? -1
+            }
+        } else {
+            return -1
+        }
+    }
     
     
     @IBAction func boardTexture(_ sender: NSMenuItem) {
@@ -94,9 +136,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         boardTextureMenuItem.title = activeController.boardTextureView.isHidden ? "Show Board Texture" : "Hide Board Texture"
-        let boardWindowController = NSStoryboard(name: "Main", bundle: nil)
-            .instantiateController(withIdentifier: "board-window") as! BoardWindowController
-        boardWindowController.showWindow(self)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

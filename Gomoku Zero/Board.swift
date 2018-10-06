@@ -9,7 +9,13 @@
 import Foundation
 
 class Board {
-    var dimension: Int
+    var dimension: Int {
+        didSet {
+            if dimension != oldValue {
+                restart()
+            }
+        }
+    }
     
     // The arrangement of pieces on the board. A 2D array.
     var pieces = [[Piece]]()
