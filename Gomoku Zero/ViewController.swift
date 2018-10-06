@@ -8,9 +8,14 @@
 
 import Cocoa
 
-class ViewController: NSViewController, BoardDelegate {
+class ViewController: NSViewController, BoardDelegate, BoardViewDelegate {
     
     @IBOutlet weak var boardView: BoardView!
+    
+    func didMouseUpOn(co: Coordinate) {
+        // Transfer the interpreted UI action to model
+        board.put(at: co)
+    }
     
     func boardDidUpdate(pieces: [[Piece]]) {
         // Transfer the current arrangement of pieces to board view for display
@@ -28,8 +33,11 @@ class ViewController: NSViewController, BoardDelegate {
         // Establish delegation with board (Model)
         board.delegate = self
         
+        // Establish delegation with board view (View)
+        boardView.delegate = self
+        
         // Spawn a few psuedo pieces for testing the UI
-        board.spawnPseudoPieces()
+//        board.spawnPseudoPieces()
     }
 
     override var representedObject: Any? {
@@ -37,7 +45,8 @@ class ViewController: NSViewController, BoardDelegate {
         // Update the view, if already loaded.
         }
     }
-
+    
+    
 
 }
 
