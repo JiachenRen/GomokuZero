@@ -35,6 +35,7 @@ class Board {
         clear()
         curPlayer = .black
         history = History()
+        delegate?.boardDidUpdate(pieces: pieces)
     }
     
     func spawnPseudoPieces() {

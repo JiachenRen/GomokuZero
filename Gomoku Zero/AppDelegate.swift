@@ -15,6 +15,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return Board.sharedInstance
     }
     
+    @IBAction func restart(_ sender: NSMenuItem) {
+        board.restart()
+    }
+    
     @IBAction func undo(_ sender: NSMenuItem) {
         board.undo()
     }

@@ -28,6 +28,9 @@ public typealias Coordinate = (col: Int, row: Int)
     var vertexRadius: CGFloat {
         return gridLineWidth * 2
     }
+    
+    // Wether track mouse is moving within the area of the board
+    var mouseInScope = false
 
     /**
      Coordinates in the format of (row, column) of the standard vertices of a go board.
@@ -38,6 +41,10 @@ public typealias Coordinate = (col: Int, row: Int)
 
     var boardWidth: CGFloat {
         return self.bounds.width - cornerOffset * 2
+    }
+    
+    var board: Board {
+        return Board.sharedInstance
     }
     
     
@@ -64,11 +71,20 @@ public typealias Coordinate = (col: Int, row: Int)
         return gap / 2
     }
     
+    var pendingPieceCo: Coordinate?
+    var shouldDrawPendingPiece = true
+    var pendingPieceRect: CGRect {
+        return CGRect(center: onScreen(pendingPieceCo!),
+                      size: CGSize(width: pieceRadius * 2, height: pieceRadius * 2))
+    }
+    
     var delegate: BoardViewDelegate?
     
     let boardBackground = NSImage(named: "board_dark")
     let blackPieceImg = NSImage(named: "black_piece_shadowed")
     let whitePieceImg = NSImage(named: "white_piece_shadowed")
+    let blackWithAlpha = NSImage(named: "black_piece_alpha")
+    let whiteWithAlpha = NSImage(named: "white_piece_alpha")
 
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
@@ -80,6 +96,7 @@ public typealias Coordinate = (col: Int, row: Int)
         
         // Draw background wooden texture of the board
 //        boardBackground?.draw(in: dirtyRect)
+        
         
         // Fill board background
         let outerRect = CGRect(origin: dirtyRect.origin, size: dirtyRect.size)
@@ -95,17 +112,74 @@ public typealias Coordinate = (col: Int, row: Int)
         
         drawPieces()
         
+        if let _ = pendingPieceCo {
+            if mouseInScope && shouldDrawPendingPiece {
+                drawPendingPiece()
+            }
+        }
+        
         
     }
     
+    private func relPos(evt: NSEvent) -> CGPoint {
+        let absPos = evt.locationInWindow
+        return CGPoint(x: absPos.x - frame.minX, y: absPos.y - frame.minY)
+    }
+    
+    
+    
     override func mouseUp(with event: NSEvent) {
-        let absPos = event.locationInWindow
-        let relPos = CGPoint(x: absPos.x - frame.minX, y: absPos.y - frame.minY)
-        if relPos.x <= 0 || relPos.y <= 0 {
+        let pos = relPos(evt: event)
+        if pos.x <= 0 || pos.y <= 0 {
             // When users drag and release out side of the board area, do nothing.
             return
         }
-        delegate?.didMouseUpOn(co: onBoard(relPos))
+        delegate?.didMouseUpOn(co: onBoard(pos))
+    }
+    
+    override func mouseEntered(with event: NSEvent) {
+        mouseInScope = true
+        if shouldDrawPendingPiece && pendingPieceCo != nil {
+            setNeedsDisplay(pendingPieceRect) // Optimization
+        }
+    }
+    
+    override func mouseExited(with event: NSEvent) {
+        mouseInScope = false
+        if shouldDrawPendingPiece && pendingPieceCo != nil {
+            setNeedsDisplay(pendingPieceRect)
+        }
+    }
+    
+    override func mouseMoved(with event: NSEvent) {
+        pendingPieceCo = onBoard(relPos(evt: event))
+        if shouldDrawPendingPiece {
+            setNeedsDisplay(bounds) // Might not be the most efficient way
+        }
+    }
+    
+    /**
+     Activates tracking, otherwise mouseMoved, mouseEntered, mouseExited wouldn't be called.
+     */
+    override func updateTrackingAreas() {
+        for trackingArea in self.trackingAreas {
+            self.removeTrackingArea(trackingArea)
+        }
+        
+        let options: NSTrackingArea.Options = [.mouseEnteredAndExited, .activeAlways, .mouseMoved]
+        let trackingArea = NSTrackingArea(rect: self.bounds, options: options, owner: self, userInfo: nil)
+        self.addTrackingArea(trackingArea)
+    }
+    
+    func drawPendingPiece() {
+        if mouseInScope && (pieces == nil || pieces![pendingPieceCo!.row][pendingPieceCo!.col] == .none) {
+            let rect = pendingPieceRect
+            if board.curPlayer == .black {
+                blackWithAlpha?.draw(in: rect)
+            } else {
+                whiteWithAlpha?.draw(in: rect)
+            }
+        }
     }
     
     private func drawPieces() {
