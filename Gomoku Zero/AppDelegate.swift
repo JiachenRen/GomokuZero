@@ -11,8 +11,18 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-
-
+    var board: Board {
+        return Board.sharedInstance
+    }
+    
+    @IBAction func undo(_ sender: NSMenuItem) {
+        board.undo()
+    }
+    
+    @IBAction func redo(_ sender: NSMenuItem) {
+        board.redo()
+    }
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
     }

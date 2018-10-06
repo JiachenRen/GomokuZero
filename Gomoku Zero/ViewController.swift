@@ -10,6 +10,7 @@ import Cocoa
 
 class ViewController: NSViewController, BoardDelegate, BoardViewDelegate {
     
+    
     @IBOutlet weak var boardView: BoardView!
     
     func didMouseUpOn(co: Coordinate) {

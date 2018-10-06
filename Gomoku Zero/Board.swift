@@ -14,6 +14,7 @@ class Board {
     // The arrangement of pieces on the board. A 2D array.
     var pieces = [[Piece]]()
     var delegate: BoardDelegate?
+    var history = History()
     
     var curPlayer: Piece = .black
     
@@ -33,6 +34,7 @@ class Board {
     func restart() {
         clear()
         curPlayer = .black
+        history = History()
     }
     
     func spawnPseudoPieces() {
@@ -46,6 +48,30 @@ class Board {
     }
     
     /**
+     Redo last move
+     */
+    func redo() {
+        if let co = history.restore() {
+            set(co, curPlayer)
+            curPlayer = curPlayer.next()
+            delegate?.boardDidUpdate(pieces: pieces)
+        }
+    }
+    
+    /**
+     Undo last move
+     */
+    func undo() {
+        if let co = history.revert() {
+            set(co, .none)
+            curPlayer = curPlayer.next()
+            delegate?.boardDidUpdate(pieces: pieces)
+        }
+    }
+    
+
+    
+    /**
      Override the piece at the given coordinate with the supplied piece by force
      */
     func set(_ co: Coordinate, _ piece: Piece) {
@@ -54,7 +80,8 @@ class Board {
     
     func put(at co: Coordinate) {
         if !isValid(co) || pieces[co.row][co.col] != .none { return }
-        pieces[co.row][co.col] = curPlayer
+        set(co, curPlayer)
+        history.push(co)
         curPlayer = curPlayer.next()
         delegate?.boardDidUpdate(pieces: pieces)
     }

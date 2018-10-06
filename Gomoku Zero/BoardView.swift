@@ -67,8 +67,8 @@ public typealias Coordinate = (col: Int, row: Int)
     var delegate: BoardViewDelegate?
     
     let boardBackground = NSImage(named: "board_dark")
-    let blackPieceImg = NSImage(named: "black_piece")
-    let whitePieceImg = NSImage(named: "white_piece")
+    let blackPieceImg = NSImage(named: "black_piece_shadowed")
+    let whitePieceImg = NSImage(named: "white_piece_shadowed")
 
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
@@ -79,7 +79,7 @@ public typealias Coordinate = (col: Int, row: Int)
         
         
         // Draw background wooden texture of the board
-        boardBackground?.draw(in: dirtyRect)
+//        boardBackground?.draw(in: dirtyRect)
         
         // Fill board background
         let outerRect = CGRect(origin: dirtyRect.origin, size: dirtyRect.size)

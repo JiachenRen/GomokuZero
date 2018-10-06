@@ -124,12 +124,12 @@
                                     <items>
                                         <menuItem title="Undo" keyEquivalent="z" id="dRJ-4n-Yzg">
                                             <connections>
-                                                <action selector="undo:" target="Ady-hI-5gd" id="M6e-cu-g7V"/>
+                                                <action selector="undo:" target="Voe-Tx-rLC" id="s0g-XU-tUD"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Redo" keyEquivalent="Z" id="6dh-zS-Vam">
                                             <connections>
-                                                <action selector="redo:" target="Ady-hI-5gd" id="oIA-Rs-6OD"/>
+                                                <action selector="redo:" target="Voe-Tx-rLC" id="FKK-8d-1Ol"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="WRV-NI-Exz"/>
@@ -706,32 +706,44 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="Gomoku_Zero" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="830" height="830"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1029" height="1029"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="D0t-4j-RbO" customClass="BoardView" customModule="Gomoku_Zero" customModuleProvider="target">
-                                <rect key="frame" x="42" y="42" width="746" height="746"/>
+                            <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aeL-OY-2am">
+                                <rect key="frame" x="0.0" y="0.0" width="1029" height="1029"/>
+                                <subviews>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="jGB-Ra-NBg" customClass="BoardView" customModule="Gomoku_Zero" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="1029" height="1029"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="jGB-Ra-NBg" secondAttribute="height" multiplier="1:1" id="eKN-q6-ydr"/>
+                                        </constraints>
+                                    </customView>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="D0t-4j-RbO" secondAttribute="height" multiplier="1:1" id="LoP-QJ-s0z"/>
+                                    <constraint firstItem="jGB-Ra-NBg" firstAttribute="height" secondItem="aeL-OY-2am" secondAttribute="height" id="hkb-AC-dD8"/>
                                 </constraints>
-                            </customView>
+                                <visibilityPriorities>
+                                    <integer value="1000"/>
+                                </visibilityPriorities>
+                                <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                </customSpacing>
+                            </stackView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="D0t-4j-RbO" firstAttribute="width" relation="lessThanOrEqual" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="3Vy-FR-faS"/>
-                            <constraint firstItem="D0t-4j-RbO" firstAttribute="height" secondItem="m2S-Jp-Qdl" secondAttribute="height" multiplier="0.9" priority="750" id="8Sw-Zv-T0b"/>
-                            <constraint firstItem="D0t-4j-RbO" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" multiplier="0.9" priority="750" id="ccb-pd-A6U"/>
-                            <constraint firstItem="D0t-4j-RbO" firstAttribute="height" relation="lessThanOrEqual" secondItem="m2S-Jp-Qdl" secondAttribute="height" id="e04-z8-GWe"/>
-                            <constraint firstItem="D0t-4j-RbO" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="gNX-Nv-dPS"/>
-                            <constraint firstItem="D0t-4j-RbO" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="rst-W2-rTl"/>
+                            <constraint firstItem="aeL-OY-2am" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="0Vh-lG-xWq"/>
+                            <constraint firstItem="aeL-OY-2am" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="5Jd-vF-uZt"/>
+                            <constraint firstItem="aeL-OY-2am" firstAttribute="height" secondItem="m2S-Jp-Qdl" secondAttribute="height" id="Nq5-9Z-75h"/>
+                            <constraint firstItem="aeL-OY-2am" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="Woa-kk-YmC"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="boardView" destination="D0t-4j-RbO" id="cyc-3y-Oes"/>
+                        <outlet property="boardView" destination="jGB-Ra-NBg" id="QdZ-nX-caM"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="218" y="881"/>
+            <point key="canvasLocation" x="238" y="1095"/>
         </scene>
     </scenes>
 </document>
