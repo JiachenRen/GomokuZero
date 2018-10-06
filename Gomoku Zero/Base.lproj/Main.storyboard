@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="11134" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11134"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.18"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -673,7 +674,7 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Gomoku_Zero" customModuleProvider="target"/>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -703,15 +704,31 @@
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="Gomoku_Zero" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="830" height="830"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="D0t-4j-RbO" customClass="BoardView" customModule="Gomoku_Zero" customModuleProvider="target">
+                                <rect key="frame" x="42" y="42" width="746" height="746"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="D0t-4j-RbO" secondAttribute="height" multiplier="1:1" id="LoP-QJ-s0z"/>
+                                </constraints>
+                            </customView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="D0t-4j-RbO" firstAttribute="width" relation="lessThanOrEqual" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="3Vy-FR-faS"/>
+                            <constraint firstItem="D0t-4j-RbO" firstAttribute="height" secondItem="m2S-Jp-Qdl" secondAttribute="height" multiplier="0.9" priority="750" id="8Sw-Zv-T0b"/>
+                            <constraint firstItem="D0t-4j-RbO" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" multiplier="0.9" priority="750" id="ccb-pd-A6U"/>
+                            <constraint firstItem="D0t-4j-RbO" firstAttribute="height" relation="lessThanOrEqual" secondItem="m2S-Jp-Qdl" secondAttribute="height" id="e04-z8-GWe"/>
+                            <constraint firstItem="D0t-4j-RbO" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="gNX-Nv-dPS"/>
+                            <constraint firstItem="D0t-4j-RbO" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="rst-W2-rTl"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="655"/>
+            <point key="canvasLocation" x="218" y="881"/>
         </scene>
     </scenes>
 </document>
