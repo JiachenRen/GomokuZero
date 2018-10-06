@@ -15,6 +15,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return Board.sharedInstance
     }
     
+    var controller: ViewController! {
+        return NSApplication.shared.mainWindow?.windowController?.contentViewController as? ViewController
+    }
+    
+    @IBOutlet weak var boardTextureMenuItem: NSMenuItem!
+    
     @IBAction func restart(_ sender: NSMenuItem) {
         board.restart()
     }
@@ -31,9 +37,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         post(saveNotif)
     }
     
+    @IBAction func boardTexture(_ sender: NSMenuItem) {
+        let bool = controller.boardTextureView.isHidden
+        controller.boardTextureView.isHidden = !bool
+        boardTextureMenuItem.title = bool ? "Hide Board Texture" : "Show Board Texture"
+    }
+    
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
+        boardTextureMenuItem.title = controller.boardTextureView.isHidden ? "Show Board Texture" : "Hide Board Texture"
 //        let myWindowController = NSStoryboard(name: "Main", bundle: nil).instantiateController(withIdentifier: "board-window") as! NSWindowController
 //        myWindowController.showWindow(self)
     }

@@ -21,6 +21,7 @@
 		1F60C39D216863F000580C99 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39C216863F000580C99 /* History.swift */; };
 		1F60C39F21690DE700580C99 /* BoardWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39E21690DE700580C99 /* BoardWindowController.swift */; };
 		1F60C3A121690EFD00580C99 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3A021690EFD00580C99 /* Notification.swift */; };
+		1F60C3A921692B0900580C99 /* BoardTextureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3A821692B0900580C99 /* BoardTextureView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 		1F60C39C216863F000580C99 /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 		1F60C39E21690DE700580C99 /* BoardWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardWindowController.swift; sourceTree = "<group>"; };
 		1F60C3A021690EFD00580C99 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		1F60C3A821692B0900580C99 /* BoardTextureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTextureView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 		1F60C3602168232C00580C99 /* Gomoku Zero */ = {
 			isa = PBXGroup;
 			children = (
+				1F60C3612168232C00580C99 /* AppDelegate.swift */,
 				1F60C39B21685C0D00580C99 /* Others */,
 				1F60C3632168232C00580C99 /* ViewController.swift */,
 				1F60C3682168232D00580C99 /* Assets.xcassets */,
@@ -123,6 +126,7 @@
 				1F60C39C216863F000580C99 /* History.swift */,
 				1F60C39E21690DE700580C99 /* BoardWindowController.swift */,
 				1F60C3A021690EFD00580C99 /* Notification.swift */,
+				1F60C3A821692B0900580C99 /* BoardTextureView.swift */,
 			);
 			path = "Gomoku Zero";
 			sourceTree = "<group>";
@@ -149,7 +153,6 @@
 			isa = PBXGroup;
 			children = (
 				1F60C36E2168232E00580C99 /* Gomoku_Zero.entitlements */,
-				1F60C3612168232C00580C99 /* AppDelegate.swift */,
 				1F60C36D2168232E00580C99 /* Info.plist */,
 				1F60C3652168232C00580C99 /* Gomoku_Zero.xcdatamodeld */,
 			);
@@ -293,6 +296,7 @@
 				1F60C39921685A8B00580C99 /* Utilities.swift in Sources */,
 				1F60C39721682FE800580C99 /* Board.swift in Sources */,
 				1F60C3A121690EFD00580C99 /* Notification.swift in Sources */,
+				1F60C3A921692B0900580C99 /* BoardTextureView.swift in Sources */,
 				1F60C39521682F6C00580C99 /* Piece.swift in Sources */,
 				1F60C3622168232C00580C99 /* AppDelegate.swift in Sources */,
 				1F60C3672168232C00580C99 /* Gomoku_Zero.xcdatamodeld in Sources */,

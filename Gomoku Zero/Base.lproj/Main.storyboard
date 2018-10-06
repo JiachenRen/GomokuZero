@@ -145,25 +145,12 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="View" id="HyV-fh-RgO">
                                     <items>
-                                        <menuItem title="Show Toolbar" keyEquivalent="t" id="snW-S8-Cw5">
-                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                        <menuItem title="Show Board Texture" keyEquivalent="t" id="dN7-o2-OXe">
                                             <connections>
-                                                <action selector="toggleToolbarShown:" target="Ady-hI-5gd" id="BXY-wc-z0C"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Customize Toolbar…" id="1UK-8n-QPP">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="runToolbarCustomizationPalette:" target="Ady-hI-5gd" id="pQI-g3-MTW"/>
+                                                <action selector="boardTexture:" target="Voe-Tx-rLC" id="dQK-LQ-eoF"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="hB3-LF-h0Y"/>
-                                        <menuItem title="Show Sidebar" keyEquivalent="s" id="kIP-vf-haE">
-                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
-                                            <connections>
-                                                <action selector="toggleSourceList:" target="Ady-hI-5gd" id="iwa-gc-5KM"/>
-                                            </connections>
-                                        </menuItem>
                                         <menuItem title="Enter Full Screen" keyEquivalent="f" id="4J7-dP-txa">
                                             <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                             <connections>
@@ -216,7 +203,11 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Gomoku_Zero" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Gomoku_Zero" customModuleProvider="target">
+                    <connections>
+                        <outlet property="boardTextureMenuItem" destination="dN7-o2-OXe" id="FsG-iw-0DO"/>
+                    </connections>
+                </customObject>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -248,21 +239,25 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="Gomoku_Zero" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="1029" height="1029"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1035" height="1035"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="qrm-EM-CxM" customClass="BoardTextureView" customModule="Gomoku_Zero" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="1035" height="1035"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="qrm-EM-CxM" secondAttribute="height" multiplier="1:1" id="0L9-uB-koI"/>
+                                </constraints>
+                            </customView>
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aeL-OY-2am">
-                                <rect key="frame" x="0.0" y="0.0" width="1029" height="1029"/>
+                                <rect key="frame" x="0.0" y="0.0" width="1035" height="1035"/>
                                 <subviews>
-                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="jGB-Ra-NBg" customClass="BoardView" customModule="Gomoku_Zero" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="1029" height="1029"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="jGB-Ra-NBg" secondAttribute="height" multiplier="1:1" id="eKN-q6-ydr"/>
-                                        </constraints>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="TJV-jl-2lS" customClass="BoardView" customModule="Gomoku_Zero" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="1035" height="1035"/>
                                     </customView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="jGB-Ra-NBg" firstAttribute="height" secondItem="aeL-OY-2am" secondAttribute="height" id="hkb-AC-dD8"/>
+                                    <constraint firstItem="TJV-jl-2lS" firstAttribute="height" secondItem="aeL-OY-2am" secondAttribute="height" id="2Bo-Zo-tiL"/>
+                                    <constraint firstItem="TJV-jl-2lS" firstAttribute="width" secondItem="aeL-OY-2am" secondAttribute="width" id="SLf-At-Xxe"/>
                                 </constraints>
                                 <visibilityPriorities>
                                     <integer value="1000"/>
@@ -275,12 +270,17 @@
                         <constraints>
                             <constraint firstItem="aeL-OY-2am" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="0Vh-lG-xWq"/>
                             <constraint firstItem="aeL-OY-2am" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="5Jd-vF-uZt"/>
+                            <constraint firstItem="qrm-EM-CxM" firstAttribute="height" secondItem="m2S-Jp-Qdl" secondAttribute="height" id="66I-gN-Hpc"/>
+                            <constraint firstItem="qrm-EM-CxM" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="6kp-bc-wJS"/>
                             <constraint firstItem="aeL-OY-2am" firstAttribute="height" secondItem="m2S-Jp-Qdl" secondAttribute="height" id="Nq5-9Z-75h"/>
                             <constraint firstItem="aeL-OY-2am" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="Woa-kk-YmC"/>
+                            <constraint firstItem="qrm-EM-CxM" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="ZYs-AN-NMM"/>
+                            <constraint firstItem="qrm-EM-CxM" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="d8K-37-U41"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="boardView" destination="jGB-Ra-NBg" id="QdZ-nX-caM"/>
+                        <outlet property="boardTextureView" destination="qrm-EM-CxM" id="KGt-6H-D2T"/>
+                        <outlet property="boardView" destination="TJV-jl-2lS" id="xVk-2d-7KI"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
