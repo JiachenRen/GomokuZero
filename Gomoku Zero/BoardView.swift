@@ -13,10 +13,16 @@ public typealias Coordinate = (col: Int, row: Int)
 
 @IBDesignable class BoardView: NSView {
     
+    @IBInspectable var pieceScale: CGFloat = 0.95
+
     @IBInspectable var vertexColor: NSColor = NSColor.black
     
     @IBInspectable var gridLineWidth: CGFloat {
         return gap / 20
+    }
+    
+    var pieceRadius: CGFloat {
+        return gap / 2 * pieceScale
     }
     
     var vertexRadius: CGFloat {
@@ -39,11 +45,18 @@ public typealias Coordinate = (col: Int, row: Int)
         return self.bounds.width / CGFloat(dimension)
     }
     
-    var dimension: Int = 19 { //since the rows and cols of the board are always going to be the same.
+    var dimension: Int = 19 {
         didSet {
             DispatchQueue.main.async {[unowned self] in
                 self.setNeedsDisplay(self.bounds)
             }
+        }
+    }
+    
+    var pieces: [[Piece]]? {
+        didSet {
+            // If the pieces passed in is nill, the dimension should remain unchanged
+            dimension = pieces?.count ?? dimension
         }
     }
     
@@ -52,6 +65,8 @@ public typealias Coordinate = (col: Int, row: Int)
     }
     
     let boardBackground = NSImage(named: "board_light")
+    let blackPieceImg = NSImage(named: "black_piece")
+    let whitePieceImg = NSImage(named: "white_piece")
 
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
@@ -74,8 +89,26 @@ public typealias Coordinate = (col: Int, row: Int)
         // Draw vertices
         drawVertices()
         
+        drawPieces()
         
         
+    }
+    
+    private func drawPieces() {
+        guard let pieces = self.pieces else {
+            return
+        }
+        for row in 0..<pieces.count {
+            for col in 0..<pieces[row].count {
+                let ctr = onScreen(Coordinate(col: col, row: row))
+                let rect = CGRect(center: ctr, size: CGSize(width: pieceRadius * 2, height: pieceRadius * 2))
+                switch pieces[row][col] {
+                case .black: blackPieceImg?.draw(in: rect)
+                case .white: whitePieceImg?.draw(in: rect)
+                case .none: break
+                }
+            }
+        }
     }
     
     private func pathForGrid() -> NSBezierPath {

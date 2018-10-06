@@ -8,12 +8,28 @@
 
 import Cocoa
 
-class ViewController: NSViewController {
+class ViewController: NSViewController, BoardDelegate {
+    
+    @IBOutlet weak var boardView: BoardView!
+    
+    func boardDidUpdate(pieces: [[Piece]]) {
+        // Transfer the current arrangement of pieces to board view for display
+        boardView.pieces = pieces
+    }
+    
 
+    var board: Board {
+        return Board.sharedInstance
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        // Establish delegation with board (Model)
+        board.delegate = self
+        
+        // Spawn a few psuedo pieces for testing the UI
+        board.spawnPseudoPieces()
     }
 
     override var representedObject: Any? {
