@@ -8,7 +8,15 @@
 
 import Foundation
 
-enum Piece {
+enum Piece: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .none: return "-"
+        case .black: return "*"
+        case .white: return "o"
+        }
+    }
+    
     case black, white, none
     
     static func random() -> Piece {

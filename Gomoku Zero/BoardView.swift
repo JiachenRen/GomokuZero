@@ -86,6 +86,11 @@ public typealias Coordinate = (col: Int, row: Int)
     }
     
     var delegate: BoardViewDelegate?
+    var activeMap: [[Bool]]? {
+        didSet {
+            setNeedsDisplay(bounds)
+        }
+    }
     
     let blackPieceImg = NSImage(named: "black_piece_shadowed")
     let whitePieceImg = NSImage(named: "white_piece_shadowed")
@@ -112,6 +117,26 @@ public typealias Coordinate = (col: Int, row: Int)
         drawPieces()
         
         drawPendingPiece()
+        
+        drawActiveMap()
+    }
+    
+    func drawActiveMap() {
+        guard let map = self.activeMap else {
+            return
+        }
+        for row in 0..<map.count {
+            for col in 0..<map[row].count {
+                let ctr = onScreen(Coordinate(col: col, row: row))
+                let rect = CGRect(center: ctr, size: CGSize(width: pieceRadius, height: pieceRadius))
+                if map[row][col] {
+                    NSColor.green.setStroke()
+                    let path = NSBezierPath(ovalIn: rect)
+                    path.lineWidth = 1
+                    path.stroke()
+                }
+            }
+        }
     }
     
     /**
