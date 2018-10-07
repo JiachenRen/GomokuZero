@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Board {
+class Board: ZeroPlusDelegate {
     var dimension: Int {
         didSet {
             if dimension != oldValue {
@@ -23,9 +23,13 @@ class Board {
     var history = History()
     
     var curPlayer: Piece = .black
+    var zeroAi: Piece = .none
+    var zeroPlus = ZeroPlus()
+    let zeroActivityQueue = DispatchQueue(label: "zeroPlus", attributes: .concurrent)
     
     init(dimension: Int) {
         self.dimension = dimension
+        zeroPlus.delegate = self
         restart()
     }
     
@@ -37,6 +41,7 @@ class Board {
         clear()
         curPlayer = .black
         history = History()
+        requestZeroBrainStorm()
         delegate?.boardDidUpdate(pieces: pieces)
     }
     
@@ -72,8 +77,6 @@ class Board {
         }
     }
     
-
-    
     /**
      Override the piece at the given coordinate with the supplied piece by force
      */
@@ -86,7 +89,33 @@ class Board {
         set(co, curPlayer)
         history.push(co)
         curPlayer = curPlayer.next()
+        requestZeroBrainStorm()
         delegate?.boardDidUpdate(pieces: pieces)
+    }
+    
+    /**
+     This would only take effect if it is ZeroPlus's turn.
+     */
+    func requestZeroBrainStorm() {
+        if zeroAi == curPlayer {
+            triggerZeroBrainstorm()
+        }
+    }
+    
+    /**
+     Use this to allow ZeroPlus to make a move
+     */
+    func triggerZeroBrainstorm() {
+        zeroActivityQueue.async {[unowned self] in
+            self.zeroPlus.getMove(for: self.curPlayer)
+        }
+    }
+
+    /**
+     ZeroPlus has returned the extrapolated best move
+     */
+    func bestMoveExtrapolated(co: Coordinate) {
+        put(at: co)
     }
     
     func isValid(_ co: Coordinate) -> Bool {
@@ -112,4 +141,23 @@ class Board {
 
 protocol BoardDelegate {
     func boardDidUpdate(pieces: [[Piece]])
+}
+
+extension Board: CustomStringConvertible {
+    public var description: String {
+        get {
+            var str = ""
+            pieces.forEach { row in
+                row.forEach { col in
+                    switch col {
+                    case .none: str += "- "
+                    case .black: str += "* "
+                    case .white: str += "o "
+                    }
+                }
+                str += "\n"
+            }
+            return str
+        }
+    }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F4270DD2169A1480081DBFC /* ZeroPlus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270DC2169A1480081DBFC /* ZeroPlus.swift */; };
 		1F60C3622168232C00580C99 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3612168232C00580C99 /* AppDelegate.swift */; };
 		1F60C3642168232C00580C99 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3632168232C00580C99 /* ViewController.swift */; };
 		1F60C3672168232C00580C99 /* Gomoku_Zero.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3652168232C00580C99 /* Gomoku_Zero.xcdatamodeld */; };
@@ -42,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1F4270DC2169A1480081DBFC /* ZeroPlus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPlus.swift; sourceTree = "<group>"; };
 		1F60C35E2168232C00580C99 /* Gomoku Zero.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Gomoku Zero.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F60C3612168232C00580C99 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F60C3632168232C00580C99 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				1F60C39621682FE800580C99 /* Board.swift */,
 				1F60C39821685A8B00580C99 /* Utilities.swift */,
 				1F60C39C216863F000580C99 /* History.swift */,
+				1F4270DC2169A1480081DBFC /* ZeroPlus.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F60C3642168232C00580C99 /* ViewController.swift in Sources */,
+				1F4270DD2169A1480081DBFC /* ZeroPlus.swift in Sources */,
 				1F60C3932168265C00580C99 /* BoardView.swift in Sources */,
 				1F60C39D216863F000580C99 /* History.swift in Sources */,
 				1F60C39F21690DE700580C99 /* BoardWindowController.swift in Sources */,

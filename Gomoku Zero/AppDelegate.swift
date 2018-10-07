@@ -15,6 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var darkTextureMenuItem: NSMenuItem!
     @IBOutlet weak var normalTextureMenuItem: NSMenuItem!
     @IBOutlet weak var lightTextureMenuItem: NSMenuItem!
+    
     var textureMenuItems: [NSMenuItem?] {
         return [
             darkTextureMenuItem,
@@ -45,6 +46,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return windowControllers.map{$0.viewController}
     }
     
+    @IBAction func zeroPlus(_ sender: NSMenuItem) {
+        switch sender.title {
+        case "Black": activeBoard?.zeroAi = .black
+            activeBoard?.requestZeroBrainStorm()
+        case "White": activeBoard?.zeroAi = .white
+            activeBoard?.requestZeroBrainStorm()
+        case "Off": activeBoard?.zeroAi = .none
+        default: activeBoard?.triggerZeroBrainstorm()
+        }
+    }
     
     @IBAction func textureSelected(_ sender: NSMenuItem) {
         var texture: NSImage! = nil
