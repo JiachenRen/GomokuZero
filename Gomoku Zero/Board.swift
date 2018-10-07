@@ -119,7 +119,7 @@ class Board: ZeroPlusDelegate {
     }
     
     func isValid(_ co: Coordinate) -> Bool {
-        return co.col >= 0 && co.row >= 0 && co.row < dimension && co.col < 19
+        return co.col >= 0 && co.row >= 0 && co.row < dimension && co.col < dimension
     }
 
     func serialize() -> String {
