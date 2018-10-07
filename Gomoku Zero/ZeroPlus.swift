@@ -21,26 +21,41 @@ class ZeroPlus {
         return delegate.dimension
     }
     var pieces = [[Piece]]()
+    var history = History()
+    var identity: Piece = .black
+    
+    var personality: Personality = .gameTheory
+    var activeMapDiffStack = [[Coordinate]]()
     
     /**
      Generate a map that indicates the active coordinates
      */
     func genActiveCoMap() {
         activeCoMap = [[Bool]](repeating: [Bool](repeating: false, count: dim), count: dim)
-        delegate.history.stack.forEach {co in
-            for i in -2...2 {
-                for j in -2...2 {
-                    if abs(i) != abs(j) && i != 0 && j != 0  {
-                        continue // Only activate diagonal coordinates
+        delegate.history.stack.forEach {updateActiveCoMap(at: $0, recordDiff: false)}
+    }
+    
+    func updateActiveCoMap(at co: Coordinate, recordDiff: Bool) {
+        var diffCluster = [Coordinate]()
+        for i in -2...2 {
+            for j in -2...2 {
+                if abs(i) != abs(j) && i != 0 && j != 0  {
+                    continue // Only activate diagonal coordinates
+                }
+                let newCo = (col: co.col + i, row: co.row + j)
+                if delegate.isValid(newCo) && pieces[newCo.row][newCo.col] == .none {
+                    if recordDiff && activeCoMap[newCo.row][newCo.col] == false {
+                        diffCluster.append(newCo)
                     }
-                    let newCo = (col: co.col + i, row: co.row + j)
-                    if delegate.isValid(newCo) && pieces[newCo.row][newCo.col] == .none {
-                        activeCoMap[newCo.row][newCo.col] = true
-                    }
+                    activeCoMap[newCo.row][newCo.col] = true
                 }
             }
-            activeCoMap[co.row][co.col] = false
         }
+        if recordDiff && activeCoMap[co.row][co.col] == true {
+            diffCluster.append(co)
+        }
+        activeMapDiffStack.append(diffCluster)
+        activeCoMap[co.row][co.col] = false
     }
     
     /**
@@ -61,37 +76,125 @@ class ZeroPlus {
         return sortedMoves.sorted {$0.score > $1.score}
     }
     
+    /**
+     Not the most efficient way, will do for now.
+     */
+    func genSortedMoves(for player: Piece, num: Int) -> [Move] {
+        return [Move](genSortedMoves(for: player).prefix(num))
+    }
+    
     func getMove(for player: Piece) {
         pieces = delegate.pieces // Update and store the arrangement of pieces from the delegate
         genActiveCoMap() // Generate a map containing active coordinates
+        history = History() // Create new history
+        activeMapDiffStack = [[Coordinate]]()
+        identity = player
         
         visDelegate?.activeMapUpdated(activeMap: activeCoMap) // Notify the delegate that active map has updated
-        
         
         let offensiveMoves = genSortedMoves(for: player)
         let defensiveMoves = genSortedMoves(for: player.next())
         
-
-        visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map
-        
         if offensiveMoves.count == 0 { // When ZeroPlus is black, the first move is always at the center
             delegate?.bestMoveExtrapolated(co: (dim / 2, dim / 2))
         } else {
-            let offensiveMove = defensiveMoves[0]
-            let defensiveMove = offensiveMoves[0]
-            var move = offensiveMove
-            if offensiveMove.score >= ThreatType.five.rawValue {
-                move = offensiveMove
-            } else if offensiveMove.score >= ThreatType.five.rawValue {
-                move = defensiveMove
-            } else {
-                move = offensiveMove.score > defensiveMove.score ? offensiveMove : defensiveMove
+            var move = offensiveMoves[0]
+            
+            switch personality {
+            case .basic:
+                let offensiveMove = offensiveMoves[0]
+                let defensiveMove = defensiveMoves[0]
+                if offensiveMove.score >= ThreatType.terminalMax {
+                    move = offensiveMove
+                } else if defensiveMove.score >= ThreatType.terminalMax {
+                    move = defensiveMove
+                } else {
+                    move = offensiveMove.score > defensiveMove.score ? offensiveMove : defensiveMove
+                }
+            case .gameTheory:
+                move = minimax(depth: 3, breadth: 3, maximizingPlayer: true, moves: offensiveMoves)
             }
+            
             delegate.bestMoveExtrapolated(co: move.co)
         }
         
+        visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map
     }
     
+    
+    //    function minimax(node, depth, maximizingPlayer)
+    //    02     if depth = 0 or node is a terminal node
+    //    03         return the heuristic value of node
+    //
+    //    04     if maximizingPlayer
+    //    05         bestValue := −∞
+    //    06         for each child of node
+    //    07             v := minimax(child, depth − 1, FALSE)
+    //    08             bestValue := max(bestValue, v)
+    //    09         return bestValue
+    //
+    //    10     else    (* minimizing player *)
+    //    11         bestValue := +∞
+    //    12         for each child of node
+    //    13             v := minimax(child, depth − 1, TRUE)
+    //    14             bestValue := min(bestValue, v)
+    //    15         return bestValue
+    func minimax(depth: Int, breadth: Int, maximizingPlayer: Bool, moves: [Move]) -> Move {
+        if depth == 0 || moves[0].score > ThreatType.terminalMax {
+            return moves[0]
+        }
+        
+        if maximizingPlayer {
+            var bestMove = moves[0]
+            for move in moves {
+                put(at: move.co)
+                let moves = genSortedMoves(for: identity.next(), num: breadth)
+                let score = minimax(depth: depth - 1, breadth: breadth, maximizingPlayer: false, moves: moves).score
+                revert()
+                bestMove.score = max(bestMove.score, score)
+            }
+            return bestMove
+        } else {
+            var bestMove = moves[0]
+            for move in moves {
+                put(at: move.co)
+                let moves = genSortedMoves(for: identity, num: breadth)
+                let score = minimax(depth: depth - 1, breadth: breadth, maximizingPlayer: false, moves: moves).score
+                revert()
+                bestMove.score = min(bestMove.score, score)
+            }
+            return bestMove
+        }
+    }
+    
+    /**
+     Used in pair with revert to handle changes to the board efficiently
+     */
+    private func put(at co: Coordinate) {
+        pieces[co.row][co.col] = identity
+        identity = identity.next()
+        history.push(co)
+        updateActiveCoMap(at: co, recordDiff: true) // Push changes to active map to the difference stack
+        visDelegate?.activeMapUpdated(activeMap: activeCoMap)
+    }
+    
+    private func revert() {
+        let co = history.revert()!
+        pieces[co.row][co.col] = .none
+        identity = identity.next()
+        revertActiveMapUpdate()
+        visDelegate?.activeMapUpdated(activeMap: activeCoMap)
+    }
+    
+    /**
+     Revert changes made to the active map made during last put() call
+     */
+    private func revertActiveMapUpdate() {
+        for co in activeMapDiffStack.removeLast() {
+            let tmp = activeCoMap[co.row][co.col]
+            activeCoMap[co.row][co.col] = !tmp
+        }
+    }
     
     
     private func random() -> Coordinate {
@@ -99,6 +202,10 @@ class ZeroPlus {
         let col = CGFloat.random(min: 0, max: CGFloat(delegate.pieces.count))
         return (col: Int(col), row: Int(row))
     }
+}
+
+enum Personality {
+    case basic, gameTheory
 }
 
 protocol ZeroPlusDelegate {

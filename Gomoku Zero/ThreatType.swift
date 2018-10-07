@@ -9,6 +9,9 @@
 import Foundation
 
 enum ThreatType: Int, CustomStringConvertible {
+    
+    static let terminalMax = 1000000
+    
     var description: String {
         switch self {
         case .five: return "5"
@@ -28,17 +31,17 @@ enum ThreatType: Int, CustomStringConvertible {
         }
     }
     
-    case five = 100000
+    case five = 1000000000 // Just a large number that nullifies the influence of the rest
     
     case straightFour = 10000
-    case straightThree = 1000
+    case straightThree = 5000
     case straightTwo = 100
     
-    case blockedFour = 500
+    case blockedFour = 5002
     case blockedThree = 50
     case blockedTwo = 10
     
-    case straightPokedFour = 5000
+    case straightPokedFour = 5001
     case straightPokedThree = 900
     case straightPokedTwo = 99
     
