@@ -118,6 +118,45 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Edit" id="gVl-Nv-M5O">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Edit" id="h8o-0c-PU0">
+                                    <items>
+                                        <menuItem title="Delete" id="xeW-vB-9nJ">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="delete:" target="Ady-hI-5gd" id="tCr-t5-8ov"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Paste" keyEquivalent="v" id="16r-G5-8Lr">
+                                            <connections>
+                                                <action selector="paste:" target="Ady-hI-5gd" id="E4k-LG-8YM"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Paste and Match Style" keyEquivalent="V" id="OGi-0Y-MXu">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="pasteAsPlainText:" target="Ady-hI-5gd" id="r2U-yN-tIH"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Cut" keyEquivalent="x" id="0w9-Df-W8M">
+                                            <connections>
+                                                <action selector="cut:" target="Ady-hI-5gd" id="1uO-Yz-yh1"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Select All" keyEquivalent="a" id="eJn-bS-cQk">
+                                            <connections>
+                                                <action selector="selectAll:" target="Ady-hI-5gd" id="pRy-cI-K98"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Copy" keyEquivalent="c" id="Hge-O5-9rx">
+                                            <connections>
+                                                <action selector="copy:" target="Ady-hI-5gd" id="2cc-WO-2dI"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                             <menuItem title="Controls" id="5QF-Oa-p0T">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Controls" id="W48-6f-4Dl">
@@ -248,7 +287,8 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController storyboardIdentifier="board-window" id="B8D-0N-5wS" customClass="BoardWindowController" customModule="Gomoku_Zero" customModuleProvider="target" sceneMemberID="viewController">
-                    <window key="window" title="New Game" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                        <string key="title">New Game	19 x 19</string>
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="480" height="270"/>

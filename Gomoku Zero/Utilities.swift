@@ -61,3 +61,17 @@ extension NSObject {
         NotificationCenter.default.addObserver(self, selector: selector, name: name, object: nil)
     }
 }
+
+func dialogue(msg: String, infoTxt: String) -> Bool {
+    let alert: NSAlert = NSAlert()
+    alert.messageText = msg
+    alert.informativeText = infoTxt
+    alert.alertStyle = .warning
+    alert.addButton(withTitle: "OK")
+    alert.addButton(withTitle: "Cancel")
+    let res = alert.runModal()
+    if res == .alertFirstButtonReturn {
+        return true
+    }
+    return false
+}

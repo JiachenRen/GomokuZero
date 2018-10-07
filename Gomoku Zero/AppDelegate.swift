@@ -23,15 +23,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         ]
     }
 
-    var activeBoard: Board {
-        return activeController.board
+    var activeBoard: Board? {
+        return activeController?.board
     }
     
-    var activeController: ViewController! {
+    var activeController: ViewController? {
         return NSApplication.shared.mainWindow?.windowController?.contentViewController as? ViewController
     }
     
-    var activeWindowController: BoardWindowController! {
+    var activeWindowController: BoardWindowController? {
         return NSApplication.shared.mainWindow?.windowController as? BoardWindowController
     }
     
@@ -67,19 +67,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func restart(_ sender: NSMenuItem) {
-        activeBoard.restart()
+        activeBoard?.restart()
     }
     
     @IBAction func undo(_ sender: NSMenuItem) {
-        activeBoard.undo()
+        activeBoard?.undo()
     }
     
     @IBAction func redo(_ sender: NSMenuItem) {
-        activeBoard.redo()
+        activeBoard?.redo()
     }
     
     @IBAction func save(_ sender: NSMenuItem) {
-        activeWindowController.save()
+        activeWindowController?.save()
     }
     
     @IBAction func open(_ sender: NSMenuItem) {
@@ -95,13 +95,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         panel.begin() { response in
             switch response {
             case .OK:
+                var curFrame = NSApplication.shared.mainWindow?.frame ?? CGRect.zero
                 for url in panel.urls {
+                    curFrame.origin = CGPoint(x: curFrame.minX + 10, y: curFrame.minY - 10)
                     let boardWindowController = NSStoryboard(name: "Main", bundle: nil)
                         .instantiateController(withIdentifier: "board-window") as! BoardWindowController
                     do {
                         let game = try String(contentsOf: url, encoding: .utf8)
+                        let fileName = url.lastPathComponent
+                        let idx = fileName.firstIndex(of: ".")!
+                        boardWindowController.fileName = String(fileName[..<idx]) // Update the name of the window
                         boardWindowController.board.load(game)
                         boardWindowController.showWindow(self)
+                        if curFrame.size == .zero {
+                            curFrame = boardWindowController.window!.frame
+                        } else {
+                            boardWindowController.window?.setFrame(curFrame, display: true, animate: true)
+                        }
                     } catch let err {
                         print(err)
                     }
@@ -117,7 +127,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let boardWindowController = NSStoryboard(name: "Main", bundle: nil)
                 .instantiateController(withIdentifier: "board-window") as! BoardWindowController
             boardWindowController.board.dimension = dim
+            boardWindowController.fileName = boardWindowController.fileName + "" // Trigger window title update
             boardWindowController.showWindow(self)
+            if let frame = activeWindowController?.window?.frame { // There's an insignificant bug here...
+                let newFrame = CGRect(x: frame.minX + 10, y: frame.minY - 10, width: frame.width, height: frame.height)
+                boardWindowController.window?.setFrame(newFrame, display: true, animate: true)
+            }
         }
     }
     
@@ -132,7 +147,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         msg.informativeText = "* board dimension must be between between 10 and 19"
         
         let box = NSComboBox(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
-        box.addItems(withObjectValues: ["15x15","19x19"])
+        box.addItems(withObjectValues: ["15 x 15","19 x 19"])
         box.placeholderString = "19 x 19"
         
         msg.accessoryView = box
@@ -156,15 +171,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     @IBAction func boardTexture(_ sender: NSMenuItem) {
-        let bool = activeController.boardTextureView.isHidden
-        viewControllers.forEach{$0.boardTextureView.isHidden = !bool}
-        boardTextureMenuItem.title = bool ? "Hide Board Texture" : "Show Board Texture"
+        if let controller = activeController {
+            let bool = controller.boardTextureView.isHidden
+            viewControllers.forEach{$0.boardTextureView.isHidden = !bool}
+            boardTextureMenuItem.title = bool ? "Hide Board Texture" : "Show Board Texture"
+        }
     }
     
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
-        boardTextureMenuItem.title = activeController.boardTextureView.isHidden ? "Show Board Texture" : "Hide Board Texture"
+        if let controller = activeController {
+            boardTextureMenuItem.title = controller.boardTextureView.isHidden ?
+                "Show Board Texture" : "Hide Board Texture"
+        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

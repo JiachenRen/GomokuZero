@@ -17,6 +17,13 @@ class BoardWindowController: NSWindowController, NSOpenSavePanelDelegate, ViewCo
     var viewController: ViewController {
         return window!.contentViewController as! ViewController
     }
+    
+    var fileName = "New Game" {
+        didSet {
+            let dim = board.dimension
+            window?.title = "\(fileName)\t\(dim) x \(dim)"
+        }
+    }
 
     override func windowDidLoad() {
         super.windowDidLoad()
@@ -25,15 +32,23 @@ class BoardWindowController: NSWindowController, NSOpenSavePanelDelegate, ViewCo
         viewController.delegate = self
     }
     
+    
+    
     func save() {
+        if board.history.stack.isEmpty {
+            let _ = dialogue(msg: "Cannot save empty game.", infoTxt: "Give me some juice!")
+            return
+        }
         print("Saving...")
         let panel = NSSavePanel(contentRect: contentViewController!.view.bounds, styleMask: .fullSizeContentView, backing: .buffered, defer: true)
         panel.allowedFileTypes = ["gzero"]
         panel.delegate = self
         if let window = self.window {
-            panel.beginSheetModal(for: window) { response in
+            panel.nameFieldStringValue = fileName
+            panel.beginSheetModal(for: window) {response in
                 switch response {
-                case .OK: window.title = "Zero + (Saved)"
+                case .OK:
+                    self.fileName = panel.nameFieldStringValue
                 default: break
                 }
             }
