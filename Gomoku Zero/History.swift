@@ -46,5 +46,24 @@ class History {
         return co
     }
     
+    /**
+     Serialize the history stack in the following format:
+     col,row;col,row;col,row...
+     */
+    func serialize() -> String {
+        var str =  stack.map{"\($0.col),\($0.row)"}
+            .reduce(""){"\($0);\($1)"}
+        str.removeFirst()
+        return str
+    }
     
+    /**
+     Reload serialized coordinates into the stack
+     */
+    func load(_ history: String) {
+        reverted = [Coordinate]()
+        self.stack = history.split(separator: ";")
+            .map{$0.split(separator: ",").map{Int($0)!}}
+            .map{(col: $0[0], row: $0[1])}
+    }
 }

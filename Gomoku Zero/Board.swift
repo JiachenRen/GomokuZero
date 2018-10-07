@@ -92,6 +92,22 @@ class Board {
     func isValid(_ co: Coordinate) -> Bool {
         return co.col >= 0 && co.row >= 0 && co.row < dimension && co.col < 19
     }
+
+    func serialize() -> String {
+        return "\(dimension)|" + history.serialize()
+    }
+    
+    func load(_ game: String) {
+        let segments = game.split(separator: "|")
+        dimension = Int(segments[0])!
+        restart() // Reset everything
+        history.load(String(segments[1]))
+        for co in history.stack { // Replay history
+            set(co, curPlayer)
+            curPlayer = curPlayer.next()
+        }
+        delegate?.boardDidUpdate(pieces: pieces)
+    }
 }
 
 protocol BoardDelegate {

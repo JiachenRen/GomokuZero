@@ -82,6 +82,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         activeWindowController.save()
     }
     
+    @IBAction func open(_ sender: NSMenuItem) {
+        let panel = NSOpenPanel(contentRect: NSRect.zero,
+            styleMask: .fullSizeContentView,
+            backing: .buffered,
+            defer: true)
+        panel.canChooseDirectories = false
+        panel.allowedFileTypes = ["gzero"]
+        panel.canChooseFiles = true
+        panel.allowsMultipleSelection = true
+        
+        panel.begin() { response in
+            switch response {
+            case .OK:
+                for url in panel.urls {
+                    let boardWindowController = NSStoryboard(name: "Main", bundle: nil)
+                        .instantiateController(withIdentifier: "board-window") as! BoardWindowController
+                    do {
+                        let game = try String(contentsOf: url, encoding: .utf8)
+                        boardWindowController.board.load(game)
+                        boardWindowController.showWindow(self)
+                    } catch let err {
+                        print(err)
+                    }
+                }
+            default: break
+            }
+        }
+    }
+    
     @IBAction func new(_ sender: NSMenuItem) {
         let dim = newGameDialogue()
         if dim != -1 {

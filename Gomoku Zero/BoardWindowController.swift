@@ -25,8 +25,7 @@ class BoardWindowController: NSWindowController, NSOpenSavePanelDelegate, ViewCo
         viewController.delegate = self
     }
     
-    
-    @objc func save() {
+    func save() {
         print("Saving...")
         let panel = NSSavePanel(contentRect: contentViewController!.view.bounds, styleMask: .fullSizeContentView, backing: .buffered, defer: true)
         panel.allowedFileTypes = ["gzero"]
@@ -42,10 +41,10 @@ class BoardWindowController: NSWindowController, NSOpenSavePanelDelegate, ViewCo
     }
 
     func panel(_ sender: Any, validate url: URL) throws {
-        print(url)
-        let str = "Success!"
         do {
-            try str.write(to: url, atomically: true, encoding: .utf8)
+            print("Saving to \(url)")
+            let game = board.serialize()
+            try game.write(to: url, atomically: true, encoding: .utf8)
         } catch let err {
             print(err)
         }
