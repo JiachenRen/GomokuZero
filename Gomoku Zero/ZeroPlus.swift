@@ -30,7 +30,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     var betaCut = 0
     var cumCutDepth = 0
     
-    var personality: Personality = .gameTheory
+    var personality: Personality = .search(depth: 7, breadth: 3)
     var activeMapDiffStack = [[Coordinate]]()
     
     var startTime: TimeInterval = 0
@@ -124,8 +124,8 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
                 } else {
                     move = offensiveMove.score > defensiveMove.score ? offensiveMove : defensiveMove
                 }
-            case .gameTheory:
-                move = minimax(depth: 5, breadth: 4, player: identity, alpha: Int.min, beta: Int.max)
+            case .search(depth: let d, breadth: let b):
+                move = minimax(depth: d, breadth: b, player: identity, alpha: Int.min, beta: Int.max)
             }
             
             delegate.bestMoveExtrapolated(co: move!.co)
@@ -261,7 +261,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
 }
 
 enum Personality {
-    case basic, gameTheory
+    case basic, search(depth: Int, breadth: Int)
 }
 
 protocol ZeroPlusDelegate {

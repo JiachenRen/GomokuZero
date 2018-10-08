@@ -35,7 +35,7 @@ class ViewController: NSViewController, BoardDelegate, BoardViewDelegate {
         print()
         // Establish delegation with board (Model)
         board.delegate = self
-        board.zeroPlus.visDelegate = self // Set this to nil to disable visualization
+        zeroPlus.visDelegate = self // Set this to nil to disable visualization
         
         // Establish delegation with board view (View)
         boardView.delegate = self
@@ -44,7 +44,10 @@ class ViewController: NSViewController, BoardDelegate, BoardViewDelegate {
     
     func updateVisPref(_ name: String) {
         switch name {
-        case "Toggle Animation": boardView.zeroPlusVisualization = !boardView.zeroPlusVisualization
+        case "Toggle Animation":
+            let state = boardView.zeroPlusVisualization
+            boardView.zeroPlusVisualization = !state
+            zeroPlus.visDelegate = state ? nil : self
         case "Toggle Active Map": boardView.activeMapVisible = !boardView.activeMapVisible
         case "Toggle History Stack": boardView.zeroPlusHistoryVisible  = !boardView.zeroPlusHistoryVisible
         default: break

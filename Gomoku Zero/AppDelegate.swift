@@ -16,6 +16,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var normalTextureMenuItem: NSMenuItem!
     @IBOutlet weak var lightTextureMenuItem: NSMenuItem!
     
+    @IBOutlet weak var depthMenuItem: NSMenuItem!
+    @IBOutlet weak var breadthMenuItem: NSMenuItem!
+    
     var textureMenuItems: [NSMenuItem?] {
         return [
             darkTextureMenuItem,
@@ -56,6 +59,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         default: activeBoard?.triggerZeroBrainstorm()
         }
     }
+    
+    @IBAction func zeroPlusPersonality(_ sender: NSMenuItem) {
+        switch sender.title {
+        case "Heuristic": activeBoard?.zeroPlus.personality = .basic
+        case "Search":
+            let config = zeroPlusSearchConfigDialogue()
+            if let personality = config {
+                switch personality {
+                case .search(let depth, let breadth):
+                    depthMenuItem.title = "Depth = \(depth)"
+                    breadthMenuItem.title = "Breadth = \(breadth)"
+                default: break
+                }
+                activeBoard?.zeroPlus.personality = personality
+            }
+        default: break
+        }
+    }
+    
     
     @IBAction func zeroPlusVisualization(_ sender: NSMenuItem) {
         activeController?.updateVisPref(sender.title)
@@ -152,6 +174,48 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    func zeroPlusSearchConfigDialogue() -> Personality? {
+        let msg = NSAlert()
+        msg.addButton(withTitle: "Ok")
+        msg.addButton(withTitle: "Cancel")
+        msg.alertStyle = .informational
+        msg.messageText = "Configure search algorithm"
+        msg.window.title = "ZeroPlus Search Configuration"
+        msg.informativeText = "Recommended depth is between 3 and 10 while the recommended breadth is between 2 and 5. Depth of 3, for example, means ZeroPlus will look ahead 3 steps, i.e. black > white > black, etc. The larger the depth, the slower the calculation. Breadth controls the number of steps to be considered at each depth. "
+        
+        let accView = NSView(frame: NSRect(x: 0, y: 0, width: 300, height: 48))
+        
+        let depthLabel = NSTextField(frame: NSRect(x: 0, y: 24, width: 300, height: 24))
+        depthLabel.textColor = NSColor.systemGray
+        depthLabel.stringValue = "Depth\t\t\t\t   Breadth"
+        depthLabel.isBezeled = false
+        depthLabel.drawsBackground = false
+        depthLabel.isEditable = false
+        depthLabel.isSelectable = false
+        accView.addSubview(depthLabel)
+        
+        let depthBox = NSComboBox(frame: NSRect(x: 0, y: 0, width: 100, height: 24))
+        depthBox.addItems(withObjectValues: [3,4,5,6,7,8,9,10])
+        depthBox.placeholderString = "7"
+        accView.addSubview(depthBox)
+        
+        let breadthBox = NSComboBox(frame: NSRect(x: 150, y: 0, width: 100, height: 24))
+        breadthBox.addItems(withObjectValues: [2,3,4,5])
+        breadthBox.placeholderString = "3"
+        accView.addSubview(breadthBox)
+        
+        msg.accessoryView?.addSubview(accView)
+        msg.accessoryView = accView
+        let response = msg.runModal()
+        
+        if (response == .alertFirstButtonReturn) {
+            let d = Int(depthBox.stringValue) ?? Int(depthBox.placeholderString!)!
+            let b = Int(breadthBox.stringValue) ?? Int(breadthBox.placeholderString!)!
+            return Personality.search(depth: d, breadth: b)
+        } else {
+            return nil
+        }
+    }
 
     func newGameDialogue() -> Int {
         let msg = NSAlert()
@@ -200,6 +264,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let controller = activeController {
             boardTextureMenuItem.title = controller.boardTextureView.isHidden ?
                 "Show Board Texture" : "Hide Board Texture"
+            switch activeBoard!.zeroPlus.personality {
+            case .search(let depth, let breadth):
+                depthMenuItem.title = "Depth = \(depth)"
+                breadthMenuItem.title = "Breadth = \(breadth)"
+            default: break
+            }
         }
     }
 
