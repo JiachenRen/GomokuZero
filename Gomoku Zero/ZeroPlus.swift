@@ -26,6 +26,10 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     var staticId: Piece = .black
     var heuristicEvaluator = HeuristicEvaluator()
     
+    var alphaCut = 0
+    var betaCut = 0
+    var cumCutDepth = 0
+    
     var personality: Personality = .gameTheory
     var activeMapDiffStack = [[Coordinate]]()
     
@@ -93,6 +97,9 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         activeMapDiffStack = [[Coordinate]]()
         identity = player // Note: this is changed every time put() is called.
         staticId = player
+        alphaCut = 0
+        betaCut = 0
+        cumCutDepth = 0
         
         visDelegate?.activeMapUpdated(activeMap: activeCoMap) // Notify the delegate that active map has updated
         
@@ -115,12 +122,15 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
                     move = offensiveMove.score > defensiveMove.score ? offensiveMove : defensiveMove
                 }
             case .gameTheory:
-                move = minimax(depth: 4, breadth: 3, player: identity, alpha: Int.min, beta: Int.max)
+                move = minimax(depth: 5, breadth: 4, player: identity, alpha: Int.min, beta: Int.max)
             }
             
             delegate.bestMoveExtrapolated(co: move!.co)
         }
-        
+        let avgCutDepth = Double(cumCutDepth) / Double(alphaCut + betaCut)
+        print("alpha cut: \(alphaCut)\t beta cut: \(betaCut)\t avg. cut depth: \(avgCutDepth))")
+        print("recognized sequences: \(Evaluator.hashMap.count)")
+
         visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map
     }
     
@@ -158,7 +168,8 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     
         if player == staticId {
             var bestMove = (co: (col: 0,row: 0), score: Int.min)
-            for move in [genSortedMoves(for: player, num: breadth), genSortedMoves(for: player.next(), num: breadth)].flatMap({$0}) {
+            let moves = [genSortedMoves(for: player, num: breadth), genSortedMoves(for: player.next(), num: breadth)].flatMap({$0})
+            for move in moves {
                 put(at: move.co)
                 let score = minimax(depth: depth - 1, breadth: breadth, player: player.next(),alpha: alpha, beta: beta).score
                 revert()
@@ -171,7 +182,9 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
                     
                     alpha = max(alpha, score)
                     if beta <= alpha {
-                        print("alpha cut at depth \(depth)")
+                        bestMove.score = alpha
+                        cumCutDepth += depth
+                        alphaCut += 1
                         return bestMove
                     }
                 }
@@ -179,7 +192,8 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
             return bestMove
         } else {
             var bestMove = (co: (col: 0,row: 0), score: Int.max)
-            for move in [genSortedMoves(for: player, num: breadth), genSortedMoves(for: player.next(), num: breadth)].flatMap({$0}) {
+            let moves = [genSortedMoves(for: player, num: breadth), genSortedMoves(for: player.next(), num: breadth)].flatMap({$0})
+            for move in moves { // Should these be sorted?
                 put(at: move.co)
                 let score = minimax(depth: depth - 1, breadth: breadth, player: player.next(), alpha: alpha, beta: beta).score
                 revert()
@@ -192,7 +206,9 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
                     
                     beta = min(beta, score)
                     if beta <= alpha {
-                        print("beta cut at depth \(depth)")
+                        bestMove.score = beta
+                        cumCutDepth += depth
+                        betaCut += 1
                         return bestMove
                     }
                 }
@@ -209,6 +225,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         identity = identity.next()
         history.push(co)
         updateActiveCoMap(at: co, recordDiff: true) // Push changes to active map to the difference stack
+        visDelegate?.historyDidUpdate(history: history)
         visDelegate?.activeMapUpdated(activeMap: activeCoMap)
     }
     
@@ -217,6 +234,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         pieces[co.row][co.col] = .none
         identity = identity.next()
         revertActiveMapUpdate()
+        visDelegate?.historyDidUpdate(history: history)
         visDelegate?.activeMapUpdated(activeMap: activeCoMap)
     }
     
@@ -252,4 +270,5 @@ protocol ZeroPlusDelegate {
 
 protocol ZeroPlusVisualizationDelegate {
     func activeMapUpdated(activeMap: [[Bool]]?)
+    func historyDidUpdate(history: History?)
 }

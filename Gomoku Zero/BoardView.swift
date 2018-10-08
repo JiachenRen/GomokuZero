@@ -91,6 +91,11 @@ public typealias Coordinate = (col: Int, row: Int)
             setNeedsDisplay(bounds)
         }
     }
+    var zeroPlusHistory: History? {
+        didSet {
+            setNeedsDisplay(bounds)
+        }
+    }
     
     let blackPieceImg = NSImage(named: "black_piece_shadowed")
     let whitePieceImg = NSImage(named: "white_piece_shadowed")
@@ -119,6 +124,26 @@ public typealias Coordinate = (col: Int, row: Int)
         drawPendingPiece()
         
         drawActiveMap()
+        
+        drawZeroPlusHistory()
+    }
+    
+    func drawZeroPlusHistory() {
+        if let history = zeroPlusHistory {
+            var player = board.curPlayer
+            for (col, row) in history.stack {
+                let ctr = onScreen(Coordinate(col: col, row: row))
+                let rect = CGRect(center: ctr, size: CGSize(width: pieceRadius * 2, height: pieceRadius * 2))
+                switch player {
+                case .black:
+                    blackPieceImg?.draw(in: rect)
+                case .white:
+                    whitePieceImg?.draw(in: rect)
+                case .none: break
+                }
+                player = player.next()
+            }
+        }
     }
     
     func drawActiveMap() {
@@ -128,9 +153,9 @@ public typealias Coordinate = (col: Int, row: Int)
         for row in 0..<map.count {
             for col in 0..<map[row].count {
                 let ctr = onScreen(Coordinate(col: col, row: row))
-                let rect = CGRect(center: ctr, size: CGSize(width: pieceRadius, height: pieceRadius))
+                let rect = CGRect(center: ctr, size: CGSize(width: pieceRadius / 2, height: pieceRadius / 2))
                 if map[row][col] {
-                    NSColor.green.setStroke()
+                    NSColor.green.withAlphaComponent(0.7).setStroke()
                     let path = NSBezierPath(ovalIn: rect)
                     path.lineWidth = 1
                     path.stroke()

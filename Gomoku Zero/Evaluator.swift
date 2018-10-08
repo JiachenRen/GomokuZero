@@ -10,6 +10,8 @@ import Foundation
 
 class Evaluator {
     
+    static var hashMap: Dictionary<[Piece], Int> = Dictionary()
+    
     /**
      Point evaluation
      */
@@ -73,11 +75,11 @@ class Evaluator {
         
         
         let linearScores = seqPairs.map{ seqPair -> Int in
-            let newThreats = analyzeThreats(seq: seqPair.new, for: player) // Convert sequences to threat types
-            let orgThreats = analyzeThreats(seq: seqPair.org, for: player) // Convert sequences to threat types
+            let newScore = sequenceToScore(seq: seqPair.new, for: player) // Convert sequences to threat types
+            let oldScore = sequenceToScore(seq: seqPair.org, for: player) // Convert sequences to threat types
 //            print("old: \(orgThreats)")
 //            print("new: \(newThreats)")
-            return convertToScore(threats: newThreats) - convertToScore(threats: orgThreats)
+            return newScore - oldScore
         }
         
         return linearScores.reduce(0) {$0 + $1}
@@ -86,6 +88,17 @@ class Evaluator {
     static func convertToScore(threats: [ThreatType]) -> Int {
         return threats.map{$0.rawValue}  // Convert threat types to score
             .reduce(0){$0 + $1} // Sum it up
+    }
+    
+    static func sequenceToScore(seq: [Piece], for player: Piece) -> Int {
+        if let cached = hashMap[seq] {
+            return cached
+        } else {
+            let threats = analyzeThreats(seq: seq, for: player)
+            let score = convertToScore(threats: threats)
+            hashMap[seq] = score
+            return score
+        }
     }
     
     // The results could be hashed!!!

@@ -60,4 +60,10 @@ extension ViewController: ZeroPlusVisualizationDelegate {
             self.boardView.activeMap = activeMap
         }
     }
+    
+    func historyDidUpdate(history: History?) {
+        DispatchQueue.main.async {
+            self.boardView.zeroPlusHistory = history
+        }
+    }
 }
