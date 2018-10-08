@@ -25,6 +25,7 @@
 		1F60C39F21690DE700580C99 /* BoardWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39E21690DE700580C99 /* BoardWindowController.swift */; };
 		1F60C3A121690EFD00580C99 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3A021690EFD00580C99 /* Notification.swift */; };
 		1F60C3A921692B0900580C99 /* BoardTextureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3A821692B0900580C99 /* BoardTextureView.swift */; };
+		1F64DC4C216BF38000467F78 /* Zobrist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F64DC4B216BF38000467F78 /* Zobrist.swift */; };
 		1FE063E2216B028E00E07006 /* HeuristicEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE063E1216B028E00E07006 /* HeuristicEvaluator.swift */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +72,7 @@
 		1F60C3A021690EFD00580C99 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		1F60C3A821692B0900580C99 /* BoardTextureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTextureView.swift; sourceTree = "<group>"; };
 		1F60C3AB21694C7100580C99 /* Gomoku Zero.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Gomoku Zero.entitlements"; sourceTree = "<group>"; };
+		1F64DC4B216BF38000467F78 /* Zobrist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zobrist.swift; sourceTree = "<group>"; };
 		1FE063E1216B028E00E07006 /* HeuristicEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeuristicEvaluator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -175,6 +177,7 @@
 				1F4270DE2169B00B0081DBFC /* Evaluator.swift */,
 				1F4270E02169BCEA0081DBFC /* ThreatType.swift */,
 				1FE063E1216B028E00E07006 /* HeuristicEvaluator.swift */,
+				1F64DC4B216BF38000467F78 /* Zobrist.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -316,6 +319,7 @@
 			files = (
 				1F60C3642168232C00580C99 /* ViewController.swift in Sources */,
 				1F4270DD2169A1480081DBFC /* ZeroPlus.swift in Sources */,
+				1F64DC4C216BF38000467F78 /* Zobrist.swift in Sources */,
 				1F60C3932168265C00580C99 /* BoardView.swift in Sources */,
 				1F4270E12169BCEA0081DBFC /* ThreatType.swift in Sources */,
 				1F60C39D216863F000580C99 /* History.swift in Sources */,

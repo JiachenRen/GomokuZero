@@ -9,54 +9,8 @@
 import Foundation
 
 class Evaluator {
-    class SequencePair: Hashable {
-        
-        var hashValue: Int {
-            return 0 ^ new.hashValue ^ org.hashValue
-        }
-        
-        static func == (lhs: Evaluator.SequencePair, rhs: Evaluator.SequencePair) -> Bool {
-            return lhs.new == rhs.new && lhs.org == rhs.org
-        }
-        
-        var new: [Piece]
-        var org: [Piece]
-        
-        init(new: [Piece], org: [Piece]) {
-            self.new = new
-            self.org = org
-        }
-    }
-    
-    class SequenceGroup: Hashable {
-        var hashValue: Int {
-            var hash = 0
-            hash ^= horizontal.hashValue
-            hash ^= vertical.hashValue
-            hash ^= diagonal1.hashValue
-            hash ^= diagonal2.hashValue
-            return hash
-        }
-        
-        static func == (lhs: Evaluator.SequenceGroup, rhs: Evaluator.SequenceGroup) -> Bool {
-            return lhs.hashValue == rhs.hashValue
-        }
-        
-        let horizontal: SequencePair
-        let vertical: SequencePair
-        let diagonal1: SequencePair
-        let diagonal2: SequencePair
-        
-        init(_ h: SequencePair, _ v: SequencePair, _ d1: SequencePair, _ d2: SequencePair) {
-            self.horizontal = h
-            self.vertical = v
-            self.diagonal1 = d1
-            self.diagonal2 = d2
-        }
-    }
-    
     static var seqHashMap: Dictionary<[Piece], Int> = Dictionary()
-    static var seqGroupHashMap: Dictionary<SequenceGroup, Int> = Dictionary()
+    static var seqGroupHashMap: Dictionary<[SequencePair], Int> = Dictionary()
     
     /**
      Point evaluation
@@ -113,24 +67,23 @@ class Evaluator {
         
 
         
-        let seqGroup = SequenceGroup(hSeqPair, vSeqPair, d1SeqPair, d2SeqPair)
+        let seqPairs = [hSeqPair, vSeqPair, d1SeqPair, d2SeqPair]
         
         
-        return cacheOrGet(seqGroup: seqGroup, for: player)
+        return cacheOrGet(seqPairs: seqPairs, for: player)
     }
     
-    static func cacheOrGet(seqGroup: SequenceGroup, for player: Piece) -> Int  {
-        if let cached = seqGroupHashMap[seqGroup] {
+    static func cacheOrGet(seqPairs: [SequencePair], for player: Piece) -> Int  {
+        if let cached = seqGroupHashMap[seqPairs] {
             return cached
         } else {
-            let seqPairs = [seqGroup.horizontal, seqGroup.vertical, seqGroup.diagonal1, seqGroup.diagonal2]
             let linearScores = seqPairs.map{ seqPair -> Int in
                 let newScore = cacheOrGet(seq: seqPair.new, for: player) // Convert sequences to threat types
                 let oldScore = cacheOrGet(seq: seqPair.org, for: player) // Convert sequences to threat types
                 return newScore - oldScore
             }
             let score = linearScores.reduce(0) {$0 + $1}
-            seqGroupHashMap[seqGroup] = score
+            seqGroupHashMap[seqPairs] = score
             return score
         }
     }
@@ -266,5 +219,23 @@ class Evaluator {
         return findPatterns(from: 0, to: seq.count - 1)
             .map{Sequence.resolve(same: $0.same, gap: $0.gap, gapIdx: $0.gapIdx)}
             .map{$0.toThreatType(head: .straight)}
+    }
+    
+    class SequencePair: Hashable {
+        var hashValue: Int {
+            return 0 ^ new.hashValue ^ org.hashValue
+        }
+        
+        static func == (lhs: Evaluator.SequencePair, rhs: Evaluator.SequencePair) -> Bool {
+            return lhs.new == rhs.new && lhs.org == rhs.org
+        }
+        
+        var new: [Piece]
+        var org: [Piece]
+        
+        init(new: [Piece], org: [Piece]) {
+            self.new = new
+            self.org = org
+        }
     }
 }

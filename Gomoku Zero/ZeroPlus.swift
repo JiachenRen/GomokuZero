@@ -20,7 +20,10 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     var dim: Int {
         return delegate.dimension
     }
-    var pieces = [[Piece]]()
+    var zobrist: Zobrist!
+    var pieces: [[Piece]] {
+        return zobrist.matrix
+    }
     var history = History()
     var identity: Piece = .black
     var staticId: Piece = .black
@@ -30,7 +33,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     var betaCut = 0
     var cumCutDepth = 0
     
-    var personality: Personality = .search(depth: 7, breadth: 3)
+    var personality: Personality = .search(depth: 5, breadth: 3)
     var activeMapDiffStack = [[Coordinate]]()
     
     var startTime: TimeInterval = 0
@@ -94,7 +97,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     func getMove(for player: Piece) {
         startTime = Date().timeIntervalSince1970
         heuristicEvaluator.delegate = self
-        pieces = delegate.pieces // Update and store the arrangement of pieces from the delegate
+        zobrist = Zobrist(matrix: delegate.pieces) // Update and store the arrangement of pieces from the delegate
         genActiveCoMap() // Generate a map containing active coordinates
         history = History() // Create new history
         activeMapDiffStack = [[Coordinate]]()
@@ -143,6 +146,20 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map
     }
     
+    func getOrCache() -> Int {
+        var score = 0
+        if let retrieved = Zobrist.hashedTransposMaps[dim - 1][zobrist] {
+            score = retrieved
+        } else {
+            let black = heuristicEvaluator.evaluate(for: staticId)
+            let white = heuristicEvaluator.evaluate(for: staticId.next())
+            score = black - white
+            let newZobrist = Zobrist(zobrist: zobrist)
+            Zobrist.hashedTransposMaps[dim - 1][newZobrist] = score
+        }
+        return staticId == .black ? score : -score
+    }
+    
     
     //    function minimax(node, depth, maximizingPlayer)
     //    02     if depth = 0 or node is a terminal node
@@ -163,15 +180,13 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     //    15         return bestValue
     func minimax(depth: Int, breadth: Int, player: Piece,  alpha: Int, beta: Int) -> Move {
         var alpha = alpha, beta = beta // Make alpha beta mutable
-        let myScore = heuristicEvaluator.evaluate(for: staticId)
-        let opponentScore = heuristicEvaluator.evaluate(for: staticId.next())
-        let score = myScore - opponentScore
+        let score = getOrCache()
         
         if score >= ThreatType.terminalMax || score <= -ThreatType.terminalMax { // Terminal state has reached
             return (co: (col: 0, row: 0), score: score)
         } else if depth == 0  {
             var move = genSortedMoves(for: player)[0]
-            move.score = myScore - opponentScore
+            move.score = score
             return move
         }
     
@@ -230,7 +245,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
      Used in pair with revert to handle changes to the board efficiently
      */
     private func put(at co: Coordinate) {
-        pieces[co.row][co.col] = identity
+        zobrist.put(at: co, identity)
         identity = identity.next()
         history.push(co)
         updateActiveCoMap(at: co, recordDiff: true) // Push changes to active map to the difference stack
@@ -240,7 +255,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     
     private func revert() {
         let co = history.revert()!
-        pieces[co.row][co.col] = .none
+        zobrist.revert(at: co)
         identity = identity.next()
         revertActiveMapUpdate()
         visDelegate?.historyDidUpdate(history: history)

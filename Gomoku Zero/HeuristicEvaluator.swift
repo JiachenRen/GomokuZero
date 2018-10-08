@@ -254,10 +254,10 @@ class HeuristicEvaluator {
         color = player
         counter = Counter()
             
-        horizontalInspection()  //horizontal inspection
-        verticalInspection()    //vertical inspection
-        diagnalInspectionUllr() //diagnal inspection upper left to lower right
-        diagnalInspectionUrll() //diagnal inspection upper right to lower left
+        horizontalInspection()  // Horizontal inspection
+        verticalInspection()    // Vertical inspection
+        diagnalInspectionUllr() // Diagnal inspection upper left to lower right
+        diagnalInspectionUrll() // Diagnal inspection upper right to lower left
         
         return counter.fives * ThreatType.five.rawValue
             + counter.freeFour * ThreatType.straightFour.rawValue
@@ -305,7 +305,7 @@ class Counter {
     var freeOne = 0
     
     func interpret(_ leftBlocked: Bool, _ rightBlocked: Bool, _ i: Int, _ same: Int, _ gaps: Int) {
-        if (leftBlocked && rightBlocked && i <= 4) { //no potential
+        if (leftBlocked && rightBlocked && i <= 4) { // No potential
             return
         }
         switch gaps {
