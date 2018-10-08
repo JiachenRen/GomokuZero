@@ -137,7 +137,8 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         let avgCutDepth = Double(cumCutDepth) / Double(alphaCut + betaCut)
         print("alpha cut: \(alphaCut)\t beta cut: \(betaCut)\t avg. cut depth: \(avgCutDepth))")
         print("recognized sequences: \(Evaluator.seqHashMap.count)")
-        print("calc. duration (ms): \(Date().timeIntervalSince1970 - startTime)")
+        print("recognized sequence groups: \(Evaluator.seqGroupHashMap.count)")
+        print("calc. duration (s): \(Date().timeIntervalSince1970 - startTime)")
 
         visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map
     }

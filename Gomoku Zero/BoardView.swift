@@ -161,9 +161,9 @@ public typealias Coordinate = (col: Int, row: Int)
         paragraphStyle.alignment = .center
         let attributes = [
             NSAttributedString.Key.paragraphStyle  : paragraphStyle,
-            NSAttributedString.Key.font            : NSFont.systemFont(ofSize: pieceRadius),
-            NSAttributedString.Key.foregroundColor : piece == .black ? isMostRecent ? NSColor.green : NSColor.white : isMostRecent ? .red : .black,
-            ]
+            .font            : NSFont.systemFont(ofSize: pieceRadius),
+            .foregroundColor : piece == .black ? isMostRecent ? NSColor.green : NSColor.white : isMostRecent ? .red : .black,
+        ]
         
         let textRect = CGRect(center: onScreen(co), size: CGSize(width: 50, height: pieceRadius))
         let attrString = NSAttributedString(string: "\(num)", attributes: attributes)

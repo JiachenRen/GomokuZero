@@ -12,9 +12,7 @@ class Evaluator {
     class SequencePair: Hashable {
         
         var hashValue: Int {
-//            print("new: \(new.hashValue)")
-//            print("org: \(org.hashValue)")
-            return new.hashValue & org.hashValue
+            return 0 ^ new.hashValue ^ org.hashValue
         }
         
         static func == (lhs: Evaluator.SequencePair, rhs: Evaluator.SequencePair) -> Bool {
@@ -28,11 +26,37 @@ class Evaluator {
             self.new = new
             self.org = org
         }
+    }
+    
+    class SequenceGroup: Hashable {
+        var hashValue: Int {
+            var hash = 0
+            hash ^= horizontal.hashValue
+            hash ^= vertical.hashValue
+            hash ^= diagonal1.hashValue
+            hash ^= diagonal2.hashValue
+            return hash
+        }
         
+        static func == (lhs: Evaluator.SequenceGroup, rhs: Evaluator.SequenceGroup) -> Bool {
+            return lhs.hashValue == rhs.hashValue
+        }
+        
+        let horizontal: SequencePair
+        let vertical: SequencePair
+        let diagonal1: SequencePair
+        let diagonal2: SequencePair
+        
+        init(_ h: SequencePair, _ v: SequencePair, _ d1: SequencePair, _ d2: SequencePair) {
+            self.horizontal = h
+            self.vertical = v
+            self.diagonal1 = d1
+            self.diagonal2 = d2
+        }
     }
     
     static var seqHashMap: Dictionary<[Piece], Int> = Dictionary()
-    static var seqGroupHashMap: Dictionary<[SequencePair], Int> = Dictionary()
+    static var seqGroupHashMap: Dictionary<SequenceGroup, Int> = Dictionary()
     
     /**
      Point evaluation
@@ -89,23 +113,24 @@ class Evaluator {
         
 
         
-        let seqPairs = [hSeqPair, vSeqPair, d1SeqPair, d2SeqPair]
+        let seqGroup = SequenceGroup(hSeqPair, vSeqPair, d1SeqPair, d2SeqPair)
         
         
-        return cacheOrGet(seqPairs: seqPairs, for: player)
+        return cacheOrGet(seqGroup: seqGroup, for: player)
     }
     
-    static func cacheOrGet(seqPairs: [SequencePair], for player: Piece) -> Int  {
-        if let cached = seqGroupHashMap[seqPairs] {
+    static func cacheOrGet(seqGroup: SequenceGroup, for player: Piece) -> Int  {
+        if let cached = seqGroupHashMap[seqGroup] {
             return cached
         } else {
+            let seqPairs = [seqGroup.horizontal, seqGroup.vertical, seqGroup.diagonal1, seqGroup.diagonal2]
             let linearScores = seqPairs.map{ seqPair -> Int in
                 let newScore = cacheOrGet(seq: seqPair.new, for: player) // Convert sequences to threat types
                 let oldScore = cacheOrGet(seq: seqPair.org, for: player) // Convert sequences to threat types
                 return newScore - oldScore
             }
             let score = linearScores.reduce(0) {$0 + $1}
-            seqGroupHashMap[seqPairs] = score
+            seqGroupHashMap[seqGroup] = score
             return score
         }
     }
@@ -115,6 +140,9 @@ class Evaluator {
             .reduce(0){$0 + $1} // Sum it up
     }
     
+    /**
+     Results in 1/3 speed up
+     */
     static func cacheOrGet(seq: [Piece], for player: Piece) -> Int {
         if let cached = seqHashMap[seq] {
             return cached
