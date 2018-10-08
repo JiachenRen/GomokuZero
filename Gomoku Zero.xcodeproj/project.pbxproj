@@ -122,15 +122,13 @@
 		1F60C3602168232C00580C99 /* Gomoku Zero */ = {
 			isa = PBXGroup;
 			children = (
-				1F60C3AB21694C7100580C99 /* Gomoku Zero.entitlements */,
-				1F60C3612168232C00580C99 /* AppDelegate.swift */,
 				1F60C39B21685C0D00580C99 /* Others */,
 				1F60C3632168232C00580C99 /* ViewController.swift */,
+				1F60C39E21690DE700580C99 /* BoardWindowController.swift */,
 				1F60C3682168232D00580C99 /* Assets.xcassets */,
 				1F60C36A2168232D00580C99 /* Main.storyboard */,
-				1F60C3922168265C00580C99 /* BoardView.swift */,
 				1F60C3AA21694A7000580C99 /* Model */,
-				1F60C39E21690DE700580C99 /* BoardWindowController.swift */,
+				1F60C3922168265C00580C99 /* BoardView.swift */,
 				1F60C3A821692B0900580C99 /* BoardTextureView.swift */,
 			);
 			path = "Gomoku Zero";
@@ -157,6 +155,8 @@
 		1F60C39B21685C0D00580C99 /* Others */ = {
 			isa = PBXGroup;
 			children = (
+				1F60C3612168232C00580C99 /* AppDelegate.swift */,
+				1F60C3AB21694C7100580C99 /* Gomoku Zero.entitlements */,
 				1F60C36D2168232E00580C99 /* Info.plist */,
 				1F60C3652168232C00580C99 /* Gomoku_Zero.xcdatamodeld */,
 			);

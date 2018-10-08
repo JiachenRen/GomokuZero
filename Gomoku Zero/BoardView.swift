@@ -15,7 +15,8 @@ public typealias Coordinate = (col: Int, row: Int)
     
     @IBInspectable var pieceScale: CGFloat = 0.95
 
-    @IBInspectable var vertexColor: NSColor = NSColor.black
+    @IBInspectable var vertexColor: NSColor = .black
+    @IBInspectable var zeroPlusThemeColor: NSColor = .yellow
     
     var gridLineWidth: CGFloat {
         return gap / 20
@@ -93,9 +94,14 @@ public typealias Coordinate = (col: Int, row: Int)
     }
     var zeroPlusHistory: History? {
         didSet {
-            setNeedsDisplay(bounds)
+            zeroPlusHistory?.stack.forEach{setNeedsDisplay(rect(at: $0))}
+            zeroPlusHistory?.reverted.forEach{setNeedsDisplay(rect(at: $0))}
         }
     }
+    
+    var activeMapVisible = true
+    var zeroPlusVisualization = true
+    var zeroPlusHistoryVisible = true
     
     let blackPieceImg = NSImage(named: "black_piece_shadowed")
     let whitePieceImg = NSImage(named: "white_piece_shadowed")
@@ -123,9 +129,14 @@ public typealias Coordinate = (col: Int, row: Int)
         
         drawPendingPiece()
         
-        drawActiveMap()
-        
-        drawZeroPlusHistory()
+        if zeroPlusVisualization {
+            if activeMapVisible {
+                drawActiveMap()
+            }
+            if zeroPlusHistoryVisible {
+                drawZeroPlusHistory()
+            }
+        }
     }
     
     func drawZeroPlusHistory() {
@@ -155,9 +166,9 @@ public typealias Coordinate = (col: Int, row: Int)
                 let ctr = onScreen(Coordinate(col: col, row: row))
                 let rect = CGRect(center: ctr, size: CGSize(width: pieceRadius / 2, height: pieceRadius / 2))
                 if map[row][col] {
-                    NSColor.green.withAlphaComponent(0.7).setStroke()
-                    let path = NSBezierPath(ovalIn: rect)
-                    path.lineWidth = 1
+                    zeroPlusThemeColor.withAlphaComponent(0.8).setStroke()
+                    let path = NSBezierPath(rect: rect)
+                    path.lineWidth = gridLineWidth
                     path.stroke()
                 }
             }

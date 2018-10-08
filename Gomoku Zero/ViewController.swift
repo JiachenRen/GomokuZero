@@ -26,6 +26,9 @@ class ViewController: NSViewController, BoardDelegate, BoardViewDelegate {
     
     var delegate: ViewControllerDelegate?
     var board: Board = Board(dimension: 19)
+    var zeroPlus: ZeroPlus {
+        return board.zeroPlus
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +39,16 @@ class ViewController: NSViewController, BoardDelegate, BoardViewDelegate {
         
         // Establish delegation with board view (View)
         boardView.delegate = self
+        
+    }
+    
+    func updateVisPref(_ name: String) {
+        switch name {
+        case "Toggle Animation": boardView.zeroPlusVisualization = !boardView.zeroPlusVisualization
+        case "Toggle Active Map": boardView.activeMapVisible = !boardView.activeMapVisible
+        case "Toggle History Stack": boardView.zeroPlusHistoryVisible  = !boardView.zeroPlusHistoryVisible
+        default: break
+        }
     }
     
     override func mouseUp(with event: NSEvent) {

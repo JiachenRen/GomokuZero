@@ -9,8 +9,30 @@
 import Foundation
 
 class Evaluator {
+    class SequencePair: Hashable {
+        
+        var hashValue: Int {
+//            print("new: \(new.hashValue)")
+//            print("org: \(org.hashValue)")
+            return new.hashValue & org.hashValue
+        }
+        
+        static func == (lhs: Evaluator.SequencePair, rhs: Evaluator.SequencePair) -> Bool {
+            return lhs.new == rhs.new && lhs.org == rhs.org
+        }
+        
+        var new: [Piece]
+        var org: [Piece]
+        
+        init(new: [Piece], org: [Piece]) {
+            self.new = new
+            self.org = org
+        }
+        
+    }
     
-    static var hashMap: Dictionary<[Piece], Int> = Dictionary()
+    static var seqHashMap: Dictionary<[Piece], Int> = Dictionary()
+    static var seqGroupHashMap: Dictionary<[SequencePair], Int> = Dictionary()
     
     /**
      Point evaluation
@@ -47,7 +69,7 @@ class Evaluator {
         }
         
         
-        typealias SequencePair = (new: [Piece], org: [Piece])
+        
         func genSequence(x1: Int, y1: Int, x2: Int, y2: Int) -> SequencePair {
             var seqA: [Piece] = explore(x: x1, y: y1).reversed()
             var org = seqA // The sequence without the addition of the new piece, since we are only concerned about difference
@@ -56,7 +78,7 @@ class Evaluator {
             let seqB = explore(x: x2, y: y2)
             seqA.append(contentsOf: seqB)
             org.append(contentsOf: seqB)
-            return (seqA, org)
+            return SequencePair(new: seqA, org: org)
         }
         
         let hSeqPair = genSequence(x1: -1, y1: 0, x2: 1, y2: 0)    // Horizontal (from left to right)
@@ -69,20 +91,23 @@ class Evaluator {
         
         let seqPairs = [hSeqPair, vSeqPair, d1SeqPair, d2SeqPair]
         
-//        print("coordinate: \(co)")
-//        print(seqPairs)
         
-        
-        
-        let linearScores = seqPairs.map{ seqPair -> Int in
-            let newScore = sequenceToScore(seq: seqPair.new, for: player) // Convert sequences to threat types
-            let oldScore = sequenceToScore(seq: seqPair.org, for: player) // Convert sequences to threat types
-//            print("old: \(orgThreats)")
-//            print("new: \(newThreats)")
-            return newScore - oldScore
+        return cacheOrGet(seqPairs: seqPairs, for: player)
+    }
+    
+    static func cacheOrGet(seqPairs: [SequencePair], for player: Piece) -> Int  {
+        if let cached = seqGroupHashMap[seqPairs] {
+            return cached
+        } else {
+            let linearScores = seqPairs.map{ seqPair -> Int in
+                let newScore = cacheOrGet(seq: seqPair.new, for: player) // Convert sequences to threat types
+                let oldScore = cacheOrGet(seq: seqPair.org, for: player) // Convert sequences to threat types
+                return newScore - oldScore
+            }
+            let score = linearScores.reduce(0) {$0 + $1}
+            seqGroupHashMap[seqPairs] = score
+            return score
         }
-        
-        return linearScores.reduce(0) {$0 + $1}
     }
     
     static func convertToScore(threats: [ThreatType]) -> Int {
@@ -90,13 +115,13 @@ class Evaluator {
             .reduce(0){$0 + $1} // Sum it up
     }
     
-    static func sequenceToScore(seq: [Piece], for player: Piece) -> Int {
-        if let cached = hashMap[seq] {
+    static func cacheOrGet(seq: [Piece], for player: Piece) -> Int {
+        if let cached = seqHashMap[seq] {
             return cached
         } else {
             let threats = analyzeThreats(seq: seq, for: player)
             let score = convertToScore(threats: threats)
-            hashMap[seq] = score
+            seqHashMap[seq] = score
             return score
         }
     }

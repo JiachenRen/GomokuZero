@@ -57,6 +57,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    @IBAction func zeroPlusVisualization(_ sender: NSMenuItem) {
+        activeController?.updateVisPref(sender.title)
+    }
+    
+    
     @IBAction func textureSelected(_ sender: NSMenuItem) {
         var texture: NSImage! = nil
         for item in textureMenuItems {

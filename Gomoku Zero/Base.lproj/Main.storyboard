@@ -183,7 +183,7 @@
                                                             <action selector="zeroPlus:" target="Voe-Tx-rLC" id="Q8f-RP-oWL"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="Take over" keyEquivalent="t" id="Sxf-6V-AGf">
+                                                    <menuItem title="Take Over" keyEquivalent="t" id="Sxf-6V-AGf">
                                                         <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                                         <connections>
                                                             <action selector="zeroPlus:" target="Voe-Tx-rLC" id="Umc-gf-Ah9"/>
@@ -247,6 +247,32 @@
                                             <connections>
                                                 <action selector="textureSelected:" target="Voe-Tx-rLC" id="QGL-eG-o65"/>
                                             </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="mAU-td-igV"/>
+                                        <menuItem title="ZeroPlus Visualization" id="W3T-jw-wLa">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="ZeroPlus Visualization" id="hKD-jX-Qsf">
+                                                <items>
+                                                    <menuItem title="Toggle Animation" keyEquivalent="a" id="SfP-c7-ipu">
+                                                        <modifierMask key="keyEquivalentModifierMask" control="YES" option="YES"/>
+                                                        <connections>
+                                                            <action selector="zeroPlusVisualization:" target="Voe-Tx-rLC" id="AN2-ec-cXB"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Toggle History Stack" tag="2" keyEquivalent="h" id="RCk-XM-XhH">
+                                                        <modifierMask key="keyEquivalentModifierMask" control="YES" option="YES"/>
+                                                        <connections>
+                                                            <action selector="zeroPlusVisualization:" target="Voe-Tx-rLC" id="gcG-4z-ewb"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Toggle Active Map" tag="1" keyEquivalent="m" id="jso-7b-D3A">
+                                                        <modifierMask key="keyEquivalentModifierMask" control="YES" option="YES"/>
+                                                        <connections>
+                                                            <action selector="zeroPlusVisualization:" target="Voe-Tx-rLC" id="CPO-M0-fCV"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="hB3-LF-h0Y"/>
                                         <menuItem title="Enter Full Screen" keyEquivalent="f" id="4J7-dP-txa">

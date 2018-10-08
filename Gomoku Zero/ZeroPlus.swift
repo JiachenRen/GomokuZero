@@ -33,6 +33,8 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     var personality: Personality = .gameTheory
     var activeMapDiffStack = [[Coordinate]]()
     
+    var startTime: TimeInterval = 0
+    
     /**
      Generate a map that indicates the active coordinates
      */
@@ -90,6 +92,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     }
     
     func getMove(for player: Piece) {
+        startTime = Date().timeIntervalSince1970
         heuristicEvaluator.delegate = self
         pieces = delegate.pieces // Update and store the arrangement of pieces from the delegate
         genActiveCoMap() // Generate a map containing active coordinates
@@ -129,7 +132,8 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         }
         let avgCutDepth = Double(cumCutDepth) / Double(alphaCut + betaCut)
         print("alpha cut: \(alphaCut)\t beta cut: \(betaCut)\t avg. cut depth: \(avgCutDepth))")
-        print("recognized sequences: \(Evaluator.hashMap.count)")
+        print("recognized sequences: \(Evaluator.seqHashMap.count)")
+        print("calc. duration (ms): \(Date().timeIntervalSince1970 - startTime)")
 
         visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map
     }
