@@ -285,6 +285,12 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="mAU-td-igV"/>
+                                        <menuItem title="Toggle Step Number" keyEquivalent="n" id="PNr-FH-bs4">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                                            <connections>
+                                                <action selector="toggleStepNumber:" target="Voe-Tx-rLC" id="l5v-RL-poD"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="ZeroPlus Visualization" id="W3T-jw-wLa">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="ZeroPlus Visualization" id="hKD-jX-Qsf">

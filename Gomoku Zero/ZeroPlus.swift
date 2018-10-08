@@ -115,6 +115,10 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
             case .basic:
                 let offensiveMoves = genSortedMoves(for: player)
                 let defensiveMoves = genSortedMoves(for: player.next())
+                if offensiveMoves.count == 0 && defensiveMoves.count == 0 {
+                    // If ZeroPlus is out of moves...
+                    return
+                }
                 let offensiveMove = offensiveMoves[0]
                 let defensiveMove = defensiveMoves[0]
                 if offensiveMove.score >= ThreatType.terminalMax {

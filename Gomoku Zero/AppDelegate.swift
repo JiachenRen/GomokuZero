@@ -59,6 +59,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         default: activeBoard?.triggerZeroBrainstorm()
         }
     }
+    @IBAction func toggleStepNumber(_ sender: NSMenuItem) {
+        if let bool = activeController?.boardView.overlayStepNumber {
+            activeController?.boardView.overlayStepNumber = !bool
+        }
+    }
     
     @IBAction func zeroVsZero(_ sender: NSMenuItem) {
         if let board = activeBoard {

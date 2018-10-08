@@ -102,6 +102,11 @@ public typealias Coordinate = (col: Int, row: Int)
     var activeMapVisible = true
     var zeroPlusVisualization = true
     var zeroPlusHistoryVisible = true
+    var overlayStepNumber = false {
+        didSet {
+            setNeedsDisplay(bounds)
+        }
+    }
     
     let blackPieceImg = NSImage(named: "black_piece_shadowed")
     let whitePieceImg = NSImage(named: "white_piece_shadowed")
@@ -137,6 +142,32 @@ public typealias Coordinate = (col: Int, row: Int)
                 drawZeroPlusHistory()
             }
         }
+        
+        if overlayStepNumber {
+            drawStepNumberOverlay()
+        }
+    }
+    
+    func drawStepNumberOverlay() {
+        var color: Piece = .black
+        for (num, co) in board.history.stack.enumerated() {
+            drawStepNumberOverlay(num: num + 1, for: color, at: co, isMostRecent: num == board.history.stack.count - 1)
+            color = color.next()
+        }
+    }
+    
+    private func drawStepNumberOverlay(num: Int, for piece: Piece, at co: Coordinate, isMostRecent: Bool) {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        let attributes = [
+            NSAttributedString.Key.paragraphStyle  : paragraphStyle,
+            NSAttributedString.Key.font            : NSFont.systemFont(ofSize: pieceRadius),
+            NSAttributedString.Key.foregroundColor : piece == .black ? isMostRecent ? NSColor.green : NSColor.white : isMostRecent ? .red : .black,
+            ]
+        
+        let textRect = CGRect(center: onScreen(co), size: CGSize(width: 50, height: pieceRadius))
+        let attrString = NSAttributedString(string: "\(num)", attributes: attributes)
+        attrString.draw(in: textRect)
     }
     
     func drawZeroPlusHistory() {
@@ -166,7 +197,8 @@ public typealias Coordinate = (col: Int, row: Int)
                 let ctr = onScreen(Coordinate(col: col, row: row))
                 let rect = CGRect(center: ctr, size: CGSize(width: pieceRadius / 2, height: pieceRadius / 2))
                 if map[row][col] {
-                    zeroPlusThemeColor.withAlphaComponent(0.8).setStroke()
+                    let color: NSColor = board.curPlayer == .black ? .green : .yellow
+                    color.withAlphaComponent(0.8).setStroke()
                     let path = NSBezierPath(rect: rect)
                     path.lineWidth = gridLineWidth
                     path.stroke()
