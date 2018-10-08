@@ -13,7 +13,7 @@ typealias Move = (co: Coordinate, score: Int)
 /**
  Zero Plus - Jiachen's fifth attemp at making an unbeatable Gomoku AI
  */
-class ZeroPlus {
+class ZeroPlus: HeuristicEvaluatorDelegate {
     var delegate: ZeroPlusDelegate!
     var visDelegate: ZeroPlusVisualizationDelegate?
     var activeCoMap = [[Bool]]()
@@ -23,6 +23,8 @@ class ZeroPlus {
     var pieces = [[Piece]]()
     var history = History()
     var identity: Piece = .black
+    var staticId: Piece = .black
+    var heuristicEvaluator = HeuristicEvaluator()
     
     var personality: Personality = .gameTheory
     var activeMapDiffStack = [[Coordinate]]()
@@ -84,24 +86,25 @@ class ZeroPlus {
     }
     
     func getMove(for player: Piece) {
+        heuristicEvaluator.delegate = self
         pieces = delegate.pieces // Update and store the arrangement of pieces from the delegate
         genActiveCoMap() // Generate a map containing active coordinates
         history = History() // Create new history
         activeMapDiffStack = [[Coordinate]]()
-        identity = player
+        identity = player // Note: this is changed every time put() is called.
+        staticId = player
         
         visDelegate?.activeMapUpdated(activeMap: activeCoMap) // Notify the delegate that active map has updated
         
-        let offensiveMoves = genSortedMoves(for: player)
-        let defensiveMoves = genSortedMoves(for: player.next())
-        
-        if offensiveMoves.count == 0 { // When ZeroPlus is black, the first move is always at the center
+        if delegate.history.stack.count == 0 && player == .black{ // When ZeroPlus is black, the first move is always at the center
             delegate?.bestMoveExtrapolated(co: (dim / 2, dim / 2))
         } else {
-            var move = offensiveMoves[0]
+            var move: Move? = nil
             
             switch personality {
             case .basic:
+                let offensiveMoves = genSortedMoves(for: player)
+                let defensiveMoves = genSortedMoves(for: player.next())
                 let offensiveMove = offensiveMoves[0]
                 let defensiveMove = defensiveMoves[0]
                 if offensiveMove.score >= ThreatType.terminalMax {
@@ -112,10 +115,10 @@ class ZeroPlus {
                     move = offensiveMove.score > defensiveMove.score ? offensiveMove : defensiveMove
                 }
             case .gameTheory:
-                move = minimax(depth: 3, breadth: 3, maximizingPlayer: true, moves: offensiveMoves)
+                move = minimax(depth: 4, breadth: 3, player: identity)
             }
             
-            delegate.bestMoveExtrapolated(co: move.co)
+            delegate.bestMoveExtrapolated(co: move!.co)
         }
         
         visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map
@@ -139,29 +142,47 @@ class ZeroPlus {
     //    13             v := minimax(child, depth − 1, TRUE)
     //    14             bestValue := min(bestValue, v)
     //    15         return bestValue
-    func minimax(depth: Int, breadth: Int, maximizingPlayer: Bool, moves: [Move]) -> Move {
-        if depth == 0 || moves[0].score > ThreatType.terminalMax {
-            return moves[0]
-        }
+    func minimax(depth: Int, breadth: Int, player: Piece) -> Move {
+        let myScore = heuristicEvaluator.evaluate(for: staticId)
+        let opponentScore = heuristicEvaluator.evaluate(for: staticId.next())
+        let score = myScore - opponentScore
         
-        if maximizingPlayer {
-            var bestMove = moves[0]
-            for move in moves {
+        if score >= ThreatType.terminalMax || score <= -ThreatType.terminalMax { // Terminal state has reached
+            return (co: (col: 0, row: 0), score: score)
+        } else if depth == 0  {
+            var move = genSortedMoves(for: player)[0]
+            move.score = myScore - opponentScore
+            return move
+        }
+    
+        if player == staticId {
+            var bestMove = (co: (col: 0,row: 0), score: Int.min)
+            for move in [genSortedMoves(for: player, num: breadth), genSortedMoves(for: player.next(), num: breadth)].flatMap({$0}) {
                 put(at: move.co)
-                let moves = genSortedMoves(for: identity.next(), num: breadth)
-                let score = minimax(depth: depth - 1, breadth: breadth, maximizingPlayer: false, moves: moves).score
+                let score = minimax(depth: depth - 1, breadth: breadth, player: player.next()).score
                 revert()
-                bestMove.score = max(bestMove.score, score)
+                if score > bestMove.score {
+                    bestMove = move
+                    bestMove.score = score
+                    if score >= ThreatType.terminalMax {
+                        return bestMove
+                    }
+                }
             }
             return bestMove
         } else {
-            var bestMove = moves[0]
-            for move in moves {
+            var bestMove = (co: (col: 0,row: 0), score: Int.max)
+            for move in [genSortedMoves(for: player, num: breadth), genSortedMoves(for: player.next(), num: breadth)].flatMap({$0}) {
                 put(at: move.co)
-                let moves = genSortedMoves(for: identity, num: breadth)
-                let score = minimax(depth: depth - 1, breadth: breadth, maximizingPlayer: false, moves: moves).score
+                let score = minimax(depth: depth - 1, breadth: breadth, player: player.next()).score
                 revert()
-                bestMove.score = min(bestMove.score, score)
+                if score < bestMove.score {
+                    bestMove = move
+                    bestMove.score = score
+                    if score <= -ThreatType.terminalMax {
+                        return bestMove
+                    }
+                }
             }
             return bestMove
         }

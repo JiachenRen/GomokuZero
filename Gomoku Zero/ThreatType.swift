@@ -33,7 +33,7 @@ enum ThreatType: Int, CustomStringConvertible {
     
     case five = 1000000000 // Just a large number that nullifies the influence of the rest
     
-    case straightFour = 10000
+    case straightFour = 100000
     case straightThree = 5000
     case straightTwo = 100
     

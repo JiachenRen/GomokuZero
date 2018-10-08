@@ -10,8 +10,9 @@ import Foundation
 
 class Evaluator {
     
-    
-    
+    /**
+     Point evaluation
+     */
     static func evaluate(for player: Piece, at co: Coordinate, pieces: [[Piece]]) -> Int {
         let row = co.row, col = co.col, dim = pieces.count
         let opponent = player.next()
