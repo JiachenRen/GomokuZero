@@ -25,6 +25,7 @@ class Board: ZeroPlusDelegate {
     var curPlayer: Piece = .black
     var zeroAi: Piece = .none
     var zeroPlus = ZeroPlus()
+    var zeroXzero = false // When this is set to true, zero will play against itself!
     let zeroActivityQueue = DispatchQueue(label: "zeroPlus", attributes: .concurrent)
     
     init(dimension: Int) {
@@ -97,7 +98,7 @@ class Board: ZeroPlusDelegate {
      This would only take effect if it is ZeroPlus's turn.
      */
     func requestZeroBrainStorm() {
-        if zeroAi == curPlayer {
+        if zeroAi == curPlayer || zeroXzero {
             triggerZeroBrainstorm()
         }
     }

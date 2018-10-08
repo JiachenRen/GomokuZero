@@ -60,6 +60,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    @IBAction func zeroVsZero(_ sender: NSMenuItem) {
+        if let board = activeBoard {
+            board.zeroXzero = !board.zeroXzero
+            board.requestZeroBrainStorm()
+        }
+    }
+    
     @IBAction func zeroPlusPersonality(_ sender: NSMenuItem) {
         switch sender.title {
         case "Heuristic": activeBoard?.zeroPlus.personality = .basic

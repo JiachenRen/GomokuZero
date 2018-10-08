@@ -161,10 +161,17 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Controls" id="W48-6f-4Dl">
                                     <items>
-                                        <menuItem title="ZeroPlus" id="gPf-aE-Cfc">
+                                        <menuItem title="ZeroPlus Options" id="gPf-aE-Cfc">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="ZeroPlus" id="DRK-U1-p6I">
+                                            <menu key="submenu" title="ZeroPlus Options" id="DRK-U1-p6I">
                                                 <items>
+                                                    <menuItem title="Zero vs. Zero" keyEquivalent="z" id="cNp-DH-oo3">
+                                                        <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                                                        <connections>
+                                                            <action selector="zeroVsZero:" target="Voe-Tx-rLC" id="rvB-8d-m9h"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem isSeparatorItem="YES" id="o1U-hp-QJb"/>
                                                     <menuItem title="Black" keyEquivalent="b" id="0nO-Lq-kpK">
                                                         <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                                         <connections>
@@ -220,6 +227,7 @@
                                                 </items>
                                             </menu>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="afJ-wf-Ove"/>
                                         <menuItem title="Undo" keyEquivalent="z" id="dRJ-4n-Yzg">
                                             <connections>
                                                 <action selector="undo:" target="Voe-Tx-rLC" id="s0g-XU-tUD"/>

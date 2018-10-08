@@ -81,8 +81,8 @@ public typealias Coordinate = (col: Int, row: Int)
     
     var pendingPieceCo: Coordinate?
     var shouldDrawPendingPiece = true
-    func rect(at: Coordinate) -> CGRect {
-        return CGRect(center: onScreen(pendingPieceCo!),
+    func rect(at co: Coordinate) -> CGRect {
+        return CGRect(center: onScreen(co),
                       size: CGSize(width: pieceRadius * 2, height: pieceRadius * 2))
     }
     
