@@ -115,7 +115,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
                     move = offensiveMove.score > defensiveMove.score ? offensiveMove : defensiveMove
                 }
             case .gameTheory:
-                move = minimax(depth: 4, breadth: 3, player: identity)
+                move = minimax(depth: 4, breadth: 3, player: identity, alpha: Int.min, beta: Int.max)
             }
             
             delegate.bestMoveExtrapolated(co: move!.co)
@@ -142,7 +142,8 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     //    13             v := minimax(child, depth − 1, TRUE)
     //    14             bestValue := min(bestValue, v)
     //    15         return bestValue
-    func minimax(depth: Int, breadth: Int, player: Piece) -> Move {
+    func minimax(depth: Int, breadth: Int, player: Piece,  alpha: Int, beta: Int) -> Move {
+        var alpha = alpha, beta = beta // Make alpha beta mutable
         let myScore = heuristicEvaluator.evaluate(for: staticId)
         let opponentScore = heuristicEvaluator.evaluate(for: staticId.next())
         let score = myScore - opponentScore
@@ -159,12 +160,18 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
             var bestMove = (co: (col: 0,row: 0), score: Int.min)
             for move in [genSortedMoves(for: player, num: breadth), genSortedMoves(for: player.next(), num: breadth)].flatMap({$0}) {
                 put(at: move.co)
-                let score = minimax(depth: depth - 1, breadth: breadth, player: player.next()).score
+                let score = minimax(depth: depth - 1, breadth: breadth, player: player.next(),alpha: alpha, beta: beta).score
                 revert()
                 if score > bestMove.score {
                     bestMove = move
                     bestMove.score = score
                     if score >= ThreatType.terminalMax {
+                        return bestMove
+                    }
+                    
+                    alpha = max(alpha, score)
+                    if beta <= alpha {
+                        print("alpha cut at depth \(depth)")
                         return bestMove
                     }
                 }
@@ -174,12 +181,18 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
             var bestMove = (co: (col: 0,row: 0), score: Int.max)
             for move in [genSortedMoves(for: player, num: breadth), genSortedMoves(for: player.next(), num: breadth)].flatMap({$0}) {
                 put(at: move.co)
-                let score = minimax(depth: depth - 1, breadth: breadth, player: player.next()).score
+                let score = minimax(depth: depth - 1, breadth: breadth, player: player.next(), alpha: alpha, beta: beta).score
                 revert()
                 if score < bestMove.score {
                     bestMove = move
                     bestMove.score = score
                     if score <= -ThreatType.terminalMax {
+                        return bestMove
+                    }
+                    
+                    beta = min(beta, score)
+                    if beta <= alpha {
+                        print("beta cut at depth \(depth)")
                         return bestMove
                     }
                 }
