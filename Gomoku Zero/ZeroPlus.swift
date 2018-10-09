@@ -20,7 +20,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     var dim: Int {
         return delegate.dimension
     }
-    var zobrist: Zobrist!
+    var zobrist: Zobrist = Zobrist(matrix: [[Piece]]())
     var pieces: [[Piece]] {
         return zobrist.matrix
     }
@@ -94,9 +94,12 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         return [Move](genSortedMoves(for: player).prefix(num))
     }
     
+    init () {
+        heuristicEvaluator.delegate = self
+    }
+    
     func getMove(for player: Piece) {
         startTime = Date().timeIntervalSince1970
-        heuristicEvaluator.delegate = self
         zobrist = Zobrist(matrix: delegate.pieces) // Update and store the arrangement of pieces from the delegate
         genActiveCoMap() // Generate a map containing active coordinates
         history = History() // Create new history
@@ -108,6 +111,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         cumCutDepth = 0
         
         visDelegate?.activeMapUpdated(activeMap: activeCoMap) // Notify the delegate that active map has updated
+        visDelegate?.zeroPlus(isThinking: true)
         
         if delegate.history.stack.count == 0 && player == .black{ // When ZeroPlus is black, the first move is always at the center
             delegate?.bestMoveExtrapolated(co: (dim / 2, dim / 2))
@@ -124,9 +128,9 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
                 }
                 let offensiveMove = offensiveMoves[0]
                 let defensiveMove = defensiveMoves[0]
-                if offensiveMove.score >= ThreatType.terminalMax {
+                if offensiveMove.score >= Threat.win {
                     move = offensiveMove
-                } else if defensiveMove.score >= ThreatType.terminalMax {
+                } else if defensiveMove.score >= Threat.win {
                     move = defensiveMove
                 } else {
                     move = offensiveMove.score > defensiveMove.score ? offensiveMove : defensiveMove
@@ -144,6 +148,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         print("calc. duration (s): \(Date().timeIntervalSince1970 - startTime)")
 
         visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map
+        visDelegate?.zeroPlus(isThinking: false)
     }
     
     func getOrCache() -> Int {
@@ -151,8 +156,8 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         if let retrieved = Zobrist.hashedTransposMaps[dim - 1][zobrist] {
             score = retrieved
         } else {
-            let black = heuristicEvaluator.evaluate(for: staticId)
-            let white = heuristicEvaluator.evaluate(for: staticId.next())
+            let black = heuristicEvaluator.evaluate(for: .black)
+            let white = heuristicEvaluator.evaluate(for: .white)
             score = black - white
             let newZobrist = Zobrist(zobrist: zobrist)
             Zobrist.hashedTransposMaps[dim - 1][newZobrist] = score
@@ -182,7 +187,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         var alpha = alpha, beta = beta // Make alpha beta mutable
         let score = getOrCache()
         
-        if score >= ThreatType.terminalMax || score <= -ThreatType.terminalMax { // Terminal state has reached
+        if score >= Threat.win || score <= -Threat.win { // Terminal state has reached
             return (co: (col: 0, row: 0), score: score)
         } else if depth == 0  {
             var move = genSortedMoves(for: player)[0]
@@ -193,14 +198,14 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         if player == staticId {
             var bestMove = (co: (col: 0,row: 0), score: Int.min)
             let moves = [genSortedMoves(for: player, num: breadth), genSortedMoves(for: player.next(), num: breadth)].flatMap({$0})
-            for move in moves {
+            for move in moves.sorted(by: {$0.score > $1.score}) {
                 put(at: move.co)
                 let score = minimax(depth: depth - 1, breadth: breadth, player: player.next(),alpha: alpha, beta: beta).score
                 revert()
                 if score > bestMove.score {
                     bestMove = move
                     bestMove.score = score
-                    if score >= ThreatType.terminalMax {
+                    if score >= Threat.win {
                         return bestMove
                     }
                     
@@ -217,14 +222,14 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         } else {
             var bestMove = (co: (col: 0,row: 0), score: Int.max)
             let moves = [genSortedMoves(for: player, num: breadth), genSortedMoves(for: player.next(), num: breadth)].flatMap({$0})
-            for move in moves { // Should these be sorted?
+            for move in moves.sorted(by: {$0.score > $1.score}) { // Should these be sorted?
                 put(at: move.co)
                 let score = minimax(depth: depth - 1, breadth: breadth, player: player.next(), alpha: alpha, beta: beta).score
                 revert()
                 if score < bestMove.score {
                     bestMove = move
                     bestMove.score = score
-                    if score <= -ThreatType.terminalMax {
+                    if score <= -Threat.win {
                         return bestMove
                     }
                     
@@ -295,4 +300,5 @@ protocol ZeroPlusDelegate {
 protocol ZeroPlusVisualizationDelegate {
     func activeMapUpdated(activeMap: [[Bool]]?)
     func historyDidUpdate(history: History?)
+    func zeroPlus(isThinking: Bool)
 }

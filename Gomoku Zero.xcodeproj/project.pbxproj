@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		1F4270DD2169A1480081DBFC /* ZeroPlus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270DC2169A1480081DBFC /* ZeroPlus.swift */; };
 		1F4270DF2169B00B0081DBFC /* Evaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270DE2169B00B0081DBFC /* Evaluator.swift */; };
-		1F4270E12169BCEA0081DBFC /* ThreatType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270E02169BCEA0081DBFC /* ThreatType.swift */; };
+		1F4270E12169BCEA0081DBFC /* Threat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270E02169BCEA0081DBFC /* Threat.swift */; };
 		1F60C3622168232C00580C99 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3612168232C00580C99 /* AppDelegate.swift */; };
 		1F60C3642168232C00580C99 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3632168232C00580C99 /* ViewController.swift */; };
 		1F60C3672168232C00580C99 /* Gomoku_Zero.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3652168232C00580C99 /* Gomoku_Zero.xcdatamodeld */; };
@@ -49,7 +49,7 @@
 /* Begin PBXFileReference section */
 		1F4270DC2169A1480081DBFC /* ZeroPlus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPlus.swift; sourceTree = "<group>"; };
 		1F4270DE2169B00B0081DBFC /* Evaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Evaluator.swift; sourceTree = "<group>"; };
-		1F4270E02169BCEA0081DBFC /* ThreatType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreatType.swift; sourceTree = "<group>"; };
+		1F4270E02169BCEA0081DBFC /* Threat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Threat.swift; sourceTree = "<group>"; };
 		1F60C35E2168232C00580C99 /* Gomoku Zero.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Gomoku Zero.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F60C3612168232C00580C99 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F60C3632168232C00580C99 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -175,7 +175,7 @@
 				1F60C39C216863F000580C99 /* History.swift */,
 				1F4270DC2169A1480081DBFC /* ZeroPlus.swift */,
 				1F4270DE2169B00B0081DBFC /* Evaluator.swift */,
-				1F4270E02169BCEA0081DBFC /* ThreatType.swift */,
+				1F4270E02169BCEA0081DBFC /* Threat.swift */,
 				1FE063E1216B028E00E07006 /* HeuristicEvaluator.swift */,
 				1F64DC4B216BF38000467F78 /* Zobrist.swift */,
 			);
@@ -321,7 +321,7 @@
 				1F4270DD2169A1480081DBFC /* ZeroPlus.swift in Sources */,
 				1F64DC4C216BF38000467F78 /* Zobrist.swift in Sources */,
 				1F60C3932168265C00580C99 /* BoardView.swift in Sources */,
-				1F4270E12169BCEA0081DBFC /* ThreatType.swift in Sources */,
+				1F4270E12169BCEA0081DBFC /* Threat.swift in Sources */,
 				1F60C39D216863F000580C99 /* History.swift in Sources */,
 				1F60C39F21690DE700580C99 /* BoardWindowController.swift in Sources */,
 				1F60C39921685A8B00580C99 /* Utilities.swift in Sources */,

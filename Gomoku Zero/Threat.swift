@@ -8,9 +8,9 @@
 
 import Foundation
 
-enum ThreatType: Int, CustomStringConvertible {
+enum Threat: Int, CustomStringConvertible {
     
-    static let terminalMax = 1000000
+    static let win = 1000000
     
     var description: String {
         switch self {
@@ -88,7 +88,7 @@ enum Sequence {
         }
     }
     
-    func toThreatType(head: Head) -> ThreatType {
+    func toThreatType(head: Head) -> Threat {
         switch head {
         case .blocked:
             switch self {

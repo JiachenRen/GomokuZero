@@ -107,6 +107,25 @@ public typealias Coordinate = (col: Int, row: Int)
             setNeedsDisplay(bounds)
         }
     }
+    var userInteractionDisabled = false {
+        didSet {
+            if let co = pendingPieceCo {
+                DispatchQueue.main.async { [unowned self] in
+                    self.setNeedsDisplay(self.rect(at: co))
+                }
+            }
+        }
+    }
+    
+    var winningCoordinates: [Coordinate]? {
+        didSet {
+            if let coordinates = winningCoordinates {
+                for co in coordinates {
+                    setNeedsDisplay(rect(at: co))
+                }
+            }
+        }
+    }
     
     let blackPieceImg = NSImage(named: "black_piece_shadowed")
     let whitePieceImg = NSImage(named: "white_piece_shadowed")
@@ -132,7 +151,9 @@ public typealias Coordinate = (col: Int, row: Int)
         
         drawPieces()
         
-        drawPendingPiece()
+        if !userInteractionDisabled {
+            drawPendingPiece()
+        }
         
         if zeroPlusVisualization {
             if activeMapVisible {
@@ -145,6 +166,21 @@ public typealias Coordinate = (col: Int, row: Int)
         
         if overlayStepNumber {
             drawStepNumberOverlay()
+        }
+        
+        if board.gameHasEnded && !overlayStepNumber {
+            highlightWinningCoordinates()
+        }
+    }
+    
+    func highlightWinningCoordinates() {
+        winningCoordinates?.forEach {
+            var rect = self.rect(at: $0)
+            rect = CGRect(center: CGPoint(x: rect.midX, y: rect.midY), size: CGSize(width: rect.width / 4, height: rect.height / 4))
+            let dot = NSBezierPath(ovalIn: rect)
+            let color: NSColor = pieces![$0.row][$0.col] == .black ? .green : .blue
+            color.withAlphaComponent(0.8).setFill()
+            dot.fill()
         }
     }
     
@@ -218,8 +254,8 @@ public typealias Coordinate = (col: Int, row: Int)
     
     override func mouseUp(with event: NSEvent) {
         let pos = relPos(evt: event)
-        if pos.x <= 0 || pos.y <= 0 {
-            // When users drag and release out side of the board area, do nothing.
+        if pos.x <= 0 || pos.y <= 0 || userInteractionDisabled {
+            // When users drag and release out side of the board area or user interaction disabled, do nothing.
             return
         }
         delegate?.didMouseUpOn(co: onBoard(pos))

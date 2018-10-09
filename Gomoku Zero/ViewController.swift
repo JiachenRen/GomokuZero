@@ -8,8 +8,7 @@
 
 import Cocoa
 
-class ViewController: NSViewController, BoardDelegate, BoardViewDelegate {
-    
+class ViewController: NSViewController, BoardViewDelegate {
     
     @IBOutlet weak var boardView: BoardView!
     @IBOutlet weak var boardTextureView: BoardTextureView!
@@ -19,10 +18,9 @@ class ViewController: NSViewController, BoardDelegate, BoardViewDelegate {
         board.put(at: co)
     }
     
-    func boardDidUpdate(pieces: [[Piece]]) {
-        // Transfer the current arrangement of pieces to board view for display
-        boardView.pieces = pieces
-    }
+    
+    
+    
     
     var delegate: ViewControllerDelegate?
     var board: Board = Board(dimension: 19)
@@ -70,6 +68,22 @@ protocol ViewControllerDelegate {
     var board: Board {get}
 }
 
+extension ViewController: BoardDelegate {
+    func gameHasEnded(winner: Piece, coordinates: [Coordinate]) {
+        DispatchQueue.main.async {
+            self.boardView.winningCoordinates = coordinates
+            let msg = winner == .black ? "Black wins!" : "White wins!"
+            let _  = dialogue(msg: msg, infoTxt: "Hit Shift + Command + R (⇧⌘R) to restart the game.")
+        }
+    }
+    
+    func boardDidUpdate(pieces: [[Piece]]) {
+        // Transfer the current arrangement of pieces to board view for display
+        boardView.pieces = pieces
+    }
+    
+}
+
 extension ViewController: ZeroPlusVisualizationDelegate {
     func activeMapUpdated(activeMap: [[Bool]]?) {
         DispatchQueue.main.async {
@@ -81,5 +95,9 @@ extension ViewController: ZeroPlusVisualizationDelegate {
         DispatchQueue.main.async {
             self.boardView.zeroPlusHistory = history
         }
+    }
+    
+    func zeroPlus(isThinking: Bool) {
+        boardView.userInteractionDisabled = isThinking
     }
 }

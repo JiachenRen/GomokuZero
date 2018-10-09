@@ -88,7 +88,7 @@ class Evaluator {
         }
     }
     
-    static func convertToScore(threats: [ThreatType]) -> Int {
+    static func convertToScore(threats: [Threat]) -> Int {
         return threats.map{$0.rawValue}  // Convert threat types to score
             .reduce(0){$0 + $1} // Sum it up
     }
@@ -108,7 +108,7 @@ class Evaluator {
     }
     
     // The results could be hashed!!!
-    static func analyzeThreats(seq: [Piece], for player: Piece) -> [ThreatType] {
+    static func analyzeThreats(seq: [Piece], for player: Piece) -> [Threat] {
         let opponent = player.next()
         let leftBlocked = seq.first! == opponent
         let rightBlocked = seq.last! == opponent
@@ -193,7 +193,7 @@ class Evaluator {
                 let startIdx = 1, endIdx = seq.count - 2
                 let patterns = findPatterns(from: startIdx, to: endIdx)
                 let resolved = patterns.map{Sequence.resolve(same: $0.same, gap: $0.gap, gapIdx: $0.gapIdx)}
-                return zip(patterns, resolved).map {(pattern, sequence) -> ThreatType in
+                return zip(patterns, resolved).map {(pattern, sequence) -> Threat in
                     let blocked = pattern.startIdx == startIdx || pattern.endIdx == endIdx
                     let type: Head = (blocked ? .blocked : .straight)
                     return sequence.toThreatType(head: type)

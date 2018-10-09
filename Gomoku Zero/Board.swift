@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Board: ZeroPlusDelegate {
+class Board: ZeroPlusDelegate, HeuristicEvaluatorDelegate {
     var dimension: Int {
         didSet {
             if dimension != oldValue {
@@ -21,15 +21,19 @@ class Board: ZeroPlusDelegate {
     var pieces = [[Piece]]()
     var delegate: BoardDelegate?
     var history = History()
+    var heuristicEvaluator: HeuristicEvaluator
     
     var curPlayer: Piece = .black
     var zeroAi: Piece = .none
     var zeroPlus = ZeroPlus()
     var zeroXzero = false // When this is set to true, zero will play against itself!
+    var gameHasEnded = false
     let zeroActivityQueue = DispatchQueue(label: "zeroPlus", attributes: .concurrent)
     
     init(dimension: Int) {
+        heuristicEvaluator = HeuristicEvaluator()
         self.dimension = dimension
+        heuristicEvaluator.delegate = self
         zeroPlus.delegate = self
         restart()
     }
@@ -42,6 +46,7 @@ class Board: ZeroPlusDelegate {
         clear()
         curPlayer = .black
         history = History()
+        gameHasEnded = false
         requestZeroBrainStorm()
         delegate?.boardDidUpdate(pieces: pieces)
     }
@@ -73,6 +78,7 @@ class Board: ZeroPlusDelegate {
     func undo() {
         if let co = history.revert() {
             set(co, .none)
+            gameHasEnded = false
             curPlayer = curPlayer.next()
             delegate?.boardDidUpdate(pieces: pieces)
         }
@@ -86,19 +92,99 @@ class Board: ZeroPlusDelegate {
     }
     
     func put(at co: Coordinate) {
-        if !isValid(co) || pieces[co.row][co.col] != .none { return }
+        if !isValid(co) || pieces[co.row][co.col] != .none || gameHasEnded {
+            return
+        }
         set(co, curPlayer)
         history.push(co)
+        delegate?.boardDidUpdate(pieces: pieces)
+        
+        if let winner = hasWinner() {
+            gameHasEnded = true
+            let cos = findWinningCoordinates()
+            delegate?.gameHasEnded(winner: winner, coordinates: cos)
+        }
+        
         curPlayer = curPlayer.next()
         requestZeroBrainStorm()
-        delegate?.boardDidUpdate(pieces: pieces)
+    }
+    
+    func hasWinner() -> Piece? {
+        if history.stack.count == 0 { return nil}
+        let blackScore = heuristicEvaluator.evaluate(for: .black)
+        let whiteScore = heuristicEvaluator.evaluate(for: .white)
+        if blackScore > Threat.win || whiteScore >  Threat.win {
+            return blackScore > whiteScore ? .black : .white
+        }
+        return nil
+    }
+    
+    /**
+     Find the coordinates of winning pieces
+     */
+    public func findWinningCoordinates() -> [Coordinate] {
+        var winningCos = [Coordinate]()
+        let row = history.stack.last!.row, col = history.stack.last!.col
+        let color = pieces[row][col]
+        (-4...0).forEach {
+            var i = $0, buff = [Coordinate]()
+            
+            // Vertical
+            for q in i...(i+4) {
+                let co = Coordinate(col: col + q, row: row)
+                if !isValid(co) || pieces[co.row][co.col] == .none || pieces[co.row][co.col] != color {
+                    buff.removeAll()
+                    break
+                }
+                buff.append(co)
+            }
+            winningCos.append(contentsOf: buff)
+            buff.removeAll()
+            
+            // Horizontal
+            for q in i...(i+4) {
+                let co = Coordinate(col: col, row: row + q)
+                if !isValid(co) || pieces[co.row][co.col] == .none || pieces[co.row][co.col] != color {
+                    buff.removeAll()
+                    break
+                }
+                buff.append(co)
+            }
+            winningCos.append(contentsOf: buff)
+            buff.removeAll()
+            
+            // Diagnol slope = 1
+            for q in i...(i+4) {
+                let co = Coordinate(col: col + q, row: row + q)
+                if !isValid(co) || pieces[co.row][co.col] == .none || pieces[co.row][co.col] != color {
+                    buff.removeAll()
+                    break
+                }
+                buff.append(co)
+            }
+            winningCos.append(contentsOf: buff)
+            buff.removeAll()
+            
+            //diagnol slope = -1
+            for q in i...(i+4) {
+                let co = Coordinate(col: col + q, row: row - q)
+                if !isValid(co) || pieces[co.row][co.col] == .none || pieces[co.row][co.col] != color {
+                    buff.removeAll()
+                    break
+                }
+                buff.append(co)
+            }
+            winningCos.append(contentsOf: buff)
+            buff.removeAll()
+        }
+        return winningCos
     }
     
     /**
      This would only take effect if it is ZeroPlus's turn.
      */
     func requestZeroBrainStorm() {
-        if zeroAi == curPlayer || zeroXzero {
+        if (zeroAi == curPlayer || zeroXzero) && !gameHasEnded {
             triggerZeroBrainstorm()
         }
     }
@@ -107,6 +193,7 @@ class Board: ZeroPlusDelegate {
      Use this to allow ZeroPlus to make a move
      */
     func triggerZeroBrainstorm() {
+        if gameHasEnded {return}
         zeroActivityQueue.async {[unowned self] in
             self.zeroPlus.getMove(for: self.curPlayer)
         }
@@ -142,6 +229,7 @@ class Board: ZeroPlusDelegate {
 
 protocol BoardDelegate {
     func boardDidUpdate(pieces: [[Piece]])
+    func gameHasEnded(winner: Piece, coordinates: [Coordinate])
 }
 
 extension Board: CustomStringConvertible {

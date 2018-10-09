@@ -259,20 +259,20 @@ class HeuristicEvaluator {
         diagnalInspectionUllr() // Diagnal inspection upper left to lower right
         diagnalInspectionUrll() // Diagnal inspection upper right to lower left
         
-        return counter.fives * ThreatType.five.rawValue
-            + counter.freeFour * ThreatType.straightFour.rawValue
-            + counter.freeThree * ThreatType.straightThree.rawValue
-            + counter.freeTwo * ThreatType.straightTwo.rawValue
+        return counter.fives * Threat.five.rawValue
+            + counter.freeFour * Threat.straightFour.rawValue
+            + counter.freeThree * Threat.straightThree.rawValue
+            + counter.freeTwo * Threat.straightTwo.rawValue
             
-            + counter.blockedFour * ThreatType.blockedFour.rawValue
-            + counter.blockedThree * ThreatType.blockedThree.rawValue
-            + counter.blockedTwo * ThreatType.blockedTwo.rawValue
+            + counter.blockedFour * Threat.blockedFour.rawValue
+            + counter.blockedThree * Threat.blockedThree.rawValue
+            + counter.blockedTwo * Threat.blockedTwo.rawValue
             
-            + counter.blockedPokedFour * ThreatType.blockedPokedFour.rawValue
-            + counter.freePokedFour * ThreatType.straightPokedFour.rawValue
+            + counter.blockedPokedFour * Threat.blockedPokedFour.rawValue
+            + counter.freePokedFour * Threat.straightPokedFour.rawValue
             
-            + counter.freePokedThree * ThreatType.straightPokedThree.rawValue
-            + counter.blockedPokedThree * ThreatType.blockedPokedThree.rawValue
+            + counter.freePokedThree * Threat.straightPokedThree.rawValue
+            + counter.blockedPokedThree * Threat.blockedPokedThree.rawValue
         // Missing straight poked 2
     }
 }
