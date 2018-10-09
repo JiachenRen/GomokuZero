@@ -10,7 +10,8 @@ import Foundation
 
 enum Threat: Int, CustomStringConvertible {
     
-    static let win = 1000000
+    static let win = 1000000000000000
+    static let interestThreshold = 6000
     
     var description: String {
         switch self {
@@ -31,23 +32,22 @@ enum Threat: Int, CustomStringConvertible {
         }
     }
     
-    case five = 1000000000 // Just a large number that nullifies the influence of the rest
+    case five = 10000000000000000 // Just a large number that nullifies the influence of the rest
     
-    case straightFour = 100000
-    case straightThree = 5000
+    case straightFour =  100000
+    case straightPokedFour = 9000
+    case blockedFour =   5000
+    case blockedPokedFour = 4999
+    
+    case straightThree = 4000
+    case straightPokedThree = 3999
+    case blockedThree =  1000
+    case blockedPokedThree = 999
+    
     case straightTwo = 100
-    
-    case blockedFour = 5002
-    case blockedThree = 50
-    case blockedTwo = 10
-    
-    case straightPokedFour = 5001
-    case straightPokedThree = 900
-    case straightPokedTwo = 99
-    
-    case blockedPokedFour = 499
-    case blockedPokedThree = 49
-    case blockedPokedTwo = 9
+    case straightPokedTwo = 90
+    case blockedTwo = 80
+    case blockedPokedTwo = 70
     
     case none = 0
 }

@@ -29,14 +29,18 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     var staticId: Piece = .black
     var heuristicEvaluator = HeuristicEvaluator()
     
+    
     var alphaCut = 0
     var betaCut = 0
     var cumCutDepth = 0
     
-    var personality: Personality = .search(depth: 5, breadth: 3)
+    var personality: Personality = .search(depth: 5, breadth: 4)
+    var iterativeDeepening = true
     var activeMapDiffStack = [[Coordinate]]()
     
     var startTime: TimeInterval = 0
+    var maxThinkingTime: TimeInterval = 10
+    var iterativeDeepeningCompleted = false
     
     /**
      Generate a map that indicates the active coordinates
@@ -98,6 +102,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         heuristicEvaluator.delegate = self
     }
     
+    
     func getMove(for player: Piece) {
         startTime = Date().timeIntervalSince1970
         zobrist = Zobrist(matrix: delegate.pieces) // Update and store the arrangement of pieces from the delegate
@@ -111,10 +116,11 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         cumCutDepth = 0
         
         visDelegate?.activeMapUpdated(activeMap: activeCoMap) // Notify the delegate that active map has updated
-        visDelegate?.zeroPlus(isThinking: true)
         
         if delegate.history.stack.count == 0 && player == .black{ // When ZeroPlus is black, the first move is always at the center
             delegate?.bestMoveExtrapolated(co: (dim / 2, dim / 2))
+        } else if delegate.history.stack.count == 1 && player == .white {
+            delegate?.bestMoveExtrapolated(co: getSecondMove())
         } else {
             var move: Move? = nil
             
@@ -136,7 +142,49 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
                     move = offensiveMove.score > defensiveMove.score ? offensiveMove : defensiveMove
                 }
             case .search(depth: let d, breadth: let b):
-                move = minimax(depth: d, breadth: b, player: identity, alpha: Int.min, beta: Int.max)
+                if iterativeDeepening {
+                    iterativeDeepeningCompleted = false
+                    var bestMove: Move?
+                    var workItems = [DispatchWorkItem]()
+                    var maxDepth = 0
+                    let group = DispatchGroup()
+                    
+                    for depth in 1...d {
+                        let workItem = DispatchWorkItem(qos: .userInteractive, flags: .enforceQoS) {
+                            let zero = ZeroPlus()
+                            zero.delegate = self.delegate
+                            zero.zobrist = Zobrist(zobrist: self.zobrist)
+                            zero.genActiveCoMap()
+                            zero.activeMapDiffStack = [[Coordinate]]()
+                            zero.identity = self.identity
+                            zero.staticId = self.staticId
+                            zero.startTime = self.startTime
+                            let bestForDepth = zero.minimax(depth: depth, breadth: b, player: zero.identity, alpha: Int.min, beta: Int.max)
+                            if depth > maxDepth { // The deepter the depth, the more reliable the generated move.
+                                bestMove = bestForDepth
+                                maxDepth = depth
+                            }
+                            print("deepening finished at depth = \(depth), move = \(bestForDepth)")
+                        }
+                        DispatchQueue.global(qos: .userInteractive).async(group: group, execute: workItem)
+                        workItems.append(workItem)
+                    }
+                    
+                    group.notify(queue: DispatchQueue.global()) { [unowned self] in
+                        self.iterativeDeepeningCompleted = true
+                    }
+                    
+                    while Date().timeIntervalSince1970 - startTime < maxThinkingTime {
+                        if iterativeDeepeningCompleted {
+                            break
+                        }
+                        Thread.sleep(forTimeInterval: 0.01)
+                    }
+                    workItems.forEach{$0.cancel()}
+                    move = bestMove
+                } else {
+                    move = minimax(depth: d, breadth: b, player: identity, alpha: Int.min, beta: Int.max)
+                }
             }
             
             delegate.bestMoveExtrapolated(co: move!.co)
@@ -148,7 +196,21 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         print("calc. duration (s): \(Date().timeIntervalSince1970 - startTime)")
 
         visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map
-        visDelegate?.zeroPlus(isThinking: false)
+    }
+    
+    /**
+     This is a special case, generate a random second move around the first move.
+     */
+    func getSecondMove() -> Coordinate {
+        let firstMove = delegate.history.stack.first!
+        let range = Int.random(in: 0...5) == 0 ? -2...2 : -1...1
+        let randOffset1 = Int.random(in: range)
+        let randOffset2 = Int.random(in: range)
+        let co = Coordinate(col: firstMove.col + randOffset1, row: firstMove.row + randOffset2)
+        if !delegate.isValid(co) || co == firstMove  {
+            return getSecondMove()
+        }
+        return co
     }
     
     func getOrCache() -> Int {
@@ -184,7 +246,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     //    14             bestValue := min(bestValue, v)
     //    15         return bestValue
     func minimax(depth: Int, breadth: Int, player: Piece,  alpha: Int, beta: Int) -> Move {
-        var alpha = alpha, beta = beta // Make alpha beta mutable
+        var alpha = alpha, beta = beta, depth = depth // Make alpha beta mutable
         let score = getOrCache()
         
         if score >= Threat.win || score <= -Threat.win { // Terminal state has reached
@@ -217,6 +279,10 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
                         return bestMove
                     }
                 }
+                // Time limited threat space search
+                if Date().timeIntervalSince1970 - startTime > maxThinkingTime {
+                    return bestMove
+                }
             }
             return bestMove
         } else {
@@ -240,6 +306,9 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
                         betaCut += 1
                         return bestMove
                     }
+                }
+                if Date().timeIntervalSince1970 - startTime > maxThinkingTime {
+                    return bestMove
                 }
             }
             return bestMove
@@ -300,5 +369,4 @@ protocol ZeroPlusDelegate {
 protocol ZeroPlusVisualizationDelegate {
     func activeMapUpdated(activeMap: [[Bool]]?)
     func historyDidUpdate(history: History?)
-    func zeroPlus(isThinking: Bool)
 }

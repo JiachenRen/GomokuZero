@@ -96,8 +96,4 @@ extension ViewController: ZeroPlusVisualizationDelegate {
             self.boardView.zeroPlusHistory = history
         }
     }
-    
-    func zeroPlus(isThinking: Bool) {
-        boardView.userInteractionDisabled = isThinking
-    }
 }

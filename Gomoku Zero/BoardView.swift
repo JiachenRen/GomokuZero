@@ -107,15 +107,6 @@ public typealias Coordinate = (col: Int, row: Int)
             setNeedsDisplay(bounds)
         }
     }
-    var userInteractionDisabled = false {
-        didSet {
-            if let co = pendingPieceCo {
-                DispatchQueue.main.async { [unowned self] in
-                    self.setNeedsDisplay(self.rect(at: co))
-                }
-            }
-        }
-    }
     
     var winningCoordinates: [Coordinate]? {
         didSet {
@@ -151,7 +142,7 @@ public typealias Coordinate = (col: Int, row: Int)
         
         drawPieces()
         
-        if !userInteractionDisabled {
+        if !board.zeroIsThinking {
             drawPendingPiece()
         }
         
@@ -178,7 +169,7 @@ public typealias Coordinate = (col: Int, row: Int)
             var rect = self.rect(at: $0)
             rect = CGRect(center: CGPoint(x: rect.midX, y: rect.midY), size: CGSize(width: rect.width / 4, height: rect.height / 4))
             let dot = NSBezierPath(ovalIn: rect)
-            let color: NSColor = pieces![$0.row][$0.col] == .black ? .green : .blue
+            let color: NSColor = pieces![$0.row][$0.col] == .black ? .green : .red
             color.withAlphaComponent(0.8).setFill()
             dot.fill()
         }
@@ -254,7 +245,7 @@ public typealias Coordinate = (col: Int, row: Int)
     
     override func mouseUp(with event: NSEvent) {
         let pos = relPos(evt: event)
-        if pos.x <= 0 || pos.y <= 0 || userInteractionDisabled {
+        if pos.x <= 0 || pos.y <= 0 || board.zeroIsThinking {
             // When users drag and release out side of the board area or user interaction disabled, do nothing.
             return
         }
