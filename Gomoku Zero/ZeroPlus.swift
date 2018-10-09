@@ -84,10 +84,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
             for (q, isActive) in row.enumerated() {
                 if isActive {
                     let co = (col: q, row: i)
-                    var score = 0
-                    ZeroPlus.syncedQueue.sync{
-                        score = Evaluator.evaluate(for: player, at: co, pieces: pieces)
-                    }
+                    var score = Evaluator.evaluate(for: player, at: co, pieces: pieces)
                     let move = (co, score)
                     sortedMoves.append(move)
                 }
@@ -224,17 +221,19 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     
     func getOrCache() -> Int {
         var score = 0
-        ZeroPlus.syncedQueue.sync {
-            if let retrieved = Zobrist.hashedTransposMaps[dim - 1][zobrist] {
-                score = retrieved
-            } else {
-                let black = heuristicEvaluator.evaluate(for: .black)
-                let white = heuristicEvaluator.evaluate(for: .white)
-                score = black - white
-                let newZobrist = Zobrist(zobrist: zobrist)
+        
+        if let retrieved = Zobrist.hashedTransposMaps[dim - 1][zobrist] {
+            score = retrieved
+        } else {
+            let black = heuristicEvaluator.evaluate(for: .black)
+            let white = heuristicEvaluator.evaluate(for: .white)
+            score = black - white
+            let newZobrist = Zobrist(zobrist: zobrist)
+            ZeroPlus.syncedQueue.sync {
                 Zobrist.hashedTransposMaps[dim - 1][newZobrist] = score
             }
         }
+        
         return staticId == .black ? score : -score
     }
     
