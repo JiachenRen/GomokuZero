@@ -28,19 +28,21 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     var identity: Piece = .black
     var staticId: Piece = .black
     var heuristicEvaluator = HeuristicEvaluator()
-    
+    let asyncedQueue = DispatchQueue(label: "asyncedQueue", qos: .userInteractive, attributes: .concurrent, autoreleaseFrequency: .workItem, target: nil)
+    static let syncedQueue = DispatchQueue(label: "syncedQueue")
     
     var alphaCut = 0
     var betaCut = 0
     var cumCutDepth = 0
     
-    var personality: Personality = .search(depth: 5, breadth: 4)
+    var personality: Personality = .search(depth: 7, breadth: 4)
     var iterativeDeepening = true
     var activeMapDiffStack = [[Coordinate]]()
     
     var startTime: TimeInterval = 0
     var maxThinkingTime: TimeInterval = 10
     var iterativeDeepeningCompleted = false
+    var searchCancelledInProgress = false
     
     /**
      Generate a map that indicates the active coordinates
@@ -82,7 +84,10 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
             for (q, isActive) in row.enumerated() {
                 if isActive {
                     let co = (col: q, row: i)
-                    let score = Evaluator.evaluate(for: player, at: co, pieces: pieces)
+                    var score = 0
+                    ZeroPlus.syncedQueue.sync{
+                        score = Evaluator.evaluate(for: player, at: co, pieces: pieces)
+                    }
                     let move = (co, score)
                     sortedMoves.append(move)
                 }
@@ -110,6 +115,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         history = History() // Create new history
         activeMapDiffStack = [[Coordinate]]()
         identity = player // Note: this is changed every time put() is called.
+        searchCancelledInProgress = false
         staticId = player
         alphaCut = 0
         betaCut = 0
@@ -150,7 +156,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
                     let group = DispatchGroup()
                     
                     for depth in 1...d {
-                        let workItem = DispatchWorkItem(qos: .userInteractive, flags: .enforceQoS) {
+                        let workItem = DispatchWorkItem {
                             let zero = ZeroPlus()
                             zero.delegate = self.delegate
                             zero.zobrist = Zobrist(zobrist: self.zobrist)
@@ -159,14 +165,17 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
                             zero.identity = self.identity
                             zero.staticId = self.staticId
                             zero.startTime = self.startTime
+                            zero.visDelegate = self.visDelegate
                             let bestForDepth = zero.minimax(depth: depth, breadth: b, player: zero.identity, alpha: Int.min, beta: Int.max)
-                            if depth > maxDepth { // The deepter the depth, the more reliable the generated move.
+                            if depth > maxDepth && !zero.searchCancelledInProgress {
+                                // The deepter the depth, the more reliable the generated move.
                                 bestMove = bestForDepth
                                 maxDepth = depth
                             }
-                            print("deepening finished at depth = \(depth), move = \(bestForDepth)")
+                            zero.visDelegate?.activeMapUpdated(activeMap: nil)
+                            print("deepening finished at depth = \(depth), move = \(bestForDepth), cancelled = \(zero.searchCancelledInProgress)")
                         }
-                        DispatchQueue.global(qos: .userInteractive).async(group: group, execute: workItem)
+                        asyncedQueue.async(group: group, execute: workItem)
                         workItems.append(workItem)
                     }
                     
@@ -215,14 +224,16 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     
     func getOrCache() -> Int {
         var score = 0
-        if let retrieved = Zobrist.hashedTransposMaps[dim - 1][zobrist] {
-            score = retrieved
-        } else {
-            let black = heuristicEvaluator.evaluate(for: .black)
-            let white = heuristicEvaluator.evaluate(for: .white)
-            score = black - white
-            let newZobrist = Zobrist(zobrist: zobrist)
-            Zobrist.hashedTransposMaps[dim - 1][newZobrist] = score
+        ZeroPlus.syncedQueue.sync {
+            if let retrieved = Zobrist.hashedTransposMaps[dim - 1][zobrist] {
+                score = retrieved
+            } else {
+                let black = heuristicEvaluator.evaluate(for: .black)
+                let white = heuristicEvaluator.evaluate(for: .white)
+                score = black - white
+                let newZobrist = Zobrist(zobrist: zobrist)
+                Zobrist.hashedTransposMaps[dim - 1][newZobrist] = score
+            }
         }
         return staticId == .black ? score : -score
     }
@@ -281,6 +292,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
                 }
                 // Time limited threat space search
                 if Date().timeIntervalSince1970 - startTime > maxThinkingTime {
+                    searchCancelledInProgress = true
                     return bestMove
                 }
             }
@@ -308,6 +320,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
                     }
                 }
                 if Date().timeIntervalSince1970 - startTime > maxThinkingTime {
+                    searchCancelledInProgress = true
                     return bestMove
                 }
             }
