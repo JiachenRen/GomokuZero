@@ -35,7 +35,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     var betaCut = 0
     var cumCutDepth = 0
     
-    var personality: Personality = .search(depth: 7, breadth: 4)
+    var personality: Personality = .search(depth: 5, breadth: 3)
     var iterativeDeepening = true
     var activeMapDiffStack = [[Coordinate]]()
     
@@ -84,7 +84,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
             for (q, isActive) in row.enumerated() {
                 if isActive {
                     let co = (col: q, row: i)
-                    var score = Evaluator.evaluate(for: player, at: co, pieces: pieces)
+                    let score = Evaluator.evaluate(for: player, at: co, pieces: pieces)
                     let move = (co, score)
                     sortedMoves.append(move)
                 }
@@ -120,7 +120,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         
         visDelegate?.activeMapUpdated(activeMap: activeCoMap) // Notify the delegate that active map has updated
         
-        if delegate.history.stack.count == 0 && player == .black{ // When ZeroPlus is black, the first move is always at the center
+        if delegate.history.stack.count == 0 && player == .black { // When ZeroPlus is black, the first move is always at the center
             delegate?.bestMoveExtrapolated(co: (dim / 2, dim / 2))
         } else if delegate.history.stack.count == 1 && player == .white {
             delegate?.bestMoveExtrapolated(co: getSecondMove())
@@ -162,7 +162,8 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
                             zero.identity = self.identity
                             zero.staticId = self.staticId
                             zero.startTime = self.startTime
-                            zero.visDelegate = self.visDelegate
+                            zero.maxThinkingTime = self.maxThinkingTime
+//                            zero.visDelegate = self.visDelegate
                             let bestForDepth = zero.minimax(depth: depth, breadth: b, player: zero.identity, alpha: Int.min, beta: Int.max)
                             if depth > maxDepth && !zero.searchCancelledInProgress {
                                 // The deepter the depth, the more reliable the generated move.
@@ -180,13 +181,17 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
                         self.iterativeDeepeningCompleted = true
                     }
                     
-                    while Date().timeIntervalSince1970 - startTime < maxThinkingTime {
-                        if iterativeDeepeningCompleted {
+                    
+                    while true {
+                        let timeElapsed = Date().timeIntervalSince1970 - startTime
+                        let timeExceeded = timeElapsed > maxThinkingTime
+                        if iterativeDeepeningCompleted || (timeExceeded && bestMove != nil) {
+                            workItems.forEach{$0.cancel()}
                             break
                         }
                         Thread.sleep(forTimeInterval: 0.01)
                     }
-                    workItems.forEach{$0.cancel()}
+                    
                     move = bestMove
                 } else {
                     move = minimax(depth: d, breadth: b, player: identity, alpha: Int.min, beta: Int.max)

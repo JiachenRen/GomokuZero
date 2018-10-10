@@ -19,6 +19,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var depthMenuItem: NSMenuItem!
     @IBOutlet weak var breadthMenuItem: NSMenuItem!
     
+    @IBOutlet weak var iterativeDeepeningMenuItem: NSMenuItem!
+    @IBOutlet weak var timeLimitMenuItem: NSMenuItem!
+    @IBOutlet weak var maxSearchTimeMenuItem: NSMenuItem!
+    
     var textureMenuItems: [NSMenuItem?] {
         return [
             darkTextureMenuItem,
@@ -75,7 +79,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func zeroPlusPersonality(_ sender: NSMenuItem) {
         switch sender.title {
         case "Heuristic": activeBoard?.zeroPlus.personality = .basic
-        case "Search":
+        case "Custom Depth & Breadth":
             let config = zeroPlusSearchConfigDialogue()
             if let personality = config {
                 switch personality {
@@ -86,7 +90,42 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
                 activeBoard?.zeroPlus.personality = personality
             }
+        case "Use Default":
+            activeBoard?.zeroPlus = ZeroPlus()
+        case "Iterative Deepening":
+            if let tmp = activeBoard?.zeroPlus.iterativeDeepening {
+                activeBoard?.zeroPlus.iterativeDeepening = !tmp
+                iterativeDeepeningMenuItem.state = tmp ? .off : .on
+            }
+        case "Set Time Limit":
+            let timeLimit = setTimeLimitDialogue()
+            if timeLimit < 0 {return}
+            activeBoard?.zeroPlus.maxThinkingTime = timeLimit
+            maxSearchTimeMenuItem.title = "Max Search Time: \(timeLimit)"
         default: break
+        }
+    }
+    
+    func setTimeLimitDialogue() -> TimeInterval {
+        let msg = NSAlert()
+        msg.addButton(withTitle: "Set")
+        msg.addButton(withTitle: "Cancel")
+        msg.alertStyle = .informational
+        msg.messageText = "Set time limit"
+        msg.window.title = "Set Time Limit"
+        msg.informativeText = "Enter the max thinking time of Zero+ in the field below; the unit is in seconds and decimal values are allowed."
+        
+        let box = NSComboBox(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
+        box.addItems(withObjectValues: ["0","1","3","5", "10","15","30","60"])
+        box.placeholderString = "10"
+        
+        msg.accessoryView = box
+        let response = msg.runModal()
+        
+        if (response == .alertFirstButtonReturn) {
+            return TimeInterval(box.stringValue) ?? TimeInterval(box.placeholderString!)!
+        } else {
+            return -1
         }
     }
     
@@ -276,10 +315,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let controller = activeController {
             boardTextureMenuItem.title = controller.boardTextureView.isHidden ?
                 "Show Board Texture" : "Hide Board Texture"
-            switch activeBoard!.zeroPlus.personality {
+            let zeroPlus = activeBoard!.zeroPlus
+            switch zeroPlus.personality {
             case .search(let depth, let breadth):
                 depthMenuItem.title = "Depth = \(depth)"
                 breadthMenuItem.title = "Breadth = \(breadth)"
+                iterativeDeepeningMenuItem.state = zeroPlus.iterativeDeepening ? .on : .off
             default: break
             }
         }

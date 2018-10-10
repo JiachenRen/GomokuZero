@@ -163,69 +163,6 @@
                                     <items>
                                         <menuItem title="ZeroPlus Options" id="gPf-aE-Cfc">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="ZeroPlus Options" id="DRK-U1-p6I">
-                                                <items>
-                                                    <menuItem title="Zero vs. Zero" keyEquivalent="z" id="cNp-DH-oo3">
-                                                        <modifierMask key="keyEquivalentModifierMask" control="YES"/>
-                                                        <connections>
-                                                            <action selector="zeroVsZero:" target="Voe-Tx-rLC" id="rvB-8d-m9h"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                    <menuItem isSeparatorItem="YES" id="o1U-hp-QJb"/>
-                                                    <menuItem title="Black" keyEquivalent="b" id="0nO-Lq-kpK">
-                                                        <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
-                                                        <connections>
-                                                            <action selector="zeroPlus:" target="Voe-Tx-rLC" id="BJd-zk-fgq"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                    <menuItem title="White" keyEquivalent="w" id="yhB-wx-bFn">
-                                                        <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
-                                                        <connections>
-                                                            <action selector="zeroPlus:" target="Voe-Tx-rLC" id="Xhh-dy-omD"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                    <menuItem isSeparatorItem="YES" id="ftO-5x-Ta8"/>
-                                                    <menuItem title="Personality" id="RHZ-6R-o5O">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                        <menu key="submenu" title="Personality" id="Ia7-Oa-BqH">
-                                                            <items>
-                                                                <menuItem title="Heuristic" keyEquivalent="h" id="cBq-qg-9ge">
-                                                                    <modifierMask key="keyEquivalentModifierMask" control="YES"/>
-                                                                    <connections>
-                                                                        <action selector="zeroPlusPersonality:" target="Voe-Tx-rLC" id="RaA-pb-C9u"/>
-                                                                    </connections>
-                                                                </menuItem>
-                                                                <menuItem title="Search" keyEquivalent="s" id="TIl-g2-c2n">
-                                                                    <modifierMask key="keyEquivalentModifierMask" control="YES"/>
-                                                                    <connections>
-                                                                        <action selector="zeroPlusPersonality:" target="Voe-Tx-rLC" id="Rvv-Xo-6Fm"/>
-                                                                    </connections>
-                                                                </menuItem>
-                                                                <menuItem isSeparatorItem="YES" id="AK2-P1-Zbr"/>
-                                                                <menuItem title="Depth =" enabled="NO" id="8aI-FN-lxi">
-                                                                    <modifierMask key="keyEquivalentModifierMask"/>
-                                                                </menuItem>
-                                                                <menuItem title="Breadth =" enabled="NO" id="Mhc-8U-XLq">
-                                                                    <modifierMask key="keyEquivalentModifierMask"/>
-                                                                </menuItem>
-                                                            </items>
-                                                        </menu>
-                                                    </menuItem>
-                                                    <menuItem isSeparatorItem="YES" id="1W8-La-pED"/>
-                                                    <menuItem title="Take Over" keyEquivalent="t" id="Sxf-6V-AGf">
-                                                        <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
-                                                        <connections>
-                                                            <action selector="zeroPlus:" target="Voe-Tx-rLC" id="Umc-gf-Ah9"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                    <menuItem title="Off" keyEquivalent="o" id="EJH-Zc-d22">
-                                                        <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
-                                                        <connections>
-                                                            <action selector="zeroPlus:" target="Voe-Tx-rLC" id="Q8f-RP-oWL"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                </items>
-                                            </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="afJ-wf-Ove"/>
                                         <menuItem title="Undo" keyEquivalent="z" id="dRJ-4n-Yzg">
@@ -242,6 +179,101 @@
                                         <menuItem title="Restart" keyEquivalent="R" id="qs7-lq-aOw">
                                             <connections>
                                                 <action selector="restart:" target="Voe-Tx-rLC" id="j2v-h7-egB"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Zero+" id="LTb-jq-gwd">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Zero+" id="DRK-U1-p6I">
+                                    <items>
+                                        <menuItem title="Zero vs. Zero" keyEquivalent="z" id="cNp-DH-oo3">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                                            <connections>
+                                                <action selector="zeroVsZero:" target="Voe-Tx-rLC" id="rvB-8d-m9h"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="o1U-hp-QJb"/>
+                                        <menuItem title="Black" keyEquivalent="b" id="0nO-Lq-kpK">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="zeroPlus:" target="Voe-Tx-rLC" id="BJd-zk-fgq"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="White" keyEquivalent="w" id="yhB-wx-bFn">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="zeroPlus:" target="Voe-Tx-rLC" id="Xhh-dy-omD"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="ftO-5x-Ta8"/>
+                                        <menuItem title="Personality" id="RHZ-6R-o5O">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Personality" id="Ia7-Oa-BqH">
+                                                <items>
+                                                    <menuItem title="Heuristic" keyEquivalent="h" id="cBq-qg-9ge">
+                                                        <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                                                        <connections>
+                                                            <action selector="zeroPlusPersonality:" target="Voe-Tx-rLC" id="RaA-pb-C9u"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Threat Space Search" id="bqy-I0-abw">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <menu key="submenu" title="Threat Space Search" id="s6P-VF-kKB">
+                                                            <items>
+                                                                <menuItem title="Use Default" keyEquivalent="s" id="X1n-W6-sXD">
+                                                                    <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                                                                    <connections>
+                                                                        <action selector="zeroPlusPersonality:" target="Voe-Tx-rLC" id="tWw-mk-gv0"/>
+                                                                    </connections>
+                                                                </menuItem>
+                                                                <menuItem title="Custom Depth &amp; Breadth" id="gMK-2y-eKD">
+                                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    <connections>
+                                                                        <action selector="zeroPlusPersonality:" target="Voe-Tx-rLC" id="p1z-XP-HRc"/>
+                                                                    </connections>
+                                                                </menuItem>
+                                                                <menuItem title="Iterative Deepening" keyEquivalent="d" id="kwo-jZ-pfZ">
+                                                                    <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                                                                    <connections>
+                                                                        <action selector="zeroPlusPersonality:" target="Voe-Tx-rLC" id="Eed-5R-puK"/>
+                                                                    </connections>
+                                                                </menuItem>
+                                                                <menuItem isSeparatorItem="YES" id="5cC-Oi-Dwd"/>
+                                                                <menuItem title="Set Time Limit" id="6ox-Fe-2q6">
+                                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    <connections>
+                                                                        <action selector="zeroPlusPersonality:" target="Voe-Tx-rLC" id="vef-7Y-tNp"/>
+                                                                    </connections>
+                                                                </menuItem>
+                                                                <menuItem title="Max Search Time:" enabled="NO" id="ytg-Ze-fcW">
+                                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                                </menuItem>
+                                                            </items>
+                                                        </menu>
+                                                    </menuItem>
+                                                    <menuItem isSeparatorItem="YES" id="AK2-P1-Zbr"/>
+                                                    <menuItem title="Depth =" enabled="NO" id="8aI-FN-lxi">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                    <menuItem title="Breadth =" enabled="NO" id="Mhc-8U-XLq">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="1W8-La-pED"/>
+                                        <menuItem title="Take Over" keyEquivalent="t" id="Sxf-6V-AGf">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="zeroPlus:" target="Voe-Tx-rLC" id="Umc-gf-Ah9"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Off" keyEquivalent="o" id="EJH-Zc-d22">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="zeroPlus:" target="Voe-Tx-rLC" id="Q8f-RP-oWL"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -375,8 +407,11 @@
                         <outlet property="breadthMenuItem" destination="Mhc-8U-XLq" id="UOI-58-OTp"/>
                         <outlet property="darkTextureMenuItem" destination="cqz-x0-0VF" id="RX4-Vd-NV6"/>
                         <outlet property="depthMenuItem" destination="8aI-FN-lxi" id="XGw-iy-XMd"/>
+                        <outlet property="iterativeDeepeningMenuItem" destination="kwo-jZ-pfZ" id="sSq-U2-YTt"/>
                         <outlet property="lightTextureMenuItem" destination="DbW-nW-OaP" id="9q5-4r-772"/>
+                        <outlet property="maxSearchTimeMenuItem" destination="ytg-Ze-fcW" id="KE6-dY-tmD"/>
                         <outlet property="normalTextureMenuItem" destination="1nu-uX-OB1" id="lcf-7R-iZK"/>
+                        <outlet property="timeLimitMenuItem" destination="6ox-Fe-2q6" id="62U-tk-15d"/>
                     </connections>
                 </customObject>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
