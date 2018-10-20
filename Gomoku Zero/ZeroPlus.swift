@@ -39,8 +39,10 @@ class ZeroPlus: CortexDelegate {
     let asyncedQueue = DispatchQueue(label: "asyncedQueue", qos: .userInteractive, attributes: .concurrent, autoreleaseFrequency: .workItem, target: nil)
     static let syncedQueue = DispatchQueue(label: "syncedQueue")
     var cortex: CortexProtocol?
-    var personality: Personality = .search(depth: 9, breadth: 2)
+    var personality: Personality = .search(depth: 6, breadth: 3)
     var iterativeDeepening = true
+    
+    var calcDurations = [TimeInterval]()
     
     /**
      Generate a map that indicates the active coordinates
@@ -81,6 +83,7 @@ class ZeroPlus: CortexDelegate {
         activeMapDiffStack = [[Coordinate]]()
         curPlayer = player // Note: this is changed every time put() is called.
         identity = player
+        Zobrist.orderedMovesMap = Dictionary<Zobrist, [Move]>() // Clear ordered moves map.
         
         visDelegate?.activeMapUpdated(activeMap: activeCoMap) // Notify the delegate that active map has updated
         
@@ -95,11 +98,20 @@ class ZeroPlus: CortexDelegate {
                 if iterativeDeepening {
                     cortex = IterativeDeepeningCortex(self, depth: d, breadth: b)
                 } else {
-                    cortex = MinimaxCortex(self, depth: d, breadth: b)
+                    let minimax =  MinimaxCortex(self, depth: d, breadth: b)
+                    minimax.verbose = true
+                    cortex = minimax
                 }
+            case .negaScout(depth: let d, breadth: let b):
+                cortex = NegaScoutCortex(self, depth: d, breadth: b)
             }
             delegate.bestMoveExtrapolated(co: cortex!.getMove().co)
         }
+        let duration = Date().timeIntervalSince1970 - startTime
+        calcDurations.append(duration)
+        let avgDuration = calcDurations.reduce(0){$0 + $1} / Double(calcDurations.count)
+        print("duration: \(duration)\n avg. duration: \(avgDuration)")
+        
         visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map
     }
     
@@ -158,7 +170,7 @@ class ZeroPlus: CortexDelegate {
 }
 
 enum Personality {
-    case basic, search(depth: Int, breadth: Int)
+    case basic, search(depth: Int, breadth: Int), negaScout(depth: Int, breadth: Int)
 }
 
 protocol ZeroPlusDelegate {

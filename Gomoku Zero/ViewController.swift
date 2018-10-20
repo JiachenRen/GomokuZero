@@ -13,15 +13,6 @@ class ViewController: NSViewController, BoardViewDelegate {
     @IBOutlet weak var boardView: BoardView!
     @IBOutlet weak var boardTextureView: BoardTextureView!
     
-    func didMouseUpOn(co: Coordinate) {
-        // Transfer the interpreted UI action to model
-        board.put(at: co)
-    }
-    
-    
-    
-    
-    
     var delegate: ViewControllerDelegate?
     var board: Board = Board(dimension: 19)
     var zeroPlus: ZeroPlus {
@@ -54,6 +45,11 @@ class ViewController: NSViewController, BoardViewDelegate {
     
     override func mouseUp(with event: NSEvent) {
         print(event)
+    }
+    
+    func didMouseUpOn(co: Coordinate) {
+        // Transfer the interpreted UI action to model
+        board.put(at: co)
     }
 
     override var representedObject: Any? {

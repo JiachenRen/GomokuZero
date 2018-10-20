@@ -61,16 +61,15 @@ class MinimaxCortex: CortexProtocol {
         var alpha = alpha, beta = beta, depth = depth // Make alpha beta mutable
         let score = getHeuristicValue()
         
-        if score >= Threat.win || score <= -Threat.win { // Terminal state has reached
-            return (co: (col: 0, row: 0), score: score)
-        } else if depth == 0  {
+        if score >= Threat.win || score <= -Threat.win || depth == 0 {
+            // Terminal state has reached
             return Move(co: (0,0), score: score)
         }
         
         if player == identity {
-            var bestMove = (co: (col: 0,row: 0), score: Int.min)
-            let moves = [genSortedMoves(for: player, num: breadth), genSortedMoves(for: player.next(), num: breadth)].flatMap({$0})
-            for move in moves.sorted(by: {$0.score > $1.score}) {
+            var bestMove = (co: (col: 0, row: 0), score: Int.min)
+            
+            for move in getSortedMoves(num: breadth) {
                 delegate.put(at: move.co)
                 let score = minimax(depth: depth - 1, breadth: breadth, player: player.next(),alpha: alpha, beta: beta).score
                 delegate.revert()
@@ -98,8 +97,8 @@ class MinimaxCortex: CortexProtocol {
             return bestMove
         } else {
             var bestMove = (co: (col: 0,row: 0), score: Int.max)
-            let moves = [genSortedMoves(for: player, num: breadth), genSortedMoves(for: player.next(), num: breadth)].flatMap({$0})
-            for move in moves.sorted(by: {$0.score > $1.score}) { // Should these be sorted?
+            
+            for move in getSortedMoves(num: breadth) { // Should these be sorted?
                 delegate.put(at: move.co)
                 let score = minimax(depth: depth - 1, breadth: breadth, player: player.next(), alpha: alpha, beta: beta).score
                 delegate.revert()

@@ -28,6 +28,11 @@ protocol CortexProtocol: HeuristicEvaluatorDelegate {
     func genSortedMoves(for player: Piece, num: Int) -> [Move]
     
     /**
+     Query hashedDecisionMap to find out the best moves.
+     */
+    func getSortedMoves(num: Int) -> [Move]
+    
+    /**
      Computes the heuristic value of the node.
      */
     func getHeuristicValue() -> Int
@@ -45,6 +50,20 @@ extension CortexProtocol {
     
     func timeout() -> Bool {
         return Date().timeIntervalSince1970 - delegate.startTime > delegate.maxThinkingTime
+    }
+    
+    func getSortedMoves(num: Int) -> [Move] {
+        if let retrieved = Zobrist.orderedMovesMap[zobrist] {
+            return retrieved
+        } else {
+            let moves = [genSortedMoves(for: .black, num: num), genSortedMoves(for: .white, num: num)]
+                .flatMap({$0})
+                .sorted(by: {$0.score > $1.score})
+            ZeroPlus.syncedQueue.sync {
+                Zobrist.orderedMovesMap[Zobrist(zobrist: zobrist)] = moves
+            }
+            return moves
+        }
     }
     
     func genSortedMoves(for player: Piece) -> [Move] {
@@ -69,7 +88,7 @@ extension CortexProtocol {
     func getHeuristicValue() -> Int {
         var score = 0
         
-        if let retrieved = Zobrist.hashedTransposMaps[dim - 1][zobrist] {
+        if let retrieved = Zobrist.hashedHeuristicMaps[dim - 1][zobrist] {
             score = retrieved
         } else {
             let black = heuristicEvaluator.evaluate(for: .black)
@@ -77,7 +96,7 @@ extension CortexProtocol {
             score = black - white
             let newZobrist = Zobrist(zobrist: zobrist)
             ZeroPlus.syncedQueue.sync {
-                Zobrist.hashedTransposMaps[dim - 1][newZobrist] = score
+                Zobrist.hashedHeuristicMaps[dim - 1][newZobrist] = score
             }
         }
         

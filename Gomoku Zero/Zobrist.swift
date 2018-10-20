@@ -9,14 +9,19 @@
 import Foundation
 
 typealias ZobristTable = [[[Int]]]
-typealias ZobristMap = Dictionary<Zobrist, Int>
+typealias HeuristicMap = Dictionary<Zobrist, Int>
 class Zobrist: Hashable {
     
     // This is for accomodating different board dimensions
     private static var tables = Dictionary<Int,ZobristTable>()
     
-    // Note that it only supports dimension of up to 19.
-    static var hashedTransposMaps = [ZobristMap](repeatElement(ZobristMap(), count: 19))
+    // Note that the hash maps only supports dimension of up to 19.
+    
+    /// hashed heuristic values of nodes
+    static var hashedHeuristicMaps = [HeuristicMap](repeatElement(HeuristicMap(), count: 19))
+    
+    /// hashed ordered moves
+    static var orderedMovesMap = Dictionary<Zobrist, [Move]>()
     
     let dim: Int
     var matrix = [[Piece]]()
