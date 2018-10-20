@@ -74,20 +74,20 @@ class Evaluator {
     }
     
     static func cacheOrGet(seqPairs: [SequencePair], for player: Piece) -> Int  {
-        if let cached = seqGroupHashMap[seqPairs] {
-            return cached
-        } else {
+//        if let cached = seqGroupHashMap[seqPairs] {
+//            return cached
+//        } else {
             let linearScores = seqPairs.map{ seqPair -> Int in
                 let newScore = cacheOrGet(seq: seqPair.new, for: player) // Convert sequences to threat types
                 let oldScore = cacheOrGet(seq: seqPair.org, for: player) // Convert sequences to threat types
                 return newScore - oldScore
             }
             let score = linearScores.reduce(0) {$0 + $1}
-            ZeroPlus.syncedQueue.sync {
-                seqGroupHashMap[seqPairs] = score
-            }
+//            ZeroPlus.syncedQueue.sync {
+//                seqGroupHashMap[seqPairs] = score
+//            }
             return score
-        }
+//        }
     }
     
     static func convertToScore(threats: [Threat]) -> Int {

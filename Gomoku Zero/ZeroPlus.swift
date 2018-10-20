@@ -35,7 +35,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     var betaCut = 0
     var cumCutDepth = 0
     
-    var personality: Personality = .search(depth: 5, breadth: 3)
+    var personality: Personality = .search(depth: 9, breadth: 2)
     var iterativeDeepening = true
     var activeMapDiffStack = [[Coordinate]]()
     
@@ -47,12 +47,12 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     /**
      Generate a map that indicates the active coordinates
      */
-    func genActiveCoMap() {
+    private func genActiveCoMap() {
         activeCoMap = [[Bool]](repeating: [Bool](repeating: false, count: dim), count: dim)
         delegate.history.stack.forEach {updateActiveCoMap(at: $0, recordDiff: false)}
     }
     
-    func updateActiveCoMap(at co: Coordinate, recordDiff: Bool) {
+    private func updateActiveCoMap(at co: Coordinate, recordDiff: Bool) {
         var diffCluster = [Coordinate]()
         for i in -2...2 {
             for j in -2...2 {
@@ -78,7 +78,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     /**
      Could be optimized with binary insertion technique
      */
-    func genSortedMoves(for player: Piece) -> [Move] {
+    private func genSortedMoves(for player: Piece) -> [Move] {
         var sortedMoves = [Move]()
         for (i, row) in activeCoMap.enumerated() {
             for (q, isActive) in row.enumerated() {
@@ -96,12 +96,62 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
     /**
      Not the most efficient way, will do for now.
      */
-    func genSortedMoves(for player: Piece, num: Int) -> [Move] {
+    private func genSortedMoves(for player: Piece, num: Int) -> [Move] {
         return [Move](genSortedMoves(for: player).prefix(num))
     }
     
     init () {
         heuristicEvaluator.delegate = self
+    }
+    
+    private func iterativeDeepening(depth: Int, breadth: Int) -> Move {
+        iterativeDeepeningCompleted = false
+        var bestMove: Move?
+        var workItems = [DispatchWorkItem]()
+        var maxDepth = 0
+        let group = DispatchGroup()
+        
+        for d in 1...depth {
+            let workItem = DispatchWorkItem {
+                let zero = ZeroPlus()
+                zero.delegate = self.delegate
+                zero.zobrist = Zobrist(zobrist: self.zobrist)
+                zero.genActiveCoMap()
+                zero.activeMapDiffStack = [[Coordinate]]()
+                zero.identity = self.identity
+                zero.staticId = self.staticId
+                zero.startTime = self.startTime
+                zero.maxThinkingTime = self.maxThinkingTime
+                zero.visDelegate = self.visDelegate
+                let bestForDepth = zero.minimax(depth: d, breadth: breadth, player: zero.identity, alpha: Int.min, beta: Int.max)
+                if d > maxDepth && !zero.searchCancelledInProgress {
+                    // The deepter the depth, the more reliable the generated move.
+                    bestMove = bestForDepth
+                    maxDepth = d
+                }
+                zero.visDelegate?.activeMapUpdated(activeMap: nil)
+                print("deepening finished at depth = \(d), move = \(bestForDepth), cancelled = \(zero.searchCancelledInProgress)")
+            }
+            asyncedQueue.async(group: group, execute: workItem)
+            workItems.append(workItem)
+        }
+        
+        group.notify(queue: DispatchQueue.global()) { [unowned self] in
+            self.iterativeDeepeningCompleted = true
+        }
+        
+        
+        while true {
+            let timeElapsed = Date().timeIntervalSince1970 - startTime
+            let timeExceeded = timeElapsed > maxThinkingTime
+            if iterativeDeepeningCompleted || (timeExceeded && bestMove != nil) {
+                workItems.forEach{$0.cancel()}
+                break
+            }
+            Thread.sleep(forTimeInterval: 0.01)
+        }
+        
+        return bestMove!
     }
     
     
@@ -146,53 +196,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
                 }
             case .search(depth: let d, breadth: let b):
                 if iterativeDeepening {
-                    iterativeDeepeningCompleted = false
-                    var bestMove: Move?
-                    var workItems = [DispatchWorkItem]()
-                    var maxDepth = 0
-                    let group = DispatchGroup()
-                    
-                    for depth in 1...d {
-                        let workItem = DispatchWorkItem {
-                            let zero = ZeroPlus()
-                            zero.delegate = self.delegate
-                            zero.zobrist = Zobrist(zobrist: self.zobrist)
-                            zero.genActiveCoMap()
-                            zero.activeMapDiffStack = [[Coordinate]]()
-                            zero.identity = self.identity
-                            zero.staticId = self.staticId
-                            zero.startTime = self.startTime
-                            zero.maxThinkingTime = self.maxThinkingTime
-//                            zero.visDelegate = self.visDelegate
-                            let bestForDepth = zero.minimax(depth: depth, breadth: b, player: zero.identity, alpha: Int.min, beta: Int.max)
-                            if depth > maxDepth && !zero.searchCancelledInProgress {
-                                // The deepter the depth, the more reliable the generated move.
-                                bestMove = bestForDepth
-                                maxDepth = depth
-                            }
-                            zero.visDelegate?.activeMapUpdated(activeMap: nil)
-                            print("deepening finished at depth = \(depth), move = \(bestForDepth), cancelled = \(zero.searchCancelledInProgress)")
-                        }
-                        asyncedQueue.async(group: group, execute: workItem)
-                        workItems.append(workItem)
-                    }
-                    
-                    group.notify(queue: DispatchQueue.global()) { [unowned self] in
-                        self.iterativeDeepeningCompleted = true
-                    }
-                    
-                    
-                    while true {
-                        let timeElapsed = Date().timeIntervalSince1970 - startTime
-                        let timeExceeded = timeElapsed > maxThinkingTime
-                        if iterativeDeepeningCompleted || (timeExceeded && bestMove != nil) {
-                            workItems.forEach{$0.cancel()}
-                            break
-                        }
-                        Thread.sleep(forTimeInterval: 0.01)
-                    }
-                    
-                    move = bestMove
+                    move = iterativeDeepening(depth: d, breadth: b)
                 } else {
                     move = minimax(depth: d, breadth: b, player: identity, alpha: Int.min, beta: Int.max)
                 }
@@ -267,9 +271,7 @@ class ZeroPlus: HeuristicEvaluatorDelegate {
         if score >= Threat.win || score <= -Threat.win { // Terminal state has reached
             return (co: (col: 0, row: 0), score: score)
         } else if depth == 0  {
-            var move = genSortedMoves(for: player)[0]
-            move.score = score
-            return move
+            return Move(co: (0,0), score: score)
         }
     
         if player == staticId {
