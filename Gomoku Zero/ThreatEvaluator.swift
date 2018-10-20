@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Evaluator {
+class ThreatEvaluator {
     static var seqHashMap: Dictionary<[Piece], Int> = Dictionary()
     static var seqGroupHashMap: Dictionary<[SequencePair], Int> = Dictionary()
     
@@ -230,7 +230,7 @@ class Evaluator {
             return 0 ^ new.hashValue ^ org.hashValue
         }
         
-        static func == (lhs: Evaluator.SequencePair, rhs: Evaluator.SequencePair) -> Bool {
+        static func == (lhs: ThreatEvaluator.SequencePair, rhs: ThreatEvaluator.SequencePair) -> Bool {
             return lhs.new == rhs.new && lhs.org == rhs.org
         }
         
