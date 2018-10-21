@@ -113,7 +113,9 @@ protocol CortexDelegate {
     var maxThinkingTime: TimeInterval {get}
     var startTime: TimeInterval {get}
     var dim: Int {get}
+    var curPlayer: Piece {get}
     var asyncedQueue: DispatchQueue {get}
+    func hasWinner() -> Piece?
     func put(at co: Coordinate)
     func revert()
 }
@@ -128,12 +130,12 @@ class BasicCortex: CortexProtocol {
         heuristicEvaluator.delegate = self
     }
     
-    func getMove() -> Move {
-        let offensiveMoves = genSortedMoves(for: identity)
-        let defensiveMoves = genSortedMoves(for: identity.next())
+    func getMove(for player: Piece) -> Move {
+        let offensiveMoves = genSortedMoves(for: player)
+        let defensiveMoves = genSortedMoves(for: player.next())
         if offensiveMoves.count == 0 && defensiveMoves.count == 0 {
             // If ZeroPlus is out of moves...
-            print("un expected error has occurred")
+            return ((-1, -1), 0)
         }
         let offensiveMove = offensiveMoves[0]
         let defensiveMove = defensiveMoves[0]
@@ -144,6 +146,10 @@ class BasicCortex: CortexProtocol {
         } else {
             return offensiveMove.score > defensiveMove.score ? offensiveMove : defensiveMove
         }
+    }
+    
+    func getMove() -> Move {
+        return getMove(for: identity)
     }
 }
 

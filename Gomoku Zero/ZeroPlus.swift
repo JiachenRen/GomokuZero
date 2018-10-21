@@ -39,7 +39,8 @@ class ZeroPlus: CortexDelegate {
     let asyncedQueue = DispatchQueue(label: "asyncedQueue", qos: .userInteractive, attributes: .concurrent, autoreleaseFrequency: .workItem, target: nil)
     static let syncedQueue = DispatchQueue(label: "syncedQueue")
     var cortex: CortexProtocol?
-    var personality: Personality = .search(depth: 6, breadth: 3)
+//    var personality: Personality = .search(depth: 6, breadth: 3)
+    var personality: Personality = .monteCarlo(breadth: 5)
     var iterativeDeepening = true
     
     var calcDurations = [TimeInterval]()
@@ -104,6 +105,8 @@ class ZeroPlus: CortexDelegate {
                 }
             case .negaScout(depth: let d, breadth: let b):
                 cortex = NegaScoutCortex(self, depth: d, breadth: b)
+            case .monteCarlo(breadth: let b):
+                cortex = MonteCarloCortex(self, breadth: b)
             }
             delegate.bestMoveExtrapolated(co: cortex!.getMove().co)
         }
@@ -167,10 +170,17 @@ class ZeroPlus: CortexDelegate {
         let col = CGFloat.random(min: 0, max: CGFloat(delegate.pieces.count))
         return (col: Int(col), row: Int(row))
     }
+    
+    func hasWinner() -> Piece? {
+        return delegate.hasWinner()
+    }
 }
 
 enum Personality {
-    case basic, search(depth: Int, breadth: Int), negaScout(depth: Int, breadth: Int)
+    case basic
+    case search(depth: Int, breadth: Int)
+    case negaScout(depth: Int, breadth: Int)
+    case monteCarlo(breadth: Int)
 }
 
 protocol ZeroPlusDelegate {
@@ -179,6 +189,7 @@ protocol ZeroPlusDelegate {
     var pieces: [[Piece]] {get}
     func isValid(_ co: Coordinate) -> Bool
     func bestMoveExtrapolated(co: Coordinate)
+    func hasWinner() -> Piece?
 }
 
 protocol ZeroPlusVisualizationDelegate {

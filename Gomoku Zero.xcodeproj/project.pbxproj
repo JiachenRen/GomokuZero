@@ -30,6 +30,7 @@
 		1F83A54C217B9E1B00285999 /* Minimax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A54B217B9E1B00285999 /* Minimax.swift */; };
 		1F83A54E217B9E5900285999 /* IterativeDeepening.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A54D217B9E5800285999 /* IterativeDeepening.swift */; };
 		1F83A555217BB27000285999 /* NegaScout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A554217BB27000285999 /* NegaScout.swift */; };
+		1F83A557217BF95800285999 /* MonteCarlo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A556217BF95800285999 /* MonteCarlo.swift */; };
 		1FE063E2216B028E00E07006 /* HeuristicEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE063E1216B028E00E07006 /* HeuristicEvaluator.swift */; };
 /* End PBXBuildFile section */
 
@@ -81,6 +82,7 @@
 		1F83A54B217B9E1B00285999 /* Minimax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Minimax.swift; sourceTree = "<group>"; };
 		1F83A54D217B9E5800285999 /* IterativeDeepening.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IterativeDeepening.swift; sourceTree = "<group>"; };
 		1F83A554217BB27000285999 /* NegaScout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NegaScout.swift; sourceTree = "<group>"; };
+		1F83A556217BF95800285999 /* MonteCarlo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonteCarlo.swift; sourceTree = "<group>"; };
 		1FE063E1216B028E00E07006 /* HeuristicEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeuristicEvaluator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -185,6 +187,7 @@
 				1F83A54B217B9E1B00285999 /* Minimax.swift */,
 				1F83A54D217B9E5800285999 /* IterativeDeepening.swift */,
 				1F83A554217BB27000285999 /* NegaScout.swift */,
+				1F83A556217BF95800285999 /* MonteCarlo.swift */,
 			);
 			name = Zero;
 			sourceTree = "<group>";
@@ -348,6 +351,7 @@
 				1F60C3642168232C00580C99 /* ViewController.swift in Sources */,
 				1F4270DD2169A1480081DBFC /* ZeroPlus.swift in Sources */,
 				1F64DC4C216BF38000467F78 /* Zobrist.swift in Sources */,
+				1F83A557217BF95800285999 /* MonteCarlo.swift in Sources */,
 				1F60C3932168265C00580C99 /* BoardView.swift in Sources */,
 				1F83A54A217B91F700285999 /* Cortex.swift in Sources */,
 				1F4270E12169BCEA0081DBFC /* Threat.swift in Sources */,
