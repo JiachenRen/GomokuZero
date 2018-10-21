@@ -14,6 +14,7 @@ class MonteCarloCortex: CortexProtocol {
     var heuristicEvaluator = HeuristicEvaluator()
     var randomExpansion = false
     var maxSimulationDepth = 5
+    var iterations = 0
     
     // BasicCortex for performing fast simulation.
     var basicCortex: BasicCortex
@@ -35,6 +36,7 @@ class MonteCarloCortex: CortexProtocol {
     
     func getMove() -> Move {
         let rootNode = Node(identity: delegate.curPlayer, co: (0,0))
+        iterations = 0
         while !timeout() {
             let node = rootNode.select()
             let stackTrace = node.stackTrace()
@@ -45,6 +47,9 @@ class MonteCarloCortex: CortexProtocol {
             let player = playout(node: newNode)
             newNode.backpropagate(winner: player)
             revert(num: stackTrace.count)
+            iterations += 1
+            print("iterations completed: \(iterations)")
+            print("root node: \n\(rootNode)")
         }
         
         var bestNode: Node?
@@ -74,8 +79,8 @@ class MonteCarloCortex: CortexProtocol {
             let move = basicCortex.getMove(for: delegate.curPlayer)
             delegate.put(at: move.co)
             if let winner = hasWinner() {
-                print("simulated winner: \(winner)\t sim. depth = \(i)")
-                print(delegate.zobrist)
+//                print("simulated winner: \(winner)\t sim. depth = \(i)")
+//                print(delegate.zobrist)
                 revert(num: i + 2)
                 return winner
             }
@@ -183,4 +188,19 @@ class MonteCarloCortex: CortexProtocol {
         }
     }
     
+    
+    
+}
+
+extension MonteCarloCortex.Node: CustomStringConvertible {
+    var description: String {
+        let coStr = coordinate == nil ? "nil" : "\(coordinate!)"
+        let this = "wins: \(numWins)\tvisits: \(numVisits)\tidentity: \(identity)\tco: \(coStr)\tchildren: \(children.count)"
+        return self.children.map{$0.description}
+            .reduce(this){"\($0)\n\(indentation)\($1)"}
+    }
+    
+    private var indentation: String {
+        return (0..<stackTrace().count).map{_ in "\t"}.reduce("", +)
+    }
 }

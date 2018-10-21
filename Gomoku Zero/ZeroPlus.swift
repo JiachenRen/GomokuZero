@@ -35,7 +35,7 @@ class ZeroPlus: CortexDelegate {
     var identity: Piece = .black
     
     var startTime: TimeInterval = 0
-    var maxThinkingTime: TimeInterval = 5
+    var maxThinkingTime: TimeInterval = 20
     
     let asyncedQueue = DispatchQueue(label: "asyncedQueue", qos: .userInteractive, attributes: .concurrent, autoreleaseFrequency: .workItem, target: nil)
     static let syncedQueue = DispatchQueue(label: "syncedQueue")
