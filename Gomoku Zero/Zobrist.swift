@@ -120,3 +120,22 @@ class Zobrist: Hashable {
     }
     
 }
+
+extension Zobrist: CustomStringConvertible {
+    public var description: String {
+        get {
+            var str = ""
+            matrix.forEach { row in
+                row.forEach { col in
+                    switch col {
+                    case .none: str += "- "
+                    case .black: str += "* "
+                    case .white: str += "o "
+                    }
+                }
+                str += "\n"
+            }
+            return str
+        }
+    }
+}

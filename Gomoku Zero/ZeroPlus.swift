@@ -14,6 +14,7 @@ typealias Move = (co: Coordinate, score: Int)
  Zero Plus - Jiachen's fifth attemp at making an unbeatable Gomoku AI
  */
 class ZeroPlus: CortexDelegate {
+    
     var delegate: ZeroPlusDelegate!
     var visDelegate: ZeroPlusVisualizationDelegate?
     
@@ -34,13 +35,13 @@ class ZeroPlus: CortexDelegate {
     var identity: Piece = .black
     
     var startTime: TimeInterval = 0
-    var maxThinkingTime: TimeInterval = 10
+    var maxThinkingTime: TimeInterval = 5
     
     let asyncedQueue = DispatchQueue(label: "asyncedQueue", qos: .userInteractive, attributes: .concurrent, autoreleaseFrequency: .workItem, target: nil)
     static let syncedQueue = DispatchQueue(label: "syncedQueue")
     var cortex: CortexProtocol?
 //    var personality: Personality = .search(depth: 6, breadth: 3)
-    var personality: Personality = .monteCarlo(breadth: 5)
+    var personality: Personality = .monteCarlo(breadth: 3)
     var iterativeDeepening = true
     
     var calcDurations = [TimeInterval]()
@@ -169,10 +170,6 @@ class ZeroPlus: CortexDelegate {
         let row = CGFloat.random(min: 0, max: CGFloat(delegate.pieces.count))
         let col = CGFloat.random(min: 0, max: CGFloat(delegate.pieces.count))
         return (col: Int(col), row: Int(row))
-    }
-    
-    func hasWinner() -> Piece? {
-        return delegate.hasWinner()
     }
 }
 

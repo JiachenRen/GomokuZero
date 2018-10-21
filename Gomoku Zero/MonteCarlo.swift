@@ -12,8 +12,8 @@ class MonteCarloCortex: CortexProtocol {
     var delegate: CortexDelegate
     
     var heuristicEvaluator = HeuristicEvaluator()
-    var randomExpansion = true
-    var maxSimulationDepth = 20
+    var randomExpansion = false
+    var maxSimulationDepth = 5
     
     // BasicCortex for performing fast simulation.
     var basicCortex: BasicCortex
@@ -31,35 +31,17 @@ class MonteCarloCortex: CortexProtocol {
         heuristicEvaluator.delegate = self
     }
     
-    /// Expansion phase
-    func expand(_ node: Node) -> Node {
-        var moves: [Move]!
-        if let retrieved = Zobrist.orderedMovesMap[zobrist] {
-            moves = retrieved
-        } else {
-            moves = [genSortedMoves(for: .black, num: breadth), genSortedMoves(for: .white, num: breadth)]
-                .flatMap({$0})
-            if randomExpansion { moves = moves.shuffled() }
-            else { moves = moves.sorted(by: {$0.score > $1.score}) }
-            ZeroPlus.syncedQueue.sync {
-                Zobrist.orderedMovesMap[Zobrist(zobrist: zobrist)] = moves
-            }
-        }
-        let idx = node.children.count // The index of the next node to be explored
-        let newNode = Node(parent: node, identity: delegate.curPlayer, co: moves[idx].co)
-        node.children.append(newNode)
-        return newNode
-    }
+    
     
     func getMove() -> Move {
         let rootNode = Node(identity: delegate.curPlayer, co: (0,0))
         while !timeout() {
-            let node = rootNode.select(breadth)
+            let node = rootNode.select()
             let stackTrace = node.stackTrace()
             for node in stackTrace {
                 delegate.put(at: node.coordinate!)
             }
-            let newNode = expand(node)
+            let newNode = node.expand(self, breadth)
             let player = playout(node: newNode)
             newNode.backpropagate(winner: player)
             revert(num: stackTrace.count)
@@ -69,7 +51,7 @@ class MonteCarloCortex: CortexProtocol {
         for node in rootNode.children {
             if bestNode == nil {
                 bestNode = node
-            } else if node.numVisits > bestNode!.numVisits {
+            } else if node.winningRatio > bestNode!.winningRatio {
                 bestNode = node
             }
         }
@@ -91,8 +73,10 @@ class MonteCarloCortex: CortexProtocol {
         for i in 0..<maxSimulationDepth {
             let move = basicCortex.getMove(for: delegate.curPlayer)
             delegate.put(at: move.co)
-            if let winner = delegate.hasWinner() {
-                revert(num: i)
+            if let winner = hasWinner() {
+                print("simulated winner: \(winner)\t sim. depth = \(i)")
+                print(delegate.zobrist)
+                revert(num: i + 2)
                 return winner
             }
         }
@@ -100,8 +84,13 @@ class MonteCarloCortex: CortexProtocol {
         return nil
     }
     
-    func checkGameState() {
-        
+    func hasWinner() -> Piece? {
+        let blackScore = heuristicEvaluator.evaluate(for: .black)
+        let whiteScore = heuristicEvaluator.evaluate(for: .white)
+        if blackScore > Threat.win || whiteScore > Threat.win {
+            return blackScore > whiteScore ? .black : .white
+        }
+        return nil
     }
     
     /// Monte Carlo Tree Node
@@ -112,6 +101,10 @@ class MonteCarloCortex: CortexProtocol {
         var coordinate: Coordinate?
         var children = [Node]()
         var parent: Node?
+        var candidates: [Move]?
+        var winningRatio: Double {
+            return Double(numWins) / Double(numVisits)
+        }
         
         convenience init(identity: Piece, co: Coordinate) {
             self.init(parent: nil, identity: identity, co: co)
@@ -132,12 +125,12 @@ class MonteCarloCortex: CortexProtocol {
                 node = node.parent!
             }
             
-            return stack
+            return stack.reversed()
         }
         
         /// Recursive selection phase
-        func select(_ breadth: Int) -> Node {
-            if children.count < breadth {
+        func select() -> Node {
+            if candidates == nil || candidates!.count > 0 {
                 return self // If the current node is not fully expanded, stop selection.
             }
             var selected = children[0]
@@ -147,11 +140,11 @@ class MonteCarloCortex: CortexProtocol {
                 let ucb1 = node.ucb1()
                 if ucb1 > maxUcb1 {
                     maxUcb1 = ucb1
-                    selected = children[idx]
+                    selected = node
                 }
             }
             
-            return selected.select(breadth)
+            return selected.select()
         }
         
         /// Upper Confidence Bound 1 algorithm, used to balance exploiration and exploration
@@ -161,12 +154,27 @@ class MonteCarloCortex: CortexProtocol {
             return exploitation + exploration
         }
         
+        
+        /// Expansion phase
+        func expand(_ delegate: MonteCarloCortex, _ breadth: Int) -> Node {
+            if candidates == nil {
+                candidates = delegate.getSortedMoves(num: breadth)
+                if delegate.randomExpansion {
+                    candidates = candidates!.shuffled()
+                }
+            }
+            let candidate = candidates!.removeFirst()
+            let newNode = Node(parent: self, identity: identity.next(), co: candidate.co)
+            children.append(newNode)
+            return newNode
+        }
+        
         /**
          Backpropagation: update the stats of all nodes that were traversed to get to the current node
          */
         func backpropagate(winner: Piece?) {
             if let player = winner {
-                numWins += player == identity ? 0 : 1
+                numWins += player != identity ? 1 : 0
             }
             numVisits += 1
             if let parent = self.parent {

@@ -85,7 +85,7 @@ extension CortexProtocol {
         return [Move](genSortedMoves(for: player).prefix(num))
     }
     
-    func getHeuristicValue() -> Int {
+    func getHeuristicValue(for player: Piece) -> Int {
         var score = 0
         
         if let retrieved = Zobrist.hashedHeuristicMaps[dim - 1][zobrist] {
@@ -100,7 +100,11 @@ extension CortexProtocol {
             }
         }
         
-        return identity == .black ? score : -score
+        return player == .black ? score : -score
+    }
+    
+    func getHeuristicValue() -> Int {
+        return getHeuristicValue(for: identity)
     }
 }
 
@@ -115,7 +119,6 @@ protocol CortexDelegate {
     var dim: Int {get}
     var curPlayer: Piece {get}
     var asyncedQueue: DispatchQueue {get}
-    func hasWinner() -> Piece?
     func put(at co: Coordinate)
     func revert()
 }
