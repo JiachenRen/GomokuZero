@@ -12,10 +12,10 @@ class MonteCarloCortex: CortexProtocol {
     var delegate: CortexDelegate
     
     var heuristicEvaluator = HeuristicEvaluator()
-    var randomExpansion = false
+    var randomExpansion = true
     var maxSimulationDepth = 5
     var iterations = 0
-    static var debug = true
+    var debug = true
     
     // BasicCortex for performing fast simulation.
     var basicCortex: BasicCortex
@@ -34,7 +34,7 @@ class MonteCarloCortex: CortexProtocol {
     }
     
     func dPrint(_ items: Any) {
-        if !MonteCarloCortex.debug {return}
+        if !debug {return}
         print(items)
     }
     
@@ -44,7 +44,7 @@ class MonteCarloCortex: CortexProtocol {
         let rootNode = Node(identity: delegate.curPlayer, co: (0,0))
         iterations = 0
         while !timeout() {
-            dPrint("begin \((0..<20).map{_ in "-"}.reduce("",+))")
+            dPrint("begin\t------------------------------------------------")
             dPrint(">> initial root node: \n\(rootNode)")
             let node = rootNode.select()
             dPrint(">> selected node: \n\(node)")
@@ -61,7 +61,7 @@ class MonteCarloCortex: CortexProtocol {
             iterations += 1
             dPrint(">> iterations completed: \(iterations)")
             dPrint(">> root node: \n\(rootNode)")
-            dPrint("end \((0..<20).map{_ in "-"}.reduce("",+))")
+            dPrint("end\t------------------------------------------------")
         }
         
         var bestNode: Node?
@@ -209,7 +209,7 @@ class MonteCarloCortex: CortexProtocol {
          */
         func backpropagate(winner: Piece?) {
             if let player = winner, let parent = self.parent {
-                numWins += parent.identity == player ? 1 : 0
+                numWins += parent.identity == player ? 1 : -1
             }
             numVisits += 1
             if let parent = self.parent {

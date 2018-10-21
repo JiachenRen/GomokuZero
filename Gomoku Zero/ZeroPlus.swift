@@ -35,13 +35,13 @@ class ZeroPlus: CortexDelegate {
     var identity: Piece = .black
     
     var startTime: TimeInterval = 0
-    var maxThinkingTime: TimeInterval = 10
+    var maxThinkingTime: TimeInterval = 3
     
     let asyncedQueue = DispatchQueue(label: "asyncedQueue", qos: .userInteractive, attributes: .concurrent, autoreleaseFrequency: .workItem, target: nil)
     static let syncedQueue = DispatchQueue(label: "syncedQueue")
     var cortex: CortexProtocol?
 //    var personality: Personality = .search(depth: 6, breadth: 3)
-    var personality: Personality = .monteCarlo(breadth: 3)
+    var personality: Personality = .monteCarlo(breadth: 3, playout: 5, random: true, debug: true)
     var iterativeDeepening = true
     
     var calcDurations = [TimeInterval]()
@@ -106,8 +106,12 @@ class ZeroPlus: CortexDelegate {
                 }
             case .negaScout(depth: let d, breadth: let b):
                 cortex = NegaScoutCortex(self, depth: d, breadth: b)
-            case .monteCarlo(breadth: let b):
+            case .monteCarlo(breadth: let b, playout: let p, random: let r, debug: let d):
                 cortex = MonteCarloCortex(self, breadth: b)
+                let mtCortex = cortex as! MonteCarloCortex
+                mtCortex.maxSimulationDepth = p
+                mtCortex.randomExpansion = r
+                mtCortex.debug = d
             }
             delegate.bestMoveExtrapolated(co: cortex!.getMove().co)
         }
@@ -177,7 +181,7 @@ enum Personality {
     case basic
     case search(depth: Int, breadth: Int)
     case negaScout(depth: Int, breadth: Int)
-    case monteCarlo(breadth: Int)
+    case monteCarlo(breadth: Int, playout: Int, random: Bool, debug: Bool)
 }
 
 protocol ZeroPlusDelegate {

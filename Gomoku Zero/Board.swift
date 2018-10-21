@@ -24,8 +24,9 @@ class Board: ZeroPlusDelegate, HeuristicEvaluatorDelegate {
     var heuristicEvaluator: HeuristicEvaluator
     
     var curPlayer: Piece = .black
-    var zeroAi: Piece = .none
+    var zeroIdentity: Piece = .none
     var zeroPlus = ZeroPlus()
+    var zeroPlus2: ZeroPlus? // Secondary AI for skirmish
     var zeroXzero = false // When this is set to true, zero will play against itself!
     var zeroIsThinking = false
     var gameHasEnded = false
@@ -191,8 +192,24 @@ class Board: ZeroPlusDelegate, HeuristicEvaluatorDelegate {
      This would only take effect if it is ZeroPlus's turn.
      */
     func requestZeroBrainStorm() {
-        if (zeroAi == curPlayer || zeroXzero) && !gameHasEnded {
+        if zeroIdentity == curPlayer && !gameHasEnded {
             triggerZeroBrainstorm()
+        } else if zeroXzero {
+            if let zeroPlus2 = self.zeroPlus2 { // If a second AI configuration is present
+                if curPlayer == zeroPlus2.identity {
+                    triggerZero2BrainStorm()
+                } else {
+                    triggerZeroBrainstorm()
+                }
+            }
+        }
+    }
+    
+    func triggerZero2BrainStorm() {
+        if gameHasEnded {return}
+        zeroIsThinking = true
+        zeroActivityQueue.async {[unowned self] in
+            self.zeroPlus2?.getMove(for: self.curPlayer)
         }
     }
     

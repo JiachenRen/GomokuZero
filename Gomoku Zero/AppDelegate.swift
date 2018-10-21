@@ -23,6 +23,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var timeLimitMenuItem: NSMenuItem!
     @IBOutlet weak var maxSearchTimeMenuItem: NSMenuItem!
     
+    var consoleWindowController: ConsoleWindowController?
+    
     var textureMenuItems: [NSMenuItem?] {
         return [
             darkTextureMenuItem,
@@ -30,13 +32,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             lightTextureMenuItem
         ]
     }
+    
+    
 
     var activeBoard: Board? {
         return activeController?.board
     }
     
-    var activeController: ViewController? {
-        return NSApplication.shared.mainWindow?.windowController?.contentViewController as? ViewController
+    var activeController: BoardViewController? {
+        return NSApplication.shared.mainWindow?.windowController?.contentViewController as? BoardViewController
     }
     
     var activeWindowController: BoardWindowController? {
@@ -49,17 +53,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             .map{$0!}
     }
     
-    var viewControllers: [ViewController] {
+    var viewControllers: [BoardViewController] {
         return windowControllers.map{$0.viewController}
     }
     
     @IBAction func zeroPlus(_ sender: NSMenuItem) {
         switch sender.title {
-        case "Black": activeBoard?.zeroAi = .black
+        case "Black": activeBoard?.zeroIdentity = .black
             activeBoard?.requestZeroBrainStorm()
-        case "White": activeBoard?.zeroAi = .white
+        case "White": activeBoard?.zeroIdentity = .white
             activeBoard?.requestZeroBrainStorm()
-        case "Off": activeBoard?.zeroAi = .none
+        case "Off": activeBoard?.zeroIdentity = .none
         default: activeBoard?.triggerZeroBrainstorm()
         }
     }
@@ -67,6 +71,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let bool = activeController?.boardView.overlayStepNumber {
             activeController?.boardView.overlayStepNumber = !bool
         }
+    }
+    
+    @IBAction func openConsole(_ sender: NSMenuItem) {
+        if consoleWindowController == nil {
+            consoleWindowController = NSStoryboard(name: "Main", bundle: nil)
+                .instantiateController(withIdentifier: "zero-console") as? ConsoleWindowController
+        }
+        consoleWindowController?.showWindow(self)
     }
     
     @IBAction func zeroVsZero(_ sender: NSMenuItem) {
@@ -90,8 +102,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
                 activeBoard?.zeroPlus.personality = personality
             }
+        case "Monte Carlo": activeBoard?.zeroPlus.personality = .monteCarlo(breadth: 3)
         case "Use Default":
-            activeBoard?.zeroPlus = ZeroPlus()
+            activeBoard?.zeroPlus.personality = .search(depth: 6, breadth: 3)
         case "Iterative Deepening":
             if let tmp = activeBoard?.zeroPlus.iterativeDeepening {
                 activeBoard?.zeroPlus.iterativeDeepening = !tmp

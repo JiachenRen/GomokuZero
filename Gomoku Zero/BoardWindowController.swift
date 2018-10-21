@@ -14,8 +14,8 @@ class BoardWindowController: NSWindowController, NSOpenSavePanelDelegate, ViewCo
         return viewController.board
     }
     
-    var viewController: ViewController {
-        return window!.contentViewController as! ViewController
+    var viewController: BoardViewController {
+        return window!.contentViewController as! BoardViewController
     }
     
     var fileName = "New Game" {

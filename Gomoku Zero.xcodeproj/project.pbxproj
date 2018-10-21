@@ -11,7 +11,7 @@
 		1F4270DF2169B00B0081DBFC /* ThreatEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270DE2169B00B0081DBFC /* ThreatEvaluator.swift */; };
 		1F4270E12169BCEA0081DBFC /* Threat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270E02169BCEA0081DBFC /* Threat.swift */; };
 		1F60C3622168232C00580C99 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3612168232C00580C99 /* AppDelegate.swift */; };
-		1F60C3642168232C00580C99 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3632168232C00580C99 /* ViewController.swift */; };
+		1F60C3642168232C00580C99 /* BoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3632168232C00580C99 /* BoardViewController.swift */; };
 		1F60C3672168232C00580C99 /* Gomoku_Zero.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3652168232C00580C99 /* Gomoku_Zero.xcdatamodeld */; };
 		1F60C3692168232D00580C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F60C3682168232D00580C99 /* Assets.xcassets */; };
 		1F60C36C2168232D00580C99 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F60C36A2168232D00580C99 /* Main.storyboard */; };
@@ -32,6 +32,8 @@
 		1F83A555217BB27000285999 /* NegaScout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A554217BB27000285999 /* NegaScout.swift */; };
 		1F83A557217BF95800285999 /* MonteCarlo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A556217BF95800285999 /* MonteCarlo.swift */; };
 		1FE063E2216B028E00E07006 /* HeuristicEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE063E1216B028E00E07006 /* HeuristicEvaluator.swift */; };
+		1FE928DC217D1C62000B55CF /* ConsoleWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */; };
+		1FE928DE217D1EDA000B55CF /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,7 +59,7 @@
 		1F4270E02169BCEA0081DBFC /* Threat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Threat.swift; sourceTree = "<group>"; };
 		1F60C35E2168232C00580C99 /* Gomoku Zero.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Gomoku Zero.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F60C3612168232C00580C99 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1F60C3632168232C00580C99 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		1F60C3632168232C00580C99 /* BoardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardViewController.swift; sourceTree = "<group>"; };
 		1F60C3662168232C00580C99 /* Gomoku_Zero.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Gomoku_Zero.xcdatamodel; sourceTree = "<group>"; };
 		1F60C3682168232D00580C99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1F60C36B2168232D00580C99 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -84,6 +86,8 @@
 		1F83A554217BB27000285999 /* NegaScout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NegaScout.swift; sourceTree = "<group>"; };
 		1F83A556217BF95800285999 /* MonteCarlo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonteCarlo.swift; sourceTree = "<group>"; };
 		1FE063E1216B028E00E07006 /* HeuristicEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeuristicEvaluator.swift; sourceTree = "<group>"; };
+		1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleWindowController.swift; sourceTree = "<group>"; };
+		1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,14 +138,10 @@
 		1F60C3602168232C00580C99 /* Gomoku Zero */ = {
 			isa = PBXGroup;
 			children = (
+				1F60C3612168232C00580C99 /* AppDelegate.swift */,
 				1F83A553217BAFB400285999 /* Model */,
-				1F60C39B21685C0D00580C99 /* Others */,
-				1F60C3632168232C00580C99 /* ViewController.swift */,
-				1F60C39E21690DE700580C99 /* BoardWindowController.swift */,
-				1F60C3682168232D00580C99 /* Assets.xcassets */,
-				1F60C36A2168232D00580C99 /* Main.storyboard */,
-				1F60C3922168265C00580C99 /* BoardView.swift */,
-				1F60C3A821692B0900580C99 /* BoardTextureView.swift */,
+				1F60C39B21685C0D00580C99 /* Resources */,
+				1FE928E1217D2DDE000B55CF /* Interface */,
 			);
 			path = "Gomoku Zero";
 			sourceTree = "<group>";
@@ -164,15 +164,15 @@
 			path = "Gomoku ZeroUITests";
 			sourceTree = "<group>";
 		};
-		1F60C39B21685C0D00580C99 /* Others */ = {
+		1F60C39B21685C0D00580C99 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				1F60C3612168232C00580C99 /* AppDelegate.swift */,
 				1F60C3AB21694C7100580C99 /* Gomoku Zero.entitlements */,
 				1F60C36D2168232E00580C99 /* Info.plist */,
 				1F60C3652168232C00580C99 /* Gomoku_Zero.xcdatamodeld */,
+				1F60C3682168232D00580C99 /* Assets.xcassets */,
 			);
-			name = Others;
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		1F83A54F217BAEBD00285999 /* Zero */ = {
@@ -211,6 +211,36 @@
 				1F83A54F217BAEBD00285999 /* Zero */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		1FE928DF217D2DC3000B55CF /* Board */ = {
+			isa = PBXGroup;
+			children = (
+				1F60C3632168232C00580C99 /* BoardViewController.swift */,
+				1F60C39E21690DE700580C99 /* BoardWindowController.swift */,
+				1F60C3922168265C00580C99 /* BoardView.swift */,
+				1F60C3A821692B0900580C99 /* BoardTextureView.swift */,
+			);
+			name = Board;
+			sourceTree = "<group>";
+		};
+		1FE928E0217D2DD4000B55CF /* Console */ = {
+			isa = PBXGroup;
+			children = (
+				1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */,
+				1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */,
+			);
+			name = Console;
+			sourceTree = "<group>";
+		};
+		1FE928E1217D2DDE000B55CF /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				1F60C36A2168232D00580C99 /* Main.storyboard */,
+				1FE928DF217D2DC3000B55CF /* Board */,
+				1FE928E0217D2DD4000B55CF /* Console */,
+			);
+			name = Interface;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -348,7 +378,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1F60C3642168232C00580C99 /* ViewController.swift in Sources */,
+				1F60C3642168232C00580C99 /* BoardViewController.swift in Sources */,
 				1F4270DD2169A1480081DBFC /* ZeroPlus.swift in Sources */,
 				1F64DC4C216BF38000467F78 /* Zobrist.swift in Sources */,
 				1F83A557217BF95800285999 /* MonteCarlo.swift in Sources */,
@@ -361,9 +391,11 @@
 				1F60C39721682FE800580C99 /* Board.swift in Sources */,
 				1F60C3A121690EFD00580C99 /* Notification.swift in Sources */,
 				1F83A555217BB27000285999 /* NegaScout.swift in Sources */,
+				1FE928DC217D1C62000B55CF /* ConsoleWindowController.swift in Sources */,
 				1F83A54C217B9E1B00285999 /* Minimax.swift in Sources */,
 				1F4270DF2169B00B0081DBFC /* ThreatEvaluator.swift in Sources */,
 				1F60C3A921692B0900580C99 /* BoardTextureView.swift in Sources */,
+				1FE928DE217D1EDA000B55CF /* ConsoleViewController.swift in Sources */,
 				1F60C39521682F6C00580C99 /* Piece.swift in Sources */,
 				1FE063E2216B028E00E07006 /* HeuristicEvaluator.swift in Sources */,
 				1F60C3622168232C00580C99 /* AppDelegate.swift in Sources */,

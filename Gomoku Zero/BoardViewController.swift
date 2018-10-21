@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class ViewController: NSViewController, BoardViewDelegate {
+class BoardViewController: NSViewController, BoardViewDelegate {
     
     @IBOutlet weak var boardView: BoardView!
     @IBOutlet weak var boardTextureView: BoardTextureView!
@@ -64,7 +64,7 @@ protocol ViewControllerDelegate {
     var board: Board {get}
 }
 
-extension ViewController: BoardDelegate {
+extension BoardViewController: BoardDelegate {
     func gameHasEnded(winner: Piece, coordinates: [Coordinate]) {
         DispatchQueue.main.async {
             self.boardView.winningCoordinates = coordinates
@@ -80,7 +80,7 @@ extension ViewController: BoardDelegate {
     
 }
 
-extension ViewController: ZeroPlusVisualizationDelegate {
+extension BoardViewController: ZeroPlusVisualizationDelegate {
     func activeMapUpdated(activeMap: [[Bool]]?) {
         DispatchQueue.main.async {
             self.boardView.activeMap = activeMap
