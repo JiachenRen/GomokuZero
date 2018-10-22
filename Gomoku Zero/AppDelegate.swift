@@ -102,7 +102,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
                 activeBoard?.zeroPlus.personality = personality
             }
-        case "Monte Carlo": activeBoard?.zeroPlus.personality = .monteCarlo(breadth: 3)
+        case "Monte Carlo":
+            activeBoard?.zeroPlus.personality = .monteCarlo(breadth: 3, playout: 5, random: true, debug: true)
         case "Use Default":
             activeBoard?.zeroPlus.personality = .search(depth: 6, breadth: 3)
         case "Iterative Deepening":

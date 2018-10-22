@@ -94,8 +94,9 @@ public typealias Coordinate = (col: Int, row: Int)
     }
     var zeroPlusHistory: History? {
         didSet {
-            zeroPlusHistory?.stack.forEach{setNeedsDisplay(rect(at: $0))}
-            zeroPlusHistory?.reverted.forEach{setNeedsDisplay(rect(at: $0))}
+//            zeroPlusHistory?.stack.forEach{setNeedsDisplay(rect(at: $0))}
+//            zeroPlusHistory?.reverted.forEach{setNeedsDisplay(rect(at: $0))}
+            setNeedsDisplay(bounds)
         }
     }
     

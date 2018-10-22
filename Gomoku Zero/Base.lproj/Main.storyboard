@@ -184,25 +184,25 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Zero+" id="LTb-jq-gwd">
+                            <menuItem title="Zero+ AI" id="LTb-jq-gwd">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Zero+" id="DRK-U1-p6I">
+                                <menu key="submenu" title="Zero+ AI" id="DRK-U1-p6I">
                                     <items>
-                                        <menuItem title="Open Console" id="JYd-9b-s9N">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        <menuItem title="Open Console" keyEquivalent="C" id="JYd-9b-s9N">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
                                             <connections>
                                                 <action selector="openConsole:" target="Voe-Tx-rLC" id="p1E-QL-qaV"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="o1U-hp-QJb"/>
                                         <menuItem title="Black" keyEquivalent="b" id="0nO-Lq-kpK">
-                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
                                             <connections>
                                                 <action selector="zeroPlus:" target="Voe-Tx-rLC" id="BJd-zk-fgq"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="White" keyEquivalent="w" id="yhB-wx-bFn">
-                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
                                             <connections>
                                                 <action selector="zeroPlus:" target="Voe-Tx-rLC" id="Xhh-dy-omD"/>
                                             </connections>
@@ -277,13 +277,13 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Take Over" keyEquivalent="t" id="Sxf-6V-AGf">
-                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
                                             <connections>
                                                 <action selector="zeroPlus:" target="Voe-Tx-rLC" id="Umc-gf-Ah9"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Off" keyEquivalent="o" id="EJH-Zc-d22">
-                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
                                             <connections>
                                                 <action selector="zeroPlus:" target="Voe-Tx-rLC" id="Q8f-RP-oWL"/>
                                             </connections>

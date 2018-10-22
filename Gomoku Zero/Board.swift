@@ -26,7 +26,7 @@ class Board: ZeroPlusDelegate, HeuristicEvaluatorDelegate {
     var curPlayer: Piece = .black
     var zeroIdentity: Piece = .none
     var zeroPlus = ZeroPlus()
-    var zeroPlus2: ZeroPlus? // Secondary AI for skirmish
+    var zeroPlus2: ZeroPlus? // Secondary AI for skirmish, don't forget to set the delegate!
     var zeroXzero = false // When this is set to true, zero will play against itself!
     var zeroIsThinking = false
     var gameHasEnded = false

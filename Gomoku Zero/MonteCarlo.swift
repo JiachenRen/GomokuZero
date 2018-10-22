@@ -54,7 +54,7 @@ class MonteCarloCortex: CortexProtocol {
             }
             let newNode = node.expand(self, breadth)
             dPrint(">> expanded node: \n\(newNode)")
-            let player = playout(node: newNode)
+            let player = rollout(depth: maxSimulationDepth, node: newNode)
             dPrint(">> playout winner: \(player == nil ? "none" : "\(player!)")")
             newNode.backpropagate(winner: player)
             revert(num: stackTrace.count)
@@ -72,7 +72,29 @@ class MonteCarloCortex: CortexProtocol {
                 bestNode = node
             }
         }
-        return (bestNode!.coordinate!, bestNode!.numVisits)
+        let move = (bestNode!.coordinate!, bestNode!.numVisits)
+        return guardSolution(move: move)
+    }
+    
+    /**
+     Checks the output of the Monte Carlo Search, since sometimes it can get really wierd!
+     Ideally, this function should not exist. Or am I mistaken?
+     */
+    func guardSolution(move: Move) -> Move {
+        let node = Node(identity: delegate.curPlayer, co: move.co)
+        let threshold = 10
+        if let piece = rollout(depth: threshold, node: node) {
+            // A winner emerges with Monte Carlo's solution
+            if piece == node.identity {
+                return move
+            } else {
+                // If Monte Carlo loses by choosing the current move,
+                // a basic move is generated using heuristics.
+                print("monte carlo solution invalidated - generating basic move")
+                return basicCortex.getMove(for: delegate.curPlayer)
+            }
+        }
+        return move
     }
     
     func revert(num: Int) {
@@ -85,14 +107,14 @@ class MonteCarloCortex: CortexProtocol {
      Performs quick simulation with target node
      - Returns: null for draw, .black if black emerges as winner.
      */
-    func playout(node: Node) -> Piece? {
+    func rollout(depth: Int, node: Node) -> Piece? {
         delegate.put(at: node.coordinate!)
         if let winnner = hasWinner() { // if the node is terminal node
             node.isTerminal = true
             delegate.revert()
             return winnner
         }
-        for i in 0..<maxSimulationDepth {
+        for i in 0..<depth {
             let move = basicCortex.getMove(for: delegate.curPlayer)
             delegate.put(at: move.co)
             if let winner = hasWinner() {
@@ -102,7 +124,7 @@ class MonteCarloCortex: CortexProtocol {
                 return winner
             }
         }
-        revert(num: maxSimulationDepth + 1)
+        revert(num: depth + 1)
         return nil
     }
     

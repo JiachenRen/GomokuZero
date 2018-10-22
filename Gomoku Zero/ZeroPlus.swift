@@ -151,12 +151,13 @@ class ZeroPlus: CortexDelegate {
     }
     
     func revert() {
-        let co = history.revert()!
-        zobrist.revert(at: co)
-        curPlayer = curPlayer.next()
-        revertActiveMapUpdate()
-        visDelegate?.historyDidUpdate(history: history)
-        visDelegate?.activeMapUpdated(activeMap: activeCoMap)
+        if let co = history.revert() {
+            zobrist.revert(at: co)
+            curPlayer = curPlayer.next()
+            revertActiveMapUpdate()
+            visDelegate?.historyDidUpdate(history: history)
+            visDelegate?.activeMapUpdated(activeMap: activeCoMap)
+        }
     }
     
     /**
