@@ -73,11 +73,11 @@ class ZeroMax: CortexProtocol, TimeLimitedSearchProtocol {
         } else if depth == 0 {
             var move = Move(co: (0,0), score: score)
             // Overcome horizon effect by looking further into interesting nodes
-            if abs(score) > 6000 && Int.random(in: 0..<3) == 0 {
+            if abs(score) > Threat.interesting && Int.random(in: 0..<1) == 0 {
                 let rolloutScore = rollout(depth: 10, policy: basicCortex)
-                if isTerminal(score: rolloutScore) {
+//                if isTerminal(score: rolloutScore) {
                     move.score = rolloutScore
-                }
+//                }
             }
             return move
         }

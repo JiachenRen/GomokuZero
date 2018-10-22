@@ -71,16 +71,19 @@ extension CortexProtocol {
      This is used by ZeroMax to overcome the horizon effect.
      */
     func rollout(depth: Int, policy: BasicCortex) -> Int {
+        var heuristicValue = 0
         for i in 0..<depth {
             let move = policy.getMove(for: delegate.curPlayer)
             delegate.put(at: move.co)
             if let _ = hasWinner() {
+                heuristicValue = getHeuristicValue()
                 revert(num: i + 1)
-                return getHeuristicValue()
+                return heuristicValue
             }
         }
+        heuristicValue = getHeuristicValue()
         revert(num: depth)
-        return getHeuristicValue()
+        return heuristicValue
     }
     
     func revert(num: Int) {
