@@ -1,14 +1,15 @@
 //
-//  Minimax.swift
+//  ZeroMax.swift
 //  Gomoku Zero
 //
-//  Created by Jiachen Ren on 10/20/18.
+//  Created by Jiachen Ren on 10/21/18.
 //  Copyright © 2018 Jiachen Ren. All rights reserved.
 //
 
 import Foundation
 
-class MinimaxCortex: CortexProtocol, TimeLimitedSearchProtocol {
+/// A variant of minimax that attempts to address the horizon effect
+class ZeroMax: CortexProtocol, TimeLimitedSearchProtocol {
     var delegate: CortexDelegate
     
     var heuristicEvaluator = HeuristicEvaluator()
@@ -19,12 +20,13 @@ class MinimaxCortex: CortexProtocol, TimeLimitedSearchProtocol {
     var betaCut = 0
     var cumCutDepth = 0
     var verbose = false
+    var basicCortex: BasicCortex
     
     init(_ delegate: CortexDelegate, depth: Int, breadth: Int) {
         self.depth = depth
         self.breadth = breadth
         self.delegate = delegate
-        
+        basicCortex = BasicCortex(delegate)
         heuristicEvaluator.delegate = self
     }
     
@@ -57,13 +59,27 @@ class MinimaxCortex: CortexProtocol, TimeLimitedSearchProtocol {
     //    13             v := minimax(child, depth − 1, TRUE)
     //    14             bestValue := min(bestValue, v)
     //    15         return bestValue
+    
+    func isTerminal(score: Int) -> Bool {
+        return score >= Threat.win || score <= -Threat.win
+    }
+    
     func minimax(depth: Int, breadth: Int, player: Piece,  alpha: Int, beta: Int) -> Move {
         var alpha = alpha, beta = beta, depth = depth // Make alpha beta mutable
         let score = getHeuristicValue()
         
-        if score >= Threat.win || score <= -Threat.win || depth == 0 {
-            // Terminal state has reached
+        if isTerminal(score: score) {
             return Move(co: (0,0), score: score)
+        } else if depth == 0 {
+            var move = Move(co: (0,0), score: score)
+            // Overcome horizon effect by looking further into interesting nodes
+            if abs(score) > 6000 && Int.random(in: 0..<3) == 0 {
+                let rolloutScore = rollout(depth: 10, policy: basicCortex)
+                if isTerminal(score: rolloutScore) {
+                    move.score = rolloutScore
+                }
+            }
+            return move
         }
         
         if player == identity {

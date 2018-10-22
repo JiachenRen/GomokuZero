@@ -66,6 +66,38 @@ extension CortexProtocol {
         }
     }
     
+    /**
+     Perform a fast simulation on the current game state.
+     This is used by ZeroMax to overcome the horizon effect.
+     */
+    func rollout(depth: Int, policy: BasicCortex) -> Int {
+        for i in 0..<depth {
+            let move = policy.getMove(for: delegate.curPlayer)
+            delegate.put(at: move.co)
+            if let _ = hasWinner() {
+                revert(num: i + 1)
+                return getHeuristicValue()
+            }
+        }
+        revert(num: depth)
+        return getHeuristicValue()
+    }
+    
+    func revert(num: Int) {
+        for _ in 0..<num {
+            delegate.revert()
+        }
+    }
+    
+    func hasWinner() -> Piece? {
+        let blackScore = heuristicEvaluator.evaluate(for: .black)
+        let whiteScore = heuristicEvaluator.evaluate(for: .white)
+        if blackScore > Threat.win || whiteScore > Threat.win {
+            return blackScore > whiteScore ? .black : .white
+        }
+        return nil
+    }
+    
     func genSortedMoves(for player: Piece) -> [Move] {
         var sortedMoves = [Move]()
         for (i, row) in delegate.activeCoMap.enumerated() {
@@ -156,3 +188,6 @@ class BasicCortex: CortexProtocol {
     }
 }
 
+protocol TimeLimitedSearchProtocol {
+    var searchCancelledInProgress: Bool {get}
+}

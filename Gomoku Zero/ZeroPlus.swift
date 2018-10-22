@@ -41,7 +41,7 @@ class ZeroPlus: CortexDelegate {
     static let syncedQueue = DispatchQueue(label: "syncedQueue")
     var cortex: CortexProtocol?
 //    var personality: Personality = .search(depth: 6, breadth: 3)
-    var personality: Personality = .monteCarlo(breadth: 3, playout: 5, random: true, debug: true)
+    var personality: Personality = .monteCarlo(breadth: 3, rollout: 5, random: true, debug: true)
     var iterativeDeepening = true
     
     var calcDurations = [TimeInterval]()
@@ -98,27 +98,37 @@ class ZeroPlus: CortexDelegate {
             case .basic: cortex = BasicCortex(self)
             case .search(depth: let d, breadth: let b):
                 if iterativeDeepening {
-                    cortex = IterativeDeepeningCortex(self, depth: d, breadth: b)
+                    cortex = IterativeDeepeningCortex(self, depth: d, breadth: b) {
+                        $0.cortex = MinimaxCortex($0, depth: $1, breadth: b)
+                    }
                 } else {
-                    let minimax =  MinimaxCortex(self, depth: d, breadth: b)
+                    let minimax = MinimaxCortex(self, depth: d, breadth: b)
                     minimax.verbose = true
                     cortex = minimax
                 }
             case .negaScout(depth: let d, breadth: let b):
                 cortex = NegaScoutCortex(self, depth: d, breadth: b)
-            case .monteCarlo(breadth: let b, playout: let p, random: let r, debug: let d):
+            case .monteCarlo(breadth: let b, rollout: let p, random: let r, debug: let d):
                 cortex = MonteCarloCortex(self, breadth: b)
                 let mtCortex = cortex as! MonteCarloCortex
                 mtCortex.maxSimulationDepth = p
                 mtCortex.randomExpansion = r
                 mtCortex.debug = d
+            case .zeroMax(depth: let d, breadth: let b):
+                if iterativeDeepening {
+                    cortex = IterativeDeepeningCortex(self, depth: d, breadth: b) {
+                        $0.cortex = ZeroMax($0, depth: $1, breadth: b)
+                    }
+                } else {
+                    cortex = ZeroMax(self, depth: d, breadth: b)
+                }
             }
             delegate.bestMoveExtrapolated(co: cortex!.getMove().co)
         }
         let duration = Date().timeIntervalSince1970 - startTime
         calcDurations.append(duration)
         let avgDuration = calcDurations.reduce(0){$0 + $1} / Double(calcDurations.count)
-        print("duration: \(duration)\n avg. duration: \(avgDuration)")
+        print("cortex: \(String(describing: cortex))\nduration: \(duration)\navg. duration: \(avgDuration)\n")
         
         visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map
     }
@@ -182,7 +192,8 @@ enum Personality {
     case basic
     case search(depth: Int, breadth: Int)
     case negaScout(depth: Int, breadth: Int)
-    case monteCarlo(breadth: Int, playout: Int, random: Bool, debug: Bool)
+    case monteCarlo(breadth: Int, rollout: Int, random: Bool, debug: Bool)
+    case zeroMax(depth: Int, breadth: Int)
 }
 
 protocol ZeroPlusDelegate {

@@ -34,6 +34,7 @@
 		1FE063E2216B028E00E07006 /* HeuristicEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE063E1216B028E00E07006 /* HeuristicEvaluator.swift */; };
 		1FE928DC217D1C62000B55CF /* ConsoleWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */; };
 		1FE928DE217D1EDA000B55CF /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */; };
+		1FE928E3217D6B43000B55CF /* ZeroMax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928E2217D6B43000B55CF /* ZeroMax.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +89,7 @@
 		1FE063E1216B028E00E07006 /* HeuristicEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeuristicEvaluator.swift; sourceTree = "<group>"; };
 		1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleWindowController.swift; sourceTree = "<group>"; };
 		1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
+		1FE928E2217D6B43000B55CF /* ZeroMax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMax.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,6 +187,7 @@
 				1F64DC4B216BF38000467F78 /* Zobrist.swift */,
 				1F83A549217B91F700285999 /* Cortex.swift */,
 				1F83A54B217B9E1B00285999 /* Minimax.swift */,
+				1FE928E2217D6B43000B55CF /* ZeroMax.swift */,
 				1F83A54D217B9E5800285999 /* IterativeDeepening.swift */,
 				1F83A554217BB27000285999 /* NegaScout.swift */,
 				1F83A556217BF95800285999 /* MonteCarlo.swift */,
@@ -392,6 +395,7 @@
 				1F60C3A121690EFD00580C99 /* Notification.swift in Sources */,
 				1F83A555217BB27000285999 /* NegaScout.swift in Sources */,
 				1FE928DC217D1C62000B55CF /* ConsoleWindowController.swift in Sources */,
+				1FE928E3217D6B43000B55CF /* ZeroMax.swift in Sources */,
 				1F83A54C217B9E1B00285999 /* Minimax.swift in Sources */,
 				1F4270DF2169B00B0081DBFC /* ThreatEvaluator.swift in Sources */,
 				1F60C3A921692B0900580C99 /* BoardTextureView.swift in Sources */,

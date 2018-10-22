@@ -15,11 +15,13 @@ class IterativeDeepeningCortex: CortexProtocol {
     var iterativeDeepeningCompleted = false
     var depth: Int
     var breadth: Int
+    var setup: (ZeroPlus, Int) -> ()
     
-    init(_ delegate: CortexDelegate, depth: Int, breadth: Int) {
+    init(_ delegate: CortexDelegate, depth: Int, breadth: Int, _ setup: @escaping (ZeroPlus, Int) -> ()) {
         self.depth = depth
         self.breadth = breadth
         self.delegate = delegate
+        self.setup = setup
     }
     
     func getMove() -> Move {
@@ -46,9 +48,9 @@ class IterativeDeepeningCortex: CortexProtocol {
                 zero.startTime = zero2.startTime
                 zero.maxThinkingTime = zero2.maxThinkingTime
                 zero.visDelegate = zero2.visDelegate
-                zero.cortex = MinimaxCortex(zero, depth: d, breadth: breadth)
+                self.setup(zero, d)
                 let bestForDepth = zero.cortex!.getMove()
-                let cancelled = (zero.cortex as! MinimaxCortex).searchCancelledInProgress
+                let cancelled = (zero.cortex as! TimeLimitedSearchProtocol).searchCancelledInProgress
                 if d > maxDepth && !cancelled {
                     // The deepter the depth, the more reliable the generated move.
                     bestMove = bestForDepth
@@ -61,7 +63,7 @@ class IterativeDeepeningCortex: CortexProtocol {
             workItems.append(workItem)
         }
         
-        group.notify(queue: DispatchQueue.global()) { [unowned self] in
+        group.notify(queue: DispatchQueue.global()) {
             self.iterativeDeepeningCompleted = true
         }
         

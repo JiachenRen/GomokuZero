@@ -88,7 +88,9 @@ class ConsoleViewController: NSViewController {
                 zero1.personality = .search(depth: depth, breadth: breadth)
                 zero1.iterativeDeepening = iterativeDeepening
             case "Monte Carlo":
-                zero1.personality = .monteCarlo(breadth: breadth, playout: playout, random: randExpansion, debug: debug)
+                zero1.personality = .monteCarlo(breadth: breadth, rollout: playout, random: randExpansion, debug: debug)
+            case "ZeroMax":
+                zero1.personality = .zeroMax(depth: depth, breadth: breadth)
             default: break
             }
             zero1.maxThinkingTime = TimeInterval(blackMaxThinkingTime.stringValue) ?? 5
@@ -107,7 +109,9 @@ class ConsoleViewController: NSViewController {
                 zero2.personality = .search(depth: depth, breadth: breadth)
                 zero2.iterativeDeepening = iterativeDeepening
             case "Monte Carlo":
-                zero2.personality = .monteCarlo(breadth: breadth, playout: playout, random: randExpansion, debug: debug)
+                zero2.personality = .monteCarlo(breadth: breadth, rollout: playout, random: randExpansion, debug: debug)
+            case "ZeroMax":
+                zero2.personality = .zeroMax(depth: depth, breadth: breadth)
             default: break
             }
             zero2.maxThinkingTime = TimeInterval(whiteMaxThinkingTime.stringValue) ?? 5

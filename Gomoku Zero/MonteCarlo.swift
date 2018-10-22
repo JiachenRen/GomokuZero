@@ -97,11 +97,7 @@ class MonteCarloCortex: CortexProtocol {
         return move
     }
     
-    func revert(num: Int) {
-        for _ in 0..<num {
-            delegate.revert()
-        }
-    }
+    
     
     /**
      Performs quick simulation with target node
@@ -128,14 +124,6 @@ class MonteCarloCortex: CortexProtocol {
         return nil
     }
     
-    func hasWinner() -> Piece? {
-        let blackScore = heuristicEvaluator.evaluate(for: .black)
-        let whiteScore = heuristicEvaluator.evaluate(for: .white)
-        if blackScore > Threat.win || whiteScore > Threat.win {
-            return blackScore > whiteScore ? .black : .white
-        }
-        return nil
-    }
     
     /// Monte Carlo Tree Node
     class Node {
