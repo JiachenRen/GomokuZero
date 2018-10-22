@@ -40,6 +40,10 @@ class MinimaxCortex: CortexProtocol, TimeLimitedSearchProtocol {
         return move
     }
     
+    func isTerminal(score: Int) -> Bool {
+        return score >= Threat.win || score <= -Threat.win
+    }
+    
     //    function minimax(node, depth, maximizingPlayer)
     //    02     if depth = 0 or node is a terminal node
     //    03         return the heuristic value of node
@@ -61,7 +65,7 @@ class MinimaxCortex: CortexProtocol, TimeLimitedSearchProtocol {
         var alpha = alpha, beta = beta, depth = depth // Make alpha beta mutable
         let score = getHeuristicValue()
         
-        if score >= Threat.win || score <= -Threat.win || depth == 0 {
+        if isTerminal(score: score) || depth == 0 {
             // Terminal state has reached
             return Move(co: (0,0), score: score)
         }

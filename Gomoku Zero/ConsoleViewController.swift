@@ -20,6 +20,8 @@ class ConsoleViewController: NSViewController {
     @IBOutlet weak var blackDebug: NSButton! // Done
     @IBOutlet weak var blackSimulationDepth: NSTextField! // Done
     @IBOutlet weak var blackRandomExpansion: NSButton! // Done
+    @IBOutlet weak var blackRolloutProbability: NSTextField!
+    @IBOutlet weak var blackThreshold: NSTextField!
     
     @IBOutlet weak var whiteCheckBox: NSButton!
     @IBOutlet weak var whiteAlgorithm: NSPopUpButton!
@@ -30,6 +32,8 @@ class ConsoleViewController: NSViewController {
     @IBOutlet weak var whiteDebug: NSButton!
     @IBOutlet weak var whiteSimulationDepth: NSTextField!
     @IBOutlet weak var whiteRandomExpansion: NSButton!
+    @IBOutlet weak var whiteRolloutProbability: NSTextField!
+    @IBOutlet weak var whiteThreshold: NSTextField!
     
     @IBOutlet weak var boardDimension: NSComboBox! // Done
     @IBOutlet weak var showStepNumber: NSButton! // Done
@@ -80,17 +84,20 @@ class ConsoleViewController: NSViewController {
             let breadth = Int(blackBreadth.stringValue) ?? 3
             let iterativeDeepening = blackIterativeDeepening.state == .on
             let debug = blackDebug.state == .on
-            let playout = Int(blackSimulationDepth.stringValue) ?? 5
+            let simDepth = Int(blackSimulationDepth.stringValue) ?? 5
             let randExpansion = blackRandomExpansion.state == .on
+            
             switch blackAlgorithm.selectedItem!.title {
             case "Heuristic": zero1.personality = .basic
             case "Minimax":
                 zero1.personality = .search(depth: depth, breadth: breadth)
                 zero1.iterativeDeepening = iterativeDeepening
             case "Monte Carlo":
-                zero1.personality = .monteCarlo(breadth: breadth, rollout: playout, random: randExpansion, debug: debug)
+                zero1.personality = .monteCarlo(breadth: breadth, rollout: simDepth, random: randExpansion, debug: debug)
             case "ZeroMax":
-                zero1.personality = .zeroMax(depth: depth, breadth: breadth)
+                let rolloutPr = Int(blackRolloutProbability.stringValue) ?? 100
+                let threshold = Int(blackThreshold.stringValue) ?? Threat.interesting
+                zero1.personality = .zeroMax(depth: depth, breadth: breadth, rolloutPr: rolloutPr, simDepth: simDepth, threshold: threshold)
             default: break
             }
             zero1.maxThinkingTime = TimeInterval(blackMaxThinkingTime.stringValue) ?? 5
@@ -101,7 +108,7 @@ class ConsoleViewController: NSViewController {
             let breadth = Int(whiteBreadth.stringValue) ?? 3
             let iterativeDeepening = whiteIterativeDeepening.state == .on
             let debug = whiteDebug.state == .on
-            let playout = Int(whiteSimulationDepth.stringValue) ?? 5
+            let simDepth = Int(whiteSimulationDepth.stringValue) ?? 5
             let randExpansion = whiteRandomExpansion.state == .on
             switch whiteAlgorithm.selectedItem!.title {
             case "Heuristic": zero2.personality = .basic
@@ -109,13 +116,24 @@ class ConsoleViewController: NSViewController {
                 zero2.personality = .search(depth: depth, breadth: breadth)
                 zero2.iterativeDeepening = iterativeDeepening
             case "Monte Carlo":
-                zero2.personality = .monteCarlo(breadth: breadth, rollout: playout, random: randExpansion, debug: debug)
+                zero2.personality = .monteCarlo(breadth: breadth, rollout: simDepth, random: randExpansion, debug: debug)
             case "ZeroMax":
-                zero2.personality = .zeroMax(depth: depth, breadth: breadth)
+                let rolloutPr = Int(whiteRolloutProbability.stringValue) ?? 100
+                let threshold = Int(whiteThreshold.stringValue) ?? Threat.interesting
+                zero2.personality = .zeroMax(depth: depth, breadth: breadth, rolloutPr: rolloutPr, simDepth: simDepth, threshold: threshold)
             default: break
             }
             zero2.maxThinkingTime = TimeInterval(whiteMaxThinkingTime.stringValue) ?? 5
             board.zeroPlus2 = zero2
+        }
+        
+        if blackCheckBox.state == .off && whiteCheckBox.state == .on {
+            // Special case, disable default board AI
+            board.zeroPlus = zero2
+            board.zeroPlus2 = nil
+            board.zeroIdentity = .white
+        } else {
+            board.zeroIdentity = .black
         }
         
         if board.zeroPlus2 != nil {

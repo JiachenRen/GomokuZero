@@ -9,62 +9,51 @@
 import Foundation
 
 /// A variant of minimax that attempts to address the horizon effect
-class ZeroMax: CortexProtocol, TimeLimitedSearchProtocol {
-    var delegate: CortexDelegate
-    
-    var heuristicEvaluator = HeuristicEvaluator()
-    var depth: Int
-    var breadth: Int
-    var searchCancelledInProgress = false
-    var alphaCut = 0
-    var betaCut = 0
-    var cumCutDepth = 0
-    var verbose = false
+class ZeroMax: MinimaxCortex {
+
     var basicCortex: BasicCortex
     
-    init(_ delegate: CortexDelegate, depth: Int, breadth: Int) {
-        self.depth = depth
-        self.breadth = breadth
-        self.delegate = delegate
-        basicCortex = BasicCortex(delegate)
-        heuristicEvaluator.delegate = self
+    /// An Int b/w 0 and 100 that denotes the probability in which a simulation should be performed.
+    var rolloutPr: Int
+    
+    /// Defaults to Threat.interesting. Denotes the threshold beyond which a simulation might be performed.
+    var threshold: Int
+    
+    /// Simulation deph during rollout.
+    var simDepth: Int
+    
+    /**
+     - Parameter rollout: an integer b/w 0 and 100 that denotes the probability of simulation at leaf nodes.
+     - Parameter threshold: defaults to Threat.interesting. Denotes the threshold beyond which a simulation might be performed.
+     - Parameter simDepth: depth of rollouts to be carried. Defaults to 10.
+     */
+    init(_ delegate: CortexDelegate, depth: Int, breadth: Int, rollout: Int, threshold: Int = Threat.interesting, simDepth: Int = 10) {
+        self.basicCortex = BasicCortex(delegate)
+        self.rolloutPr = rollout
+        self.threshold  = threshold
+        self.simDepth = simDepth
+        super.init(delegate, depth: depth, breadth: breadth)
     }
     
-    func getMove() -> Move {
-        let move = minimax(depth: depth, breadth: breadth, player: identity, alpha: Int.min, beta: Int.max)
+    override func getMove() -> Move {
+        let move = super.getMove()
         if verbose {
-            let avgCutDepth = Double(cumCutDepth) / Double(alphaCut + betaCut)
-            print("alpha cut: \(alphaCut)\t beta cut: \(betaCut)\t avg. cut depth: \(avgCutDepth))")
-            print("recognized sequences: \(ThreatEvaluator.seqHashMap.count)")
-            print("recognized sequence groups: \(ThreatEvaluator.seqGroupHashMap.count)")
-            print("calc. duration (s): \(Date().timeIntervalSince1970 - delegate.startTime)")
+            print("rollout probability: \(rolloutPr)")
         }
         return move
     }
     
-    //    function minimax(node, depth, maximizingPlayer)
-    //    02     if depth = 0 or node is a terminal node
-    //    03         return the heuristic value of node
-    //
-    //    04     if maximizingPlayer
-    //    05         bestValue := −∞
-    //    06         for each child of node
-    //    07             v := minimax(child, depth − 1, FALSE)
-    //    08             bestValue := max(bestValue, v)
-    //    09         return bestValue
-    //
-    //    10     else    (* minimizing player *)
-    //    11         bestValue := +∞
-    //    12         for each child of node
-    //    13             v := minimax(child, depth − 1, TRUE)
-    //    14             bestValue := min(bestValue, v)
-    //    15         return bestValue
     
-    func isTerminal(score: Int) -> Bool {
-        return score >= Threat.win || score <= -Threat.win
-    }
     
-    func minimax(depth: Int, breadth: Int, player: Piece,  alpha: Int, beta: Int) -> Move {
+    /**
+     A variant of minimax algorithm that attempts to address the horizon effect.
+     The main difference is that instead of returning the heuristic value of the node,
+     a simulation (rollout) is performed, and the heuristic value of the game state
+     at the end of the simulation is used instead.
+     
+     - Returns: the best move for the current player in the given delegate.
+     */
+    override func minimax(depth: Int, breadth: Int, player: Piece,  alpha: Int, beta: Int) -> Move {
         var alpha = alpha, beta = beta, depth = depth // Make alpha beta mutable
         let score = getHeuristicValue()
         
@@ -73,11 +62,10 @@ class ZeroMax: CortexProtocol, TimeLimitedSearchProtocol {
         } else if depth == 0 {
             var move = Move(co: (0,0), score: score)
             // Overcome horizon effect by looking further into interesting nodes
-            if abs(score) > Threat.interesting && Int.random(in: 0..<1) == 0 {
-                let rolloutScore = rollout(depth: 10, policy: basicCortex)
-//                if isTerminal(score: rolloutScore) {
-                    move.score = rolloutScore
-//                }
+            let shouldRollout = rolloutPr != 0 && Int.random(in: 0...(100 - rolloutPr)) == 0
+            if abs(score) > threshold && shouldRollout {
+                let rolloutScore = rollout(depth: simDepth, policy: basicCortex)
+                move.score = rolloutScore
             }
             return move
         }
