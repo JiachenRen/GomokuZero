@@ -35,7 +35,7 @@ class IterativeDeepeningCortex: CortexProtocol {
         var maxDepth = 0
         let group = DispatchGroup()
         
-        for d in 1...depth {
+        for d in stride(from: 2, to: depth * 2 + 1, by: 2) {
             let workItem = DispatchWorkItem {
                 let zero = ZeroPlus()
                 let zero2 = self.delegate as! ZeroPlus

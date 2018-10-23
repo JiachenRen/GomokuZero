@@ -65,10 +65,11 @@ class ConsoleViewController: NSViewController {
             let idx = dim.firstIndex(of: "x")
             if idx == nil {
                 board.dimension = Int(dim) ?? 19
+            } else  {
+                var num = String(dim[..<idx!])
+                num.removeAll{$0 == " "}
+                board.dimension = Int(num) ?? 19
             }
-            var num = String(dim[..<idx!])
-            num.removeAll{$0 == " "}
-            board.dimension = Int(num) ?? 19
         }
         
         // Configure Zero+ AI
