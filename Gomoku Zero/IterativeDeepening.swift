@@ -16,16 +16,26 @@ class IterativeDeepeningCortex: CortexProtocol {
     var depth: Int
     var breadth: Int
     var setup: (ZeroPlus, Int) -> ()
+    var layers: Layers
     
-    init(_ delegate: CortexDelegate, depth: Int, breadth: Int, _ setup: @escaping (ZeroPlus, Int) -> ()) {
+    init(_ delegate: CortexDelegate, depth: Int, breadth: Int, layers: Layers = .all, _ setup: @escaping (ZeroPlus, Int) -> ()) {
         self.depth = depth
         self.breadth = breadth
         self.delegate = delegate
+        self.layers = layers
         self.setup = setup
     }
     
     func getMove() -> Move {
         return iterativeDeepening(depth: depth, breadth: breadth)
+    }
+    
+    private func getDeepeningLayers() -> StrideTo<Int> {
+        switch layers {
+        case .all: return stride(from: 1, to: depth + 1, by: 1)
+        case .evens: return stride(from: 2, to: depth * 2 + 1, by: 2)
+        case .odds: return stride(from: 1, to: depth * 2, by: 2)
+        }
     }
     
     private func iterativeDeepening(depth: Int, breadth: Int) -> Move {
@@ -35,7 +45,7 @@ class IterativeDeepeningCortex: CortexProtocol {
         var maxDepth = 0
         let group = DispatchGroup()
         
-        for d in stride(from: 2, to: depth * 2 + 1, by: 2) {
+        for d in getDeepeningLayers() {
             let workItem = DispatchWorkItem {
                 let zero = ZeroPlus()
                 let zero2 = self.delegate as! ZeroPlus
@@ -81,5 +91,8 @@ class IterativeDeepeningCortex: CortexProtocol {
         return bestMove!
     }
     
+    enum Layers: String {
+        case all, odds, evens
+    }
     
 }

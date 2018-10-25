@@ -32,6 +32,49 @@ class BoardWindowController: NSWindowController, NSOpenSavePanelDelegate, ViewCo
         viewController.delegate = self
     }
     
+    static func open(_ completion: (([BoardWindowController]) -> Void)? = nil) {
+        let panel = NSOpenPanel(contentRect: NSRect.zero,
+                                styleMask: .fullSizeContentView,
+                                backing: .buffered,
+                                defer: true)
+        panel.canChooseDirectories = false
+        panel.allowedFileTypes = ["gzero"]
+        panel.canChooseFiles = true
+        panel.allowsMultipleSelection = true
+        
+        var controllers = [BoardWindowController]()
+        
+        panel.begin() { response in
+            switch response {
+            case .OK:
+                var curFrame = NSApplication.shared.mainWindow?.frame ?? CGRect.zero
+                for url in panel.urls {
+                    curFrame.origin = CGPoint(x: curFrame.minX + 10, y: curFrame.minY - 10)
+                    let boardWindowController = NSStoryboard(name: "Main", bundle: nil)
+                        .instantiateController(withIdentifier: "board-window") as! BoardWindowController
+                    do {
+                        let game = try String(contentsOf: url, encoding: .utf8)
+                        let fileName = url.lastPathComponent
+                        let idx = fileName.firstIndex(of: ".")!
+                        boardWindowController.fileName = String(fileName[..<idx]) // Update the name of the window
+                        boardWindowController.board.load(game)
+                        boardWindowController.showWindow(self)
+                        if curFrame.size == .zero {
+                            curFrame = boardWindowController.window!.frame
+                        } else {
+                            boardWindowController.window?.setFrame(curFrame, display: true, animate: true)
+                        }
+                        controllers.append(boardWindowController)
+                    } catch let err {
+                        print(err)
+                    }
+                }
+                completion?(controllers)
+            default: break
+            }
+        }
+    }
+    
     
     
     func save() {

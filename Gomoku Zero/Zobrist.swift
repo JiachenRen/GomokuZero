@@ -10,6 +10,8 @@ import Foundation
 
 typealias ZobristTable = [[[Int]]]
 typealias HeuristicMap = Dictionary<Zobrist, Int>
+
+var hashCollisions: Int = 0
 class Zobrist: Hashable {
     
     // This is for accomodating different board dimensions
@@ -17,11 +19,14 @@ class Zobrist: Hashable {
     
     // Note that the hash maps only supports dimension of up to 19.
     
-    /// hashed heuristic values of nodes
+    /// Hashed heuristic values of nodes
     static var hashedHeuristicMaps = [HeuristicMap](repeatElement(HeuristicMap(), count: 19))
     
-    /// hashed ordered moves
+    /// Hashed ordered moves
     static var orderedMovesMap = Dictionary<Zobrist, [Move]>()
+    
+    /// Slightly boosts performance at a neglegible risk of judging two diffenrent game states to be the same.
+    static var strictEqualityCheck = false
     
     let dim: Int
     var matrix = [[Piece]]()
@@ -84,15 +89,20 @@ class Zobrist: Hashable {
     }
     
     static func == (lhs: Zobrist, rhs: Zobrist) -> Bool {
-        let dim = lhs.dim
-        for i in 0..<dim {
-            for q in 0..<dim {
-                if lhs.matrix[i][q] != rhs.matrix[i][q] {
-                    return false
+        hashCollisions += 1
+        if strictEqualityCheck {
+            let dim = lhs.dim
+            for i in 0..<dim {
+                for q in 0..<dim {
+                    if lhs.matrix[i][q] != rhs.matrix[i][q] {
+                        return false
+                    }
                 }
             }
+            return true
         }
-        return true
+        // Loads faster, but could be faulty!
+        return lhs.hashValue == rhs.hashValue
     }
     
     func get(_ co: Coordinate) -> Piece {

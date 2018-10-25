@@ -42,7 +42,9 @@ class ZeroPlus: CortexDelegate {
     var cortex: CortexProtocol?
 //    var personality: Personality = .search(depth: 6, breadth: 3)
     var personality: Personality = .monteCarlo(breadth: 3, rollout: 5, random: true, debug: true)
+    
     var iterativeDeepening = true
+    var layers: IterativeDeepeningCortex.Layers = .evens
     
     var calcDurations = [TimeInterval]()
     
@@ -86,7 +88,6 @@ class ZeroPlus: CortexDelegate {
         curPlayer = player // Note: this is changed every time put() is called.
         identity = player
         Zobrist.orderedMovesMap = Dictionary<Zobrist, [Move]>() // Clear ordered moves map.
-        
         visDelegate?.activeMapUpdated(activeMap: activeCoMap) // Notify the delegate that active map has updated
         
         if delegate.history.stack.count == 0 && player == .black { // When ZeroPlus is black, the first move is always at the center
@@ -98,7 +99,7 @@ class ZeroPlus: CortexDelegate {
             case .basic: cortex = BasicCortex(self)
             case .search(depth: let d, breadth: let b):
                 if iterativeDeepening {
-                    cortex = IterativeDeepeningCortex(self, depth: d, breadth: b) {
+                    cortex = IterativeDeepeningCortex(self, depth: d, breadth: b, layers: layers) {
                         $0.cortex = MinimaxCortex($0, depth: $1, breadth: b)
                     }
                 } else {
@@ -116,7 +117,7 @@ class ZeroPlus: CortexDelegate {
                 mtCortex.debug = d
             case .zeroMax(depth: let d, breadth: let b, rolloutPr: let r, simDepth: let s, threshold: let t):
                 if iterativeDeepening {
-                    cortex = IterativeDeepeningCortex(self, depth: d, breadth: b) {
+                    cortex = IterativeDeepeningCortex(self, depth: d, breadth: b, layers: layers) {
                         $0.cortex = ZeroMax($0, depth: $1, breadth: b, rollout: r, threshold: t, simDepth: s)
                     }
                 } else {
@@ -129,6 +130,9 @@ class ZeroPlus: CortexDelegate {
         calcDurations.append(duration)
         let avgDuration = calcDurations.reduce(0){$0 + $1} / Double(calcDurations.count)
         print("cortex: \(String(describing: cortex))\nduration: \(duration)\navg. duration: \(avgDuration)\n")
+        
+        let cached = Zobrist.hashedHeuristicMaps[dim - 1].count
+        print("retrieved: \(retrievedCount)\tcached: \(cached)\tratio: \(Double(retrievedCount) / Double(cached))\tcollisions: \(hashCollisions)\tcollision ratio: \(Double(hashCollisions) / Double(retrievedCount))")
         
         visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map
     }

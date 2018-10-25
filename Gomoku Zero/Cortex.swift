@@ -42,6 +42,7 @@ protocol CortexProtocol: HeuristicEvaluatorDelegate {
     func timeout() -> Bool
 }
 
+var retrievedCount = 0
 extension CortexProtocol {
     var pieces: [[Piece]] {return delegate.pieces}
     var identity: Piece {return delegate.identity}
@@ -124,6 +125,7 @@ extension CortexProtocol {
         var score = 0
         
         if let retrieved = Zobrist.hashedHeuristicMaps[dim - 1][zobrist] {
+            retrievedCount += 1
             score = retrieved
         } else {
             let black = heuristicEvaluator.evaluate(for: .black)
