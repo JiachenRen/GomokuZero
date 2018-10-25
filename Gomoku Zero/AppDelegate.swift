@@ -185,6 +185,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         BoardWindowController.open()
     }
     
+    @IBAction func copyToClipboard(_ sender: NSMenuItem) {
+        let pasteboard = NSPasteboard.general
+        pasteboard.declareTypes([NSPasteboard.PasteboardType.string], owner: nil)
+        pasteboard.setString(activeBoard?.description ?? "", forType: .string)
+    }
+    
     @IBAction func new(_ sender: NSMenuItem) {
         let dim = getNewGameDimension()
         if dim != -1 {

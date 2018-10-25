@@ -151,7 +151,7 @@
                                         </menuItem>
                                         <menuItem title="Copy" keyEquivalent="c" id="Hge-O5-9rx">
                                             <connections>
-                                                <action selector="copy:" target="Ady-hI-5gd" id="2cc-WO-2dI"/>
+                                                <action selector="copyToClipboard:" target="Voe-Tx-rLC" id="axL-st-hhe"/>
                                             </connections>
                                         </menuItem>
                                     </items>
