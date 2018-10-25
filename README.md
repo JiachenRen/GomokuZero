@@ -13,9 +13,30 @@ Zero+ is an OSX application built with Swift 4 that is optimized all the way to 
 ### Minimax w/ Alpha-beta Pruning 
 
 #### Hashing
-Many well-known hashing techniques are used to optimize the minimax algorithm. One of the most important hash tables involved is a Zobrist transposition map. 
-At the start of each iteration of minimax, the hash value for the board is computed by using an xor operation for each piece.
+Many well-known hashing techniques are used to optimize the `minimax` algorithm. One of the most important hash tables involved is a `Zobrist` transposition map. 
+
 ##### Zobrist
+First, a matrix matching the dimension of the board containing random 64-bit integer pairs is generated. Since there are only two colors involved in gomoku, i.e. black and white, each slot in the matrix correspond to 2 randomly generated integer. This table is shared across multiple concurrent AIs. At the beginning of each iteration of computation, the hash value for the board is computed once. 
+```swift
+private func computeInitialHash() -> Int {
+        var hash = 0
+        for i in 0..<dim {
+            for q in 0..<dim {
+                let piece = matrix[i][q]
+                switch piece {
+                case .none: continue
+                case .black: hash ^= Zobrist.tables[dim]![i][q][0]
+                case .white: hash ^= Zobrist.tables[dim]![i][q][1]
+                }
+            }
+        }
+        return hash
+    }
+```
+This offers a huge advantage - once the initial hash value is computed, the expense of calculating the hash for successive game states down the decision tree is almost neglegible. A simple xor operation is required to update the hash value of the board:
+```swift
+hashValue ^= Zobrist.tables[dim]![co.row][co.col][piece == .black ? 0 : 1]
+```
 ##### Ordered Moves
 ##### Sequence
 
