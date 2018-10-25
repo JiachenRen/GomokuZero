@@ -1,4 +1,4 @@
-#  ![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Assets.xcassets/AppIcon.appiconset/icon_32x32%402x.png "Zero + App Icon") Zero +
+#  ![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Assets.xcassets/AppIcon.appiconset/icon_128x128.png "Zero + App Icon") Zero +
 My fifth attemp at building an unbeatable gomoku AI!
 
 ## Story of Creation
