@@ -6,11 +6,18 @@ Zero+ is an OSX application built with Swift 4 that is optimized all the way to 
 
 ## Algorithms
 
-### Basic Heuristic Evaluation
+### Evaluation
+#### Heuristic
+#### Threat
 
 ### Minimax w/ Alpha-beta Pruning 
 
-#### Zobrist Hashing
+#### Hashing
+Many well-known hashing techniques are used to optimize the minimax algorithm. One of the most important hash tables involved is a Zobrist transposition map. 
+At the start of each iteration of minimax, the hash value for the board is computed by using an xor operation for each piece.
+##### Zobrist
+##### Ordered Moves
+##### Sequence
 
 #### Iterative Deepening
 
