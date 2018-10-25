@@ -79,9 +79,12 @@ if let retrieved = Zobrist.orderedMovesMap[zobrist] {
 ```
 Another thing that worth pointing out is how the array of candidates is sorted. There is an old saying that applies really well to the game of go:
 > "The positions that are vital to the enemy are also vital positions to me"
+
 Not surprisingly, this principle also applies very well to Gomoku, since both are zero-sum games with two players playing against one another. Programmatically, this is done by evaluating threat potential of the same postions for both black and white. Since the threat is always a positive number, we can simply combine the two arrays candidates obtained for black and white and arrange them in a decreasing order. This way, we can take into account both defense and offense; whether a defensive or offensive move should be played is then determined by minimax. 
 
 ### Sequence & Threat Types
+The `ThreatEvaluator` works by linearizing a certain position on the 2D board into 1D arrays called `Sequence`. For example, this is what the linearization of the coordinate `(8, 9)` looks like:
+
 
 ## Concurrency
 ### Iterative Deepening
