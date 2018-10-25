@@ -13,7 +13,7 @@ class MonteCarloCortex: CortexProtocol {
     
     var heuristicEvaluator = HeuristicEvaluator()
     var randomExpansion = true
-    var maxSimulationDepth = 5
+    var maxSimulationDepth = 10
     var iterations = 0
     var debug = true
     
