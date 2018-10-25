@@ -90,7 +90,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         switch sender.title {
         case "Heuristic": activeBoard?.zeroPlus.personality = .basic
         case "Custom Depth & Breadth":
-            let config = zeroPlusSearchConfigDialogue()
+            let config = getMinimaxConfig()
             if let personality = config {
                 switch personality {
                 case .search(let depth, let breadth):
@@ -186,7 +186,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func new(_ sender: NSMenuItem) {
-        let dim = newGameDialogue()
+        let dim = getNewGameDimension()
         if dim != -1 {
             let boardWindowController = NSStoryboard(name: "Main", bundle: nil)
                 .instantiateController(withIdentifier: "board-window") as! BoardWindowController
@@ -200,7 +200,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    func zeroPlusSearchConfigDialogue() -> Personality? {
+    private func getMinimaxConfig() -> Personality? {
         let msg = NSAlert()
         msg.addButton(withTitle: "Ok")
         msg.addButton(withTitle: "Cancel")
@@ -243,7 +243,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    func newGameDialogue() -> Int {
+    private func getNewGameDimension() -> Int {
         let msg = NSAlert()
         msg.addButton(withTitle: "Create")
         msg.addButton(withTitle: "Cancel")

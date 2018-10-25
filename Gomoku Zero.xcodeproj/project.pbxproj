@@ -140,10 +140,10 @@
 		1F60C3602168232C00580C99 /* Gomoku Zero */ = {
 			isa = PBXGroup;
 			children = (
+				1F8A8B6F218159C600355EB3 /* Resources */,
+				1F8A8B7221815A1D00355EB3 /* Interface */,
+				1F8A8B6E2181599500355EB3 /* Model */,
 				1F60C3612168232C00580C99 /* AppDelegate.swift */,
-				1F83A553217BAFB400285999 /* Model */,
-				1F60C39B21685C0D00580C99 /* Resources */,
-				1FE928E1217D2DDE000B55CF /* Interface */,
 			);
 			path = "Gomoku Zero";
 			sourceTree = "<group>";
@@ -166,18 +166,7 @@
 			path = "Gomoku ZeroUITests";
 			sourceTree = "<group>";
 		};
-		1F60C39B21685C0D00580C99 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				1F60C3AB21694C7100580C99 /* Gomoku Zero.entitlements */,
-				1F60C36D2168232E00580C99 /* Info.plist */,
-				1F60C3652168232C00580C99 /* Gomoku_Zero.xcdatamodeld */,
-				1F60C3682168232D00580C99 /* Assets.xcassets */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		1F83A54F217BAEBD00285999 /* Zero */ = {
+		1F8A8B6B2181592500355EB3 /* Core */ = {
 			isa = PBXGroup;
 			children = (
 				1F4270DC2169A1480081DBFC /* ZeroPlus.swift */,
@@ -185,38 +174,52 @@
 				1F4270E02169BCEA0081DBFC /* Threat.swift */,
 				1FE063E1216B028E00E07006 /* HeuristicEvaluator.swift */,
 				1F64DC4B216BF38000467F78 /* Zobrist.swift */,
-				1F83A549217B91F700285999 /* Cortex.swift */,
-				1F83A54B217B9E1B00285999 /* Minimax.swift */,
-				1FE928E2217D6B43000B55CF /* ZeroMax.swift */,
-				1F83A54D217B9E5800285999 /* IterativeDeepening.swift */,
-				1F83A554217BB27000285999 /* NegaScout.swift */,
-				1F83A556217BF95800285999 /* MonteCarlo.swift */,
+				1F8A8B7321815B7500355EB3 /* Cortices */,
 			);
-			name = Zero;
+			path = Core;
 			sourceTree = "<group>";
 		};
-		1F83A550217BAEEA00285999 /* Support */ = {
+		1F8A8B6C2181595B00355EB3 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
 				1F60C3A021690EFD00580C99 /* Notification.swift */,
 				1F60C39821685A8B00580C99 /* Utilities.swift */,
 			);
-			name = Support;
+			path = Utilities;
 			sourceTree = "<group>";
 		};
-		1F83A553217BAFB400285999 /* Model */ = {
+		1F8A8B6D2181597700355EB3 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				1F83A550217BAEEA00285999 /* Support */,
 				1F60C39421682F6C00580C99 /* Piece.swift */,
 				1F60C39621682FE800580C99 /* Board.swift */,
 				1F60C39C216863F000580C99 /* History.swift */,
-				1F83A54F217BAEBD00285999 /* Zero */,
 			);
-			name = Model;
+			path = Components;
 			sourceTree = "<group>";
 		};
-		1FE928DF217D2DC3000B55CF /* Board */ = {
+		1F8A8B6E2181599500355EB3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1F8A8B6D2181597700355EB3 /* Components */,
+				1F8A8B6C2181595B00355EB3 /* Utilities */,
+				1F8A8B6B2181592500355EB3 /* Core */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		1F8A8B6F218159C600355EB3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1F60C36D2168232E00580C99 /* Info.plist */,
+				1F60C3AB21694C7100580C99 /* Gomoku Zero.entitlements */,
+				1F60C3652168232C00580C99 /* Gomoku_Zero.xcdatamodeld */,
+				1F60C3682168232D00580C99 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		1F8A8B70218159E600355EB3 /* Board */ = {
 			isa = PBXGroup;
 			children = (
 				1F60C3632168232C00580C99 /* BoardViewController.swift */,
@@ -224,26 +227,39 @@
 				1F60C3922168265C00580C99 /* BoardView.swift */,
 				1F60C3A821692B0900580C99 /* BoardTextureView.swift */,
 			);
-			name = Board;
+			path = Board;
 			sourceTree = "<group>";
 		};
-		1FE928E0217D2DD4000B55CF /* Console */ = {
+		1F8A8B7121815A0800355EB3 /* Zero Console */ = {
 			isa = PBXGroup;
 			children = (
 				1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */,
 				1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */,
 			);
-			name = Console;
+			path = "Zero Console";
 			sourceTree = "<group>";
 		};
-		1FE928E1217D2DDE000B55CF /* Interface */ = {
+		1F8A8B7221815A1D00355EB3 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
 				1F60C36A2168232D00580C99 /* Main.storyboard */,
-				1FE928DF217D2DC3000B55CF /* Board */,
-				1FE928E0217D2DD4000B55CF /* Console */,
+				1F8A8B7121815A0800355EB3 /* Zero Console */,
+				1F8A8B70218159E600355EB3 /* Board */,
 			);
-			name = Interface;
+			path = Interface;
+			sourceTree = "<group>";
+		};
+		1F8A8B7321815B7500355EB3 /* Cortices */ = {
+			isa = PBXGroup;
+			children = (
+				1F83A549217B91F700285999 /* Cortex.swift */,
+				1F83A54B217B9E1B00285999 /* Minimax.swift */,
+				1FE928E2217D6B43000B55CF /* ZeroMax.swift */,
+				1F83A54D217B9E5800285999 /* IterativeDeepening.swift */,
+				1F83A554217BB27000285999 /* NegaScout.swift */,
+				1F83A556217BF95800285999 /* MonteCarlo.swift */,
+			);
+			path = Cortices;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -573,7 +589,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
-				INFOPLIST_FILE = "Gomoku Zero/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Gomoku Zero/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -591,7 +607,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
-				INFOPLIST_FILE = "Gomoku Zero/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Gomoku Zero/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
