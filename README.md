@@ -83,8 +83,40 @@ Another thing that worth pointing out is how the array of candidates is sorted. 
 Not surprisingly, this principle also applies very well to Gomoku, since both are zero-sum games with two players playing against one another. Programmatically, this is done by evaluating threat potential of the same postions for both black and white. Since the threat is always a positive number, we can simply combine the two arrays candidates obtained for black and white and arrange them in a decreasing order. This way, we can take into account both defense and offense; whether a defensive or offensive move should be played is then determined by minimax. 
 
 ### Sequence & Threat Types
-The `ThreatEvaluator` works by linearizing a certain position on the 2D board into 1D arrays called `Sequence`. For example, this is what the linearization of the coordinate `(8, 9)` looks like:
-
+The `ThreatEvaluator` works by linearizing a certain position on the 2D board into 1D arrays called `Sequence`. For example, this is what the linearization of the coordinate `(6, 7)` looks like:
+```css
+- - - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - - 
+- - - - - * o - - - - - - - - 
+- - - o * * o - - - - - - - - 
+- - - * * o * - o - - - - - - 
+- - o o * * * o o - - - - - - 
+- * o o o o E * * * - - - - - 
+- - - - - * o - * - - - - - - 
+- - - - o * o - - - - - - - - 
+- - - - - - o - - - - - - - - 
+- - - - - - * - - - - - - - - 
+- - - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - - 
+```
+Horizontally, we have 
+```css
+* o o o o - * * *
+```
+Vertically, we have 
+```css
+o o * * - o o o *
+```
+Diagonally (top left to bottom right), we have
+```css
+o * *
+```
+Diagonally (bottom left to top right), we have
+```css
+o * - o o
+```
 
 ## Concurrency
 ### Iterative Deepening
