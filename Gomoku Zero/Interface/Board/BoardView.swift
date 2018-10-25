@@ -163,12 +163,29 @@ public typealias Coordinate = (col: Int, row: Int)
         if board.gameHasEnded && !overlayStepNumber {
             highlightWinningCoordinates()
         }
+        
+        highlightLastPiece()
+    }
+    
+    func highlightLastPiece() {
+        if let co = board.history.stack.last {
+            let color: NSColor = pieces![co.row][co.col] == .black ? .green : .red
+            color.withAlphaComponent(0.8).setStroke()
+            var rect = self.rect(at: co)
+            rect = CGRect(center: CGPoint(x: rect.midX, y: rect.midY),
+                          size: CGSize(width: rect.width / 3, height: rect.height / 3))
+            let path = NSBezierPath(rect: rect)
+            path.lineWidth = gridLineWidth
+            path.lineJoinStyle = .round
+            path.stroke()
+        }
     }
     
     func highlightWinningCoordinates() {
         winningCoordinates?.forEach {
             var rect = self.rect(at: $0)
-            rect = CGRect(center: CGPoint(x: rect.midX, y: rect.midY), size: CGSize(width: rect.width / 4, height: rect.height / 4))
+            rect = CGRect(center: CGPoint(x: rect.midX, y: rect.midY),
+                          size: CGSize(width: rect.width / 4, height: rect.height / 4))
             let dot = NSBezierPath(ovalIn: rect)
             let color: NSColor = pieces![$0.row][$0.col] == .black ? .green : .red
             color.withAlphaComponent(0.8).setFill()
