@@ -8,16 +8,8 @@
 
 import Foundation
 
-enum Piece: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .none: return "-"
-        case .black: return "*"
-        case .white: return "o"
-        }
-    }
-    
-    case black, white, none
+enum Piece: String {
+    case black = "*", white = "o", none = "-"
     
     static func random() -> Piece {
         switch Int(CGFloat.random(min: 0, max: 3)) {

@@ -191,6 +191,43 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         pasteboard.setString(activeBoard?.description ?? "", forType: .string)
     }
     
+    @IBAction func paste(_ sender: Any) {
+        let pasteboard = NSPasteboard.general
+        var clipboardItems: [String] = []
+        for element in pasteboard.pasteboardItems! {
+            if let str = element.string(forType: .string) {
+                clipboardItems.append(str)
+            }
+        }
+        
+        // Access the item in the clipboard
+        let boardStr = clipboardItems[0]
+        let rows = boardStr.split(separator: "\n")
+        activeBoard?.dimension = rows.count
+        activeBoard?.clear()
+        
+        // Update board
+        var player: Piece = .black
+        rows.enumerated().forEach { (r, row) in
+            row.split(separator: " ").enumerated().forEach { (c, p) in
+                if let piece = Piece(rawValue: String(p)) {
+                    activeBoard?.set((c,r), piece)
+                    if piece == .none {
+                        return
+                    }
+                    player = player.next()
+                }
+            }
+        }
+        activeBoard?.curPlayer = player
+        
+        // Update display
+        if let pieces = activeBoard?.pieces {
+            activeBoard?.delegate?.boardDidUpdate(pieces: pieces)
+        }
+    }
+    
+    
     @IBAction func new(_ sender: NSMenuItem) {
         let dim = getNewGameDimension()
         if dim != -1 {

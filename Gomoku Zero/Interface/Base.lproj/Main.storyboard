@@ -130,7 +130,7 @@
                                         </menuItem>
                                         <menuItem title="Paste" keyEquivalent="v" id="16r-G5-8Lr">
                                             <connections>
-                                                <action selector="paste:" target="Ady-hI-5gd" id="E4k-LG-8YM"/>
+                                                <action selector="paste:" target="Voe-Tx-rLC" id="eFI-vj-q32"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Paste and Match Style" keyEquivalent="V" id="OGi-0Y-MXu">
