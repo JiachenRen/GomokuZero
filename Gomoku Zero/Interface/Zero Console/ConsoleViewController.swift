@@ -65,9 +65,9 @@ class ConsoleViewController: NSViewController {
         // Configure visualization properties
         let vc = wc.viewController as BoardViewController
         vc.boardView.overlayStepNumber = showStepNumber.state == .on
-        vc.boardView.zeroPlusVisualization = enableVisualization.state == .on
+        vc.boardView.visualizationEnabled = enableVisualization.state == .on
         vc.boardView.activeMapVisible = activeCoordinates.state == .on
-        vc.boardView.zeroPlusHistoryVisible = historyStack.state == .on
+        vc.boardView.historyVisible = historyStack.state == .on
         
         // Configure board properties
         let board = wc.board

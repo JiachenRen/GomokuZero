@@ -34,11 +34,11 @@ class BoardViewController: NSViewController, BoardViewDelegate {
     func updateVisPref(_ name: String) {
         switch name {
         case "Toggle Animation":
-            let state = boardView.zeroPlusVisualization
-            boardView.zeroPlusVisualization = !state
+            let state = boardView.visualizationEnabled
+            boardView.visualizationEnabled = !state
             zeroPlus.visDelegate = state ? nil : self
         case "Toggle Active Map": boardView.activeMapVisible = !boardView.activeMapVisible
-        case "Toggle History Stack": boardView.zeroPlusHistoryVisible  = !boardView.zeroPlusHistoryVisible
+        case "Toggle History Stack": boardView.historyVisible  = !boardView.historyVisible
         default: break
         }
     }

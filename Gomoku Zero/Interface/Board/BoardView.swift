@@ -90,6 +90,13 @@ public typealias Coordinate = (col: Int, row: Int)
     var activeMap: [[Bool]]? {
         didSet {
             setNeedsDisplay(bounds)
+//            activeMap?.enumerated().forEach { (r, row) in
+//                row.enumerated().forEach { (c, b) in
+//                    if b {
+//                        setNeedsDisplay(rect(at: (c, r)))
+//                    }
+//                }
+//            }
         }
     }
     var zeroPlusHistory: History? {
@@ -101,8 +108,15 @@ public typealias Coordinate = (col: Int, row: Int)
     }
     
     var activeMapVisible = true
-    var zeroPlusVisualization = true
-    var zeroPlusHistoryVisible = true
+    var visualizationEnabled = true
+    var historyVisible = true
+    var highlightLastStep = true {
+        didSet {
+            if let co = board.history.stack.last {
+                setNeedsDisplay(rect(at: co))
+            }
+        }
+    }
     var overlayStepNumber = false {
         didSet {
             setNeedsDisplay(bounds)
@@ -111,11 +125,7 @@ public typealias Coordinate = (col: Int, row: Int)
     
     var winningCoordinates: [Coordinate]? {
         didSet {
-            if let coordinates = winningCoordinates {
-                for co in coordinates {
-                    setNeedsDisplay(rect(at: co))
-                }
-            }
+            setNeedsDisplay(bounds)
         }
     }
     
@@ -143,37 +153,37 @@ public typealias Coordinate = (col: Int, row: Int)
         
         drawPieces()
         
-        if !board.zeroIsThinking {
+        if !board.zeroIsThinking && !board.gameHasEnded {
             drawPendingPiece()
         }
         
-        if zeroPlusVisualization {
+        if visualizationEnabled {
             if activeMapVisible {
                 drawActiveMap()
             }
-            if zeroPlusHistoryVisible {
+            if historyVisible {
                 drawZeroPlusHistory()
             }
         }
         
         if overlayStepNumber {
             drawStepNumberOverlay()
+        } else {
+            if board.gameHasEnded {
+                highlightWinningCoordinates()
+            } else if highlightLastStep {
+                highlightMostRecentStep()
+            }
         }
-        
-        if board.gameHasEnded && !overlayStepNumber {
-            highlightWinningCoordinates()
-        }
-        
-        highlightLastPiece()
     }
     
-    func highlightLastPiece() {
+    private func highlightMostRecentStep() {
         if let co = board.history.stack.last {
             let color: NSColor = pieces![co.row][co.col] == .black ? .green : .red
             color.withAlphaComponent(0.8).setStroke()
             var rect = self.rect(at: co)
             rect = CGRect(center: CGPoint(x: rect.midX, y: rect.midY),
-                          size: CGSize(width: rect.width / 3, height: rect.height / 3))
+                          size: CGSize(width: rect.width / 4, height: rect.height / 4))
             let path = NSBezierPath(rect: rect)
             path.lineWidth = gridLineWidth
             path.lineJoinStyle = .round
@@ -181,7 +191,7 @@ public typealias Coordinate = (col: Int, row: Int)
         }
     }
     
-    func highlightWinningCoordinates() {
+    private func highlightWinningCoordinates() {
         winningCoordinates?.forEach {
             var rect = self.rect(at: $0)
             rect = CGRect(center: CGPoint(x: rect.midX, y: rect.midY),
@@ -193,7 +203,7 @@ public typealias Coordinate = (col: Int, row: Int)
         }
     }
     
-    func drawStepNumberOverlay() {
+    private func drawStepNumberOverlay() {
         var color: Piece = .black
         for (num, co) in board.history.stack.enumerated() {
             drawStepNumberOverlay(num: num + 1, for: color, at: co, isMostRecent: num == board.history.stack.count - 1)
@@ -215,7 +225,7 @@ public typealias Coordinate = (col: Int, row: Int)
         attrString.draw(in: textRect)
     }
     
-    func drawZeroPlusHistory() {
+    private func drawZeroPlusHistory() {
         if let history = zeroPlusHistory {
             var player = board.curPlayer
             for (col, row) in history.stack {
@@ -223,9 +233,9 @@ public typealias Coordinate = (col: Int, row: Int)
                 let rect = CGRect(center: ctr, size: CGSize(width: pieceRadius * 2, height: pieceRadius * 2))
                 switch player {
                 case .black:
-                    blackPieceImg?.draw(in: rect)
+                    blackWithAlpha?.draw(in: rect)
                 case .white:
-                    whitePieceImg?.draw(in: rect)
+                    whiteWithAlpha?.draw(in: rect)
                 case .none: break
                 }
                 player = player.next()
@@ -233,20 +243,20 @@ public typealias Coordinate = (col: Int, row: Int)
         }
     }
     
-    func drawActiveMap() {
+    private func drawActiveMap() {
         guard let map = self.activeMap else {
             return
         }
         for row in 0..<map.count {
             for col in 0..<map[row].count {
                 let ctr = onScreen(Coordinate(col: col, row: row))
-                let rect = CGRect(center: ctr, size: CGSize(width: pieceRadius / 2, height: pieceRadius / 2))
+                let rect = CGRect(center: ctr, size: CGSize(width: pieceRadius, height: pieceRadius))
                 if map[row][col] {
-                    let color: NSColor = board.curPlayer == .black ? .green : .yellow
-                    color.withAlphaComponent(0.8).setStroke()
-                    let path = NSBezierPath(rect: rect)
+                    let color: NSColor = board.curPlayer == .black ? .black : .white
+                    color.withAlphaComponent(0.3).setFill()
+                    let path = NSBezierPath(ovalIn: rect)
                     path.lineWidth = gridLineWidth
-                    path.stroke()
+                    path.fill()
                 }
             }
         }
@@ -327,7 +337,7 @@ public typealias Coordinate = (col: Int, row: Int)
     /**
      Draw a half transparent piece at the coordinate that the mouse is hovering over
      */
-    func drawPendingPiece() {
+    private func drawPendingPiece() {
         if let co = pendingPieceCo, mouseInScope {
             if !board.isValid(co) { return }
             if pieces == nil || pieces![co.row][co.col] == .none { // If the coordinate is not occupied
@@ -400,7 +410,7 @@ public typealias Coordinate = (col: Int, row: Int)
     /**
      Convert a coordinate to position on screen
      */
-    private func onScreen(_ coordinate: Coordinate) -> CGPoint {
+    public func onScreen(_ coordinate: Coordinate) -> CGPoint {
         return CGPoint(
             x: cornerOffset + CGFloat(coordinate.col) * gap,
             y: bounds.height - (cornerOffset + CGFloat(coordinate.row) * gap)

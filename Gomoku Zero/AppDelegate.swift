@@ -10,26 +10,26 @@ import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-    @IBOutlet weak var boardTextureMenuItem: NSMenuItem!
+    @IBOutlet weak var toggleTexture: NSMenuItem!
     
-    @IBOutlet weak var darkTextureMenuItem: NSMenuItem!
-    @IBOutlet weak var normalTextureMenuItem: NSMenuItem!
-    @IBOutlet weak var lightTextureMenuItem: NSMenuItem!
+    @IBOutlet weak var darkTexture: NSMenuItem!
+    @IBOutlet weak var normalTexture: NSMenuItem!
+    @IBOutlet weak var lightTexture: NSMenuItem!
     
-    @IBOutlet weak var depthMenuItem: NSMenuItem!
-    @IBOutlet weak var breadthMenuItem: NSMenuItem!
+    @IBOutlet weak var depthMI: NSMenuItem!
+    @IBOutlet weak var breadthMI: NSMenuItem!
     
-    @IBOutlet weak var iterativeDeepeningMenuItem: NSMenuItem!
-    @IBOutlet weak var timeLimitMenuItem: NSMenuItem!
-    @IBOutlet weak var maxSearchTimeMenuItem: NSMenuItem!
+    @IBOutlet weak var iterativeDeepening: NSMenuItem!
+    @IBOutlet weak var setTimeLimit: NSMenuItem!
+    @IBOutlet weak var maxSearchTime: NSMenuItem!
     
     var consoleWindowController: ConsoleWindowController?
     
     var textureMenuItems: [NSMenuItem?] {
         return [
-            darkTextureMenuItem,
-            normalTextureMenuItem,
-            lightTextureMenuItem
+            darkTexture,
+            normalTexture,
+            lightTexture
         ]
     }
     
@@ -43,6 +43,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     var activeWindowController: BoardWindowController? {
         return NSApplication.shared.mainWindow?.windowController as? BoardWindowController
+    }
+    
+    var activeBoardView: BoardView? {
+        return activeController?.boardView
     }
     
     var windowControllers: [BoardWindowController] {
@@ -66,8 +70,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     @IBAction func toggleStepNumber(_ sender: NSMenuItem) {
-        if let bool = activeController?.boardView.overlayStepNumber {
-            activeController?.boardView.overlayStepNumber = !bool
+        if let b = activeBoardView?.overlayStepNumber {
+            activeBoardView?.overlayStepNumber = !b
+        }
+    }
+    
+    @IBAction func toggleHighlight(_ sender: NSMenuItem) {
+        if let b = activeBoardView?.highlightLastStep {
+            activeBoardView?.highlightLastStep = !b
         }
     }
     
@@ -94,8 +104,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if let personality = config {
                 switch personality {
                 case .search(let depth, let breadth):
-                    depthMenuItem.title = "Depth = \(depth)"
-                    breadthMenuItem.title = "Breadth = \(breadth)"
+                    depthMI.title = "Depth = \(depth)"
+                    breadthMI.title = "Breadth = \(breadth)"
                 default: break
                 }
                 activeBoard?.zeroPlus.personality = personality
@@ -107,13 +117,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         case "Iterative Deepening":
             if let tmp = activeBoard?.zeroPlus.iterativeDeepening {
                 activeBoard?.zeroPlus.iterativeDeepening = !tmp
-                iterativeDeepeningMenuItem.state = tmp ? .off : .on
+                iterativeDeepening.state = tmp ? .off : .on
             }
         case "Set Time Limit":
             let timeLimit = setTimeLimitDialogue()
             if timeLimit < 0 {return}
             activeBoard?.zeroPlus.maxThinkingTime = timeLimit
-            maxSearchTimeMenuItem.title = "Max Search Time: \(timeLimit)"
+            maxSearchTime.title = "Max Search Time: \(timeLimit)"
         default: break
         }
     }
@@ -153,13 +163,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         switch sender.title {
         case "Dark":
             texture = NSImage(named: "board_dark")
-            darkTextureMenuItem.state = .on
+            darkTexture.state = .on
         case "Light":
             texture = NSImage(named: "board_light")
-            lightTextureMenuItem.state = .on
+            lightTexture.state = .on
         case "Normal":
             texture = NSImage(named: "board")
-            normalTextureMenuItem.state = .on
+            normalTexture.state = .on
         default: break
         }
         viewControllers.forEach{$0.boardTextureView.image = texture}
@@ -322,21 +332,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let controller = activeController {
             let bool = controller.boardTextureView.isHidden
             viewControllers.forEach{$0.boardTextureView.isHidden = !bool}
-            boardTextureMenuItem.title = bool ? "Hide Board Texture" : "Show Board Texture"
+            toggleTexture.title = bool ? "Hide Board Texture" : "Show Board Texture"
         }
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         if let controller = activeController {
-            boardTextureMenuItem.title = controller.boardTextureView.isHidden ?
+            toggleTexture.title = controller.boardTextureView.isHidden ?
                 "Show Board Texture" : "Hide Board Texture"
             let zeroPlus = activeBoard!.zeroPlus
             switch zeroPlus.personality {
             case .search(let depth, let breadth):
-                depthMenuItem.title = "Depth = \(depth)"
-                breadthMenuItem.title = "Breadth = \(breadth)"
-                iterativeDeepeningMenuItem.state = zeroPlus.iterativeDeepening ? .on : .off
+                depthMI.title = "Depth = \(depth)"
+                breadthMI.title = "Breadth = \(breadth)"
+                iterativeDeepening.state = zeroPlus.iterativeDeepening ? .on : .off
             default: break
             }
         }

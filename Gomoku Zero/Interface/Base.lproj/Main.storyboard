@@ -330,9 +330,15 @@
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="mAU-td-igV"/>
                                         <menuItem title="Toggle Step Number" keyEquivalent="n" id="PNr-FH-bs4">
-                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                                            <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="toggleStepNumber:" target="Voe-Tx-rLC" id="l5v-RL-poD"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Toggle Highlight" keyEquivalent="h" id="cpk-Io-7HS">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="toggleHighlight:" target="Voe-Tx-rLC" id="raR-xX-d0T"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="ZeroPlus Visualization" id="W3T-jw-wLa">
@@ -415,15 +421,15 @@
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Gomoku_Zero" customModuleProvider="target">
                     <connections>
-                        <outlet property="boardTextureMenuItem" destination="dN7-o2-OXe" id="FsG-iw-0DO"/>
-                        <outlet property="breadthMenuItem" destination="Mhc-8U-XLq" id="UOI-58-OTp"/>
-                        <outlet property="darkTextureMenuItem" destination="cqz-x0-0VF" id="RX4-Vd-NV6"/>
-                        <outlet property="depthMenuItem" destination="8aI-FN-lxi" id="XGw-iy-XMd"/>
-                        <outlet property="iterativeDeepeningMenuItem" destination="kwo-jZ-pfZ" id="sSq-U2-YTt"/>
-                        <outlet property="lightTextureMenuItem" destination="DbW-nW-OaP" id="9q5-4r-772"/>
-                        <outlet property="maxSearchTimeMenuItem" destination="ytg-Ze-fcW" id="KE6-dY-tmD"/>
-                        <outlet property="normalTextureMenuItem" destination="1nu-uX-OB1" id="lcf-7R-iZK"/>
-                        <outlet property="timeLimitMenuItem" destination="6ox-Fe-2q6" id="62U-tk-15d"/>
+                        <outlet property="breadthMI" destination="Mhc-8U-XLq" id="UOI-58-OTp"/>
+                        <outlet property="darkTexture" destination="cqz-x0-0VF" id="RX4-Vd-NV6"/>
+                        <outlet property="depthMI" destination="8aI-FN-lxi" id="XGw-iy-XMd"/>
+                        <outlet property="iterativeDeepening" destination="kwo-jZ-pfZ" id="sSq-U2-YTt"/>
+                        <outlet property="lightTexture" destination="DbW-nW-OaP" id="9q5-4r-772"/>
+                        <outlet property="maxSearchTime" destination="ytg-Ze-fcW" id="KE6-dY-tmD"/>
+                        <outlet property="normalTexture" destination="1nu-uX-OB1" id="lcf-7R-iZK"/>
+                        <outlet property="setTimeLimit" destination="6ox-Fe-2q6" id="62U-tk-15d"/>
+                        <outlet property="toggleTexture" destination="dN7-o2-OXe" id="FsG-iw-0DO"/>
                     </connections>
                 </customObject>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
