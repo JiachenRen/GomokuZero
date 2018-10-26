@@ -61,6 +61,7 @@ public typealias Coordinate = (col: Int, row: Int)
             DispatchQueue.main.async {[unowned self] in
                 self.setNeedsDisplay(self.bounds)
             }
+            dampenerMap = [[CGFloat]] (repeating: [CGFloat](repeating: 0, count: dimension), count: dimension)
         }
     }
     
@@ -243,20 +244,39 @@ public typealias Coordinate = (col: Int, row: Int)
         }
     }
     
+    var dampenerMap: [[CGFloat]] = [[CGFloat]](repeating: [CGFloat](repeating: 0, count: 19), count: 19)
+    
+    func updateDampenerMap() {
+        activeMap?.enumerated().forEach { (r, row) in
+            row.enumerated().forEach { (c, b) in
+                let i = dampenerMap[r][c]
+                if i < 1 && b {
+                    dampenerMap[r][c] += 0.03
+                } else if i > 0 {
+                    dampenerMap[r][c] -= 0.03
+                }
+            }
+        }
+    }
+    
     private func drawActiveMap() {
         guard let map = self.activeMap else {
             return
         }
+        updateDampenerMap()
         for row in 0..<map.count {
             for col in 0..<map[row].count {
                 let ctr = onScreen(Coordinate(col: col, row: row))
-                let rect = CGRect(center: ctr, size: CGSize(width: pieceRadius, height: pieceRadius))
-                if map[row][col] {
+                let scale = dampenerMap[row][col]
+                var radius = pieceRadius
+                radius = radius * scale
+                let rect = CGRect(center: ctr, size: CGSize(width: radius, height: radius))
+                if scale > 0 {
                     let color: NSColor = board.curPlayer == .black ? .black : .white
-                    color.withAlphaComponent(0.3).setFill()
+                    color.withAlphaComponent(0.5).setFill()
                     let path = NSBezierPath(ovalIn: rect)
                     path.lineWidth = gridLineWidth
-                    path.fill()
+                    path.fill() // Should stroke look better?
                 }
             }
         }
