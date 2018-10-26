@@ -75,8 +75,6 @@ class BoardWindowController: NSWindowController, NSOpenSavePanelDelegate, ViewCo
         }
     }
     
-    
-    
     func save() {
         if board.history.stack.isEmpty {
             let _ = dialogue(msg: "Cannot save empty game.", infoTxt: "Give me some juice!")
@@ -106,5 +104,11 @@ class BoardWindowController: NSWindowController, NSOpenSavePanelDelegate, ViewCo
         } catch let err {
             print(err)
         }
+    }
+}
+
+extension BoardWindowController: NSWindowDelegate {
+    func windowWillClose(_ notification: Notification) {
+        board.gameHasEnded = true
     }
 }
