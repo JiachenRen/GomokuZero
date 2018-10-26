@@ -116,7 +116,7 @@ Diagonally (bottom left to top right), we have
 ```css
 o * - o o
 ```
-
+The linearization of 2D patterns into 1D sequences offers a huge advantage - rather than having to develop an algorithm that evaluates linear patterns for threats that could be very complex, a simpler general algorithm could be used to categorize each sequence, let it be horizontal, vertical, or diagonal (since it does not matter in the end), into `Threat` types. There are several threat types, and each is assigned a specific score. In Zero +, the values are assigned intuitively; nevertheless, these arbitrary values should be assigned by the program itself. In order to do so, the algorithm has to play against itself many times to figure out the optimal scores to be assigned to the threat types. This can be quite complex, and sadly, Zero + does not have this implementation. Although Zero + does not attempt to address this issue, it does use a hash map to efficiently categorize sequences into threat types. Once the categorizing of a sequence is done, the result is stored into a map such that when the same linear sequence is encountered later, the threat type is directly extracted from the map rather than resolved by running it through the identification algorithm all over again. This might not seem like much, but in practice it offers a **30% speed-up**, which is way more than what I expected!
 ## Concurrency
 ### Iterative Deepening
 
