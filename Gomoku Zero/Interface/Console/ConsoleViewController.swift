@@ -76,16 +76,22 @@ class ConsoleViewController: NSViewController {
         
         // Configure board properties
         let board = wc.board
+        func constraint(_ dim: String) -> Int {
+            if let d = Int(dim) {
+                return d > 0 && d <= Zobrist.hashedHeuristicMaps.count ? d : 19
+            }
+            return 19
+        }
         let dim = boardDimension.stringValue // Translate board dimension
         if cleanSlate {
             if dim == "" { board.dimension = 19} else {
                 let idx = dim.firstIndex(of: "x")
                 if idx == nil {
-                    board.dimension = Int(dim) ?? 19
+                    board.dimension = constraint(dim)
                 } else  {
                     var num = String(dim[..<idx!])
                     num.removeAll{$0 == " "}
-                    board.dimension = Int(num) ?? 19
+                    board.dimension = constraint(num)
                 }
             }
         }

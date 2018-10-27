@@ -20,7 +20,7 @@ class Zobrist: Hashable {
     // Note that the hash maps only supports dimension of up to 19.
     
     /// Hashed heuristic values of nodes
-    static var hashedHeuristicMaps = [HeuristicMap](repeatElement(HeuristicMap(), count: 19))
+    static var hashedHeuristicMaps = [HeuristicMap](repeatElement(HeuristicMap(), count: 50))
     
     /// Hashed ordered moves
     static var blackOrderedMovesMap = Dictionary<Zobrist, [Move]>()

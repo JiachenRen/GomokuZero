@@ -233,20 +233,20 @@
 			path = Board;
 			sourceTree = "<group>";
 		};
-		1F8A8B7121815A0800355EB3 /* Zero Console */ = {
+		1F8A8B7121815A0800355EB3 /* Console */ = {
 			isa = PBXGroup;
 			children = (
 				1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */,
 				1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */,
 			);
-			path = "Zero Console";
+			path = Console;
 			sourceTree = "<group>";
 		};
 		1F8A8B7221815A1D00355EB3 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
 				1F60C36A2168232D00580C99 /* Main.storyboard */,
-				1F8A8B7121815A0800355EB3 /* Zero Console */,
+				1F8A8B7121815A0800355EB3 /* Console */,
 				1F8A8B70218159E600355EB3 /* Board */,
 			);
 			path = Interface;
