@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Board: ZeroPlusDelegate, HeuristicEvaluatorDelegate {
+class Board: ZeroPlusDelegate, HeuristicDataSource {
     var dimension: Int {
         didSet {
             if dimension != oldValue {
@@ -46,7 +46,7 @@ class Board: ZeroPlusDelegate, HeuristicEvaluatorDelegate {
     init(dimension: Int) {
         heuristicEvaluator = HeuristicEvaluator()
         self.dimension = dimension
-        heuristicEvaluator.delegate = self
+        heuristicEvaluator.dataSource = self
         zeroPlus.delegate = self
         restart()
     }

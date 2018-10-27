@@ -9,7 +9,7 @@
 import Foundation
 
 /// The cortex packages basic evaluation functions.
-protocol CortexProtocol: HeuristicEvaluatorDelegate {
+protocol CortexProtocol: HeuristicDataSource {
     var delegate: CortexDelegate {get}
     var heuristicEvaluator: HeuristicEvaluator {get}
     var pieces: [[Piece]] {get}
@@ -242,7 +242,7 @@ class BasicCortex: CortexProtocol {
     
     init(_ delegate: CortexDelegate) {
         self.delegate = delegate
-        heuristicEvaluator.delegate = self
+        heuristicEvaluator.dataSource = self
     }
     
     /**

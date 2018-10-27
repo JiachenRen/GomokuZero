@@ -11,9 +11,9 @@ import Foundation
 class HeuristicEvaluator {
     var counter = Counter()
     var dim: Int = 0
-    var delegate: HeuristicEvaluatorDelegate!
+    var dataSource: HeuristicDataSource!
     var pieces: [[Piece]] {
-        return delegate.pieces
+        return dataSource.pieces
     }
     var color: Piece = .black
     
@@ -277,7 +277,7 @@ class HeuristicEvaluator {
     }
 }
 
-protocol HeuristicEvaluatorDelegate {
+protocol HeuristicDataSource {
     var pieces: [[Piece]] {get}
 }
 
