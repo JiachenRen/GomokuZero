@@ -67,7 +67,8 @@ class IterativeDeepeningCortex: CortexProtocol {
                     maxDepth = d
                 }
                 zero.visDelegate?.activeMapUpdated(activeMap: nil)
-                print("deepening finished at depth = \(d), move = \(bestForDepth), cancelled = \(cancelled)")
+                let duration = self.time - self.delegate.startTime
+                print("depth = \(d), move = \(bestForDepth), cancelled = \(cancelled), time = \(duration)")
             }
             delegate.asyncedQueue.async(group: group, execute: workItem)
             workItems.append(workItem)

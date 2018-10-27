@@ -54,7 +54,7 @@ class NegaScoutCortex: CortexProtocol {
         }
         
         var mv: Move!
-        let moves = [genSortedMoves(for: player, num: breadth), genSortedMoves(for: player.next(), num: breadth)].flatMap({$0})
+        let moves = getSortedMoves(num: breadth)
         for (idx, move) in moves.sorted(by: {$0.score > $1.score}).enumerated() {
             delegate.put(at: move.co)
             if idx == 0 {

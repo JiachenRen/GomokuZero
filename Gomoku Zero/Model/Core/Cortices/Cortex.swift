@@ -48,6 +48,9 @@ extension CortexProtocol {
     var identity: Piece {return delegate.identity}
     var dim: Int {return delegate.dim}
     var zobrist: Zobrist {return delegate.zobrist}
+    var time: TimeInterval {
+        return Date().timeIntervalSince1970
+    }
     
     func timeout() -> Bool {
         return Date().timeIntervalSince1970 - delegate.startTime > delegate.maxThinkingTime
@@ -97,21 +100,11 @@ extension CortexProtocol {
             sortedMoves.append(move)
         }
         
-        func computeAll() {
-            for (i, row) in delegate.activeCoMap.enumerated() {
-                for (q, isActive) in row.enumerated() {
-                    if isActive {
-                        computeMove((q, i))
-                    }
-                }
-            }
-        }
+        var scoreMap = [[Int?]](repeating: [Int?](repeating: nil, count: dim), count: dim)
         
         if let co = delegate.revert() {
             if let moves = Zobrist.getOrderedMoves(zobrist, for: player) {
                 delegate.put(at: co)
-                let dim = self.dim
-                var scoreMap = [[Int?]](repeating: [Int?](repeating: nil, count: dim), count: dim)
                 
                 moves.forEach { (co, score) in
                     scoreMap[co.row][co.col] = score
@@ -122,8 +115,23 @@ extension CortexProtocol {
                         if i == 0 && q == 0 {
                             continue
                         }
-                        var c = co
-                        while c.col >= 0 && c.col < dim && c.row >= 0 && c.row < dim {
+                        var c = (col: co.col + i, row: co.row + q)
+                        var prevIsNone = 0
+                        loop: while isValid(c) {
+                            let piece = zobrist.get(c)
+                            switch piece {
+                            case .none:
+                                if prevIsNone > 1 {
+                                    break loop
+                                } else {
+                                    prevIsNone += 1
+                                }
+                            default:
+                                if piece != player {
+                                    break loop
+                                }
+                                prevIsNone = 0
+                            }
                             scoreMap[c.row][c.col] = nil
                             c.col += i
                             c.row += q
@@ -131,26 +139,28 @@ extension CortexProtocol {
                     }
                 }
                 
-                for (i, row) in delegate.activeCoMap.enumerated() {
-                    for (q, isActive) in row.enumerated() {
-                        if isActive {
-                            let co = (q, i)
-                            if let score = scoreMap[i][q] {
-                                sortedMoves.append((co, score))
-                            } else {
-                                computeMove(co)
-                            }
-                        }
-                    }
-                }
-                
             } else {
                 delegate.put(at: co)
-                computeAll()
             }
-        } else {
-            computeAll()
         }
+        
+        var re_computed = 0
+        for (i, row) in delegate.activeCoMap.enumerated() {
+            for (q, isActive) in row.enumerated() {
+                if isActive {
+                    let co = (q, i)
+                    if let score = scoreMap[i][q] {
+                        sortedMoves.append((co, score))
+                    } else {
+                        re_computed += 1
+                        computeMove(co)
+                    }
+                }
+            }
+        }
+        
+        print(re_computed)
+        
         return sortedMoves.sorted {$0.score > $1.score}
     }
     
@@ -204,6 +214,10 @@ extension CortexProtocol {
     
     func getHeuristicValue() -> Int {
         return getHeuristicValue(for: identity)
+    }
+    
+    func isValid(_ c: Coordinate) -> Bool {
+        return c.col >= 0 && c.col < dim && c.row >= 0 && c.row < dim
     }
 }
 
