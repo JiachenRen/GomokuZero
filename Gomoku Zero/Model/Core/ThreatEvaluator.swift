@@ -12,10 +12,7 @@ class ThreatEvaluator {
     static var seqHashMap: Dictionary<[Piece], Int> = Dictionary()
     static var seqGroupHashMap: Dictionary<[SequencePair], Int> = Dictionary()
     
-    /**
-     Point evaluation
-     */
-    static func evaluate(for player: Piece, at co: Coordinate, pieces: [[Piece]]) -> Int {
+    static func map(for player: Piece, at co: Coordinate, pieces: [[Piece]]) -> [SequencePair] {
         let row = co.row, col = co.col, dim = pieces.count
         let opponent = player.next()
         
@@ -64,13 +61,20 @@ class ThreatEvaluator {
         let d1SeqPair = genSequence(x1: -1, y1: 1, x2: 1, y2: -1)  // Diagnally (from lower left to upper right)
         let d2SeqPair = genSequence(x1: -1, y1: -1, x2: 1, y2: 1) // Diagnally (from upper left to lower right)
         
-        
-
-        
-        let seqPairs = [hSeqPair, vSeqPair, d1SeqPair, d2SeqPair]
-        
-        
-        return cacheOrGet(seqPairs: seqPairs, for: player)
+        return [hSeqPair, vSeqPair, d1SeqPair, d2SeqPair]
+    }
+    
+    static func analyzeThreats(for player: Piece, at co: Coordinate, pieces: [[Piece]]) -> [Threat] {
+        return map(for: player, at: co, pieces: pieces).map{$0.new}
+            .map{analyzeThreats(seq: $0, for: player)}
+            .flatMap{$0}
+    }
+    
+    /**
+     Point evaluation
+     */
+    static func evaluate(for player: Piece, at co: Coordinate, pieces: [[Piece]]) -> Int {
+        return cacheOrGet(seqPairs: map(for: player, at: co, pieces: pieces), for: player)
     }
     
     static func cacheOrGet(seqPairs: [SequencePair], for player: Piece) -> Int  {
@@ -104,8 +108,10 @@ class ThreatEvaluator {
         } else {
             let threats = analyzeThreats(seq: seq, for: player)
             let score = convertToScore(threats: threats)
-            ZeroPlus.syncedQueue.sync {
-                seqHashMap[seq] = score
+            if ZeroPlus.useOptimizations {
+                ZeroPlus.syncedQueue.sync {
+                    seqHashMap[seq] = score
+                }
             }
             return score
         }

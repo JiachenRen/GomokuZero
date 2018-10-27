@@ -53,20 +53,6 @@ extension CortexProtocol {
         return Date().timeIntervalSince1970 - delegate.startTime > delegate.maxThinkingTime
     }
     
-    func getSortedMoves(num: Int) -> [Move] {
-        if let retrieved = Zobrist.orderedMovesMap[zobrist] {
-            return retrieved
-        } else {
-            let moves = [genSortedMoves(for: .black, num: num), genSortedMoves(for: .white, num: num)]
-                .flatMap({$0})
-                .sorted(by: {$0.score > $1.score})
-            ZeroPlus.syncedQueue.sync {
-                Zobrist.orderedMovesMap[Zobrist(zobrist: zobrist)] = moves
-            }
-            return moves
-        }
-    }
-    
     /**
      Perform a fast simulation on the current game state.
      This is used by ZeroMax to overcome the horizon effect.
@@ -104,21 +90,95 @@ extension CortexProtocol {
     
     func genSortedMoves(for player: Piece) -> [Move] {
         var sortedMoves = [Move]()
-        for (i, row) in delegate.activeCoMap.enumerated() {
-            for (q, isActive) in row.enumerated() {
-                if isActive {
-                    let co = (col: q, row: i)
-                    let score = ThreatEvaluator.evaluate(for: player, at: co, pieces: pieces)
-                    let move = (co, score)
-                    sortedMoves.append(move)
+        
+        func computeMove(_ co: Coordinate) {
+            let score = ThreatEvaluator.evaluate(for: player, at: co, pieces: pieces)
+            let move = (co, score)
+            sortedMoves.append(move)
+        }
+        
+        func computeAll() {
+            for (i, row) in delegate.activeCoMap.enumerated() {
+                for (q, isActive) in row.enumerated() {
+                    if isActive {
+                        computeMove((q, i))
+                    }
                 }
             }
+        }
+        
+        if let co = delegate.revert() {
+            if let moves = Zobrist.getOrderedMoves(zobrist, for: player) {
+                delegate.put(at: co)
+                let dim = self.dim
+                var scoreMap = [[Int?]](repeating: [Int?](repeating: nil, count: dim), count: dim)
+                
+                moves.forEach { (co, score) in
+                    scoreMap[co.row][co.col] = score
+                }
+                
+                for i in -1...1 {
+                    for q in -1...1 {
+                        if i == 0 && q == 0 {
+                            continue
+                        }
+                        var c = co
+                        while c.col >= 0 && c.col < dim && c.row >= 0 && c.row < dim {
+                            scoreMap[c.row][c.col] = nil
+                            c.col += i
+                            c.row += q
+                        }
+                    }
+                }
+                
+                for (i, row) in delegate.activeCoMap.enumerated() {
+                    for (q, isActive) in row.enumerated() {
+                        if isActive {
+                            let co = (q, i)
+                            if let score = scoreMap[i][q] {
+                                sortedMoves.append((co, score))
+                            } else {
+                                computeMove(co)
+                            }
+                        }
+                    }
+                }
+                
+            } else {
+                delegate.put(at: co)
+                computeAll()
+            }
+        } else {
+            computeAll()
         }
         return sortedMoves.sorted {$0.score > $1.score}
     }
     
     func genSortedMoves(for player: Piece, num: Int) -> [Move] {
         return [Move](genSortedMoves(for: player).prefix(num))
+    }
+    
+    func getSortedMoves(num: Int) -> [Move] {
+        func finalize(_ movesB: [Move], _ movesW: [Move]) -> [Move] {
+            return [[Move](movesB.prefix(num)), [Move](movesW.prefix(num))].flatMap{$0}
+                .sorted(by: {$0.score > $1.score})
+            
+        }
+        if let retrieved = Zobrist.getOrderedMoves(zobrist, for: .black) {
+            return finalize(retrieved, Zobrist.getOrderedMoves(zobrist, for: .white)!)
+        } else {
+            let blackMoves = genSortedMoves(for: .black)
+            let whiteMoves = genSortedMoves(for: .white)
+            
+            if ZeroPlus.useOptimizations {
+                ZeroPlus.syncedQueue.sync {
+                    let newZobrist = Zobrist(zobrist: zobrist)
+                    Zobrist.blackOrderedMovesMap[newZobrist] = blackMoves
+                    Zobrist.whiteOrderedMovesMap[newZobrist] = whiteMoves
+                }
+            }
+            return finalize(blackMoves, whiteMoves)
+        }
     }
     
     func getHeuristicValue(for player: Piece) -> Int {
@@ -132,8 +192,10 @@ extension CortexProtocol {
             let white = heuristicEvaluator.evaluate(for: .white)
             score = black - white
             let newZobrist = Zobrist(zobrist: zobrist)
-            ZeroPlus.syncedQueue.sync {
-                Zobrist.hashedHeuristicMaps[dim - 1][newZobrist] = score
+            if ZeroPlus.useOptimizations {
+                ZeroPlus.syncedQueue.sync {
+                    Zobrist.hashedHeuristicMaps[dim - 1][newZobrist] = score
+                }
             }
         }
         
@@ -156,8 +218,10 @@ protocol CortexDelegate {
     var dim: Int {get}
     var curPlayer: Piece {get}
     var asyncedQueue: DispatchQueue {get}
+    var activeMapDiffStack: [[Coordinate]] {get}
     func put(at co: Coordinate)
-    func revert()
+    @discardableResult
+    func revert() -> Coordinate?
 }
 
 class BasicCortex: CortexProtocol {

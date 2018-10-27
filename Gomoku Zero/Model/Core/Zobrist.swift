@@ -23,7 +23,8 @@ class Zobrist: Hashable {
     static var hashedHeuristicMaps = [HeuristicMap](repeatElement(HeuristicMap(), count: 19))
     
     /// Hashed ordered moves
-    static var orderedMovesMap = Dictionary<Zobrist, [Move]>()
+    static var blackOrderedMovesMap = Dictionary<Zobrist, [Move]>()
+    static var whiteOrderedMovesMap = Dictionary<Zobrist, [Move]>()
     
     /// Slightly boosts performance at a neglegible risk of judging two diffenrent game states to be the same.
     static var strictEqualityCheck = false
@@ -48,6 +49,14 @@ class Zobrist: Hashable {
             Zobrist.tables[dim] = table
         }
         hashValue = computeInitialHash()
+    }
+    
+    static func getOrderedMoves(_ zobrist: Zobrist, for player: Piece) -> [Move]?{
+        switch player {
+        case .black: return blackOrderedMovesMap[zobrist]
+        case .white: return whiteOrderedMovesMap[zobrist]
+        default: fatalError()
+        }
     }
     
     /**

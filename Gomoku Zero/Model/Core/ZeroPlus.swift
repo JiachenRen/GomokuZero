@@ -14,7 +14,7 @@ typealias Move = (co: Coordinate, score: Int)
  Zero Plus - Jiachen's fifth attemp at making an unbeatable Gomoku AI
  */
 class ZeroPlus: CortexDelegate {
-    
+    static var useOptimizations = true
     var delegate: ZeroPlusDelegate!
     var visDelegate: ZeroPlusVisualizationDelegate?
     
@@ -29,7 +29,6 @@ class ZeroPlus: CortexDelegate {
         return zobrist.matrix
     }
     var history = History()
-    
     
     var curPlayer: Piece = .black
     var identity: Piece = .black
@@ -87,7 +86,6 @@ class ZeroPlus: CortexDelegate {
         activeMapDiffStack = [[Coordinate]]()
         curPlayer = player // Note: this is changed every time put() is called.
         identity = player
-        Zobrist.orderedMovesMap = Dictionary<Zobrist, [Move]>() // Clear ordered moves map.
         visDelegate?.activeMapUpdated(activeMap: activeCoMap) // Notify the delegate that active map has updated
         
         if delegate.history.stack.count == 0 && player == .black { // When ZeroPlus is black, the first move is always at the center
@@ -164,14 +162,17 @@ class ZeroPlus: CortexDelegate {
         visDelegate?.activeMapUpdated(activeMap: activeCoMap)
     }
     
-    func revert() {
+    @discardableResult
+    func revert() -> Coordinate? {
         if let co = history.revert() {
             zobrist.revert(at: co)
             curPlayer = curPlayer.next()
             revertActiveMapUpdate()
             visDelegate?.historyDidUpdate(history: history)
             visDelegate?.activeMapUpdated(activeMap: activeCoMap)
+            return co
         }
+        return nil
     }
     
     /**
