@@ -93,22 +93,12 @@ extension CortexProtocol {
     
     func genSortedMoves(for player: Piece) -> [Move] {
         var sortedMoves = [Move]()
-        
-        func computeMove(_ co: Coordinate) {
-            let score = ThreatEvaluator.evaluate(for: player, at: co, pieces: pieces)
-            let move = (co, score)
-            sortedMoves.append(move)
-        }
-        
         var scoreMap = [[Int?]](repeating: [Int?](repeating: nil, count: dim), count: dim)
         
         if let co = delegate.revert() {
             if let moves = Zobrist.getOrderedMoves(zobrist, for: player) {
                 delegate.put(at: co)
-                
-                moves.forEach { (co, score) in
-                    scoreMap[co.row][co.col] = score
-                }
+                moves.forEach{(co, score) in scoreMap[co.row][co.col] = score}
                 
                 for i in -1...1 {
                     for q in -1...1 {
@@ -116,21 +106,21 @@ extension CortexProtocol {
                             continue
                         }
                         var c = (col: co.col + i, row: co.row + q)
-                        var prevIsNone = 0
+                        var empty = 0
                         loop: while isValid(c) {
                             let piece = zobrist.get(c)
                             switch piece {
                             case .none:
-                                if prevIsNone > 1 {
+                                if empty > 1 {
                                     break loop
                                 } else {
-                                    prevIsNone += 1
+                                    empty += 1
                                 }
                             default:
                                 if piece != player {
                                     break loop
                                 }
-                                prevIsNone = 0
+                                empty = 0
                             }
                             scoreMap[c.row][c.col] = nil
                             c.col += i
@@ -144,22 +134,20 @@ extension CortexProtocol {
             }
         }
         
-        var re_computed = 0
         for (i, row) in delegate.activeCoMap.enumerated() {
             for (q, isActive) in row.enumerated() {
                 if isActive {
-                    let co = (q, i)
+                    let co = (col: q, row: i)
                     if let score = scoreMap[i][q] {
                         sortedMoves.append((co, score))
                     } else {
-                        re_computed += 1
-                        computeMove(co)
+                        let score = ThreatEvaluator.evaluate(for: player, at: co, pieces: pieces)
+                        let move = (co, score)
+                        sortedMoves.append(move)
                     }
                 }
             }
         }
-        
-        print(re_computed)
         
         return sortedMoves.sorted {$0.score > $1.score}
     }
