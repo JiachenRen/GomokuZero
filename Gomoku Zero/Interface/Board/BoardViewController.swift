@@ -80,7 +80,7 @@ extension BoardViewController: BoardDelegate {
     
 }
 
-extension BoardViewController: ZeroPlusVisualizationDelegate {
+extension BoardViewController: VisualizationDelegate {
     func activeMapUpdated(activeMap: [[Bool]]?) {
         DispatchQueue.main.async {
             self.boardView.activeMap = activeMap

@@ -8,26 +8,24 @@
 
 import Foundation
 
-class IterativeDeepeningCortex: CortexProtocol {
-    var delegate: CortexDelegate
-    
-    var heuristicEvaluator = HeuristicEvaluator()
+class IterativeDeepeningCortex: MinimaxCortex {
     var iterativeDeepeningCompleted = false
-    var depth: Int
-    var breadth: Int
     var setup: (ZeroPlus, Int) -> ()
     var layers: Layers
     
     init(_ delegate: CortexDelegate, depth: Int, breadth: Int, layers: Layers = .all, _ setup: @escaping (ZeroPlus, Int) -> ()) {
-        self.depth = depth
-        self.breadth = breadth
-        self.delegate = delegate
         self.layers = layers
         self.setup = setup
+        super.init(delegate, depth: depth, breadth: breadth)
     }
     
-    func getMove() -> Move {
-        return iterativeDeepening(depth: depth, breadth: breadth)
+    override func getMove() -> Move {
+        if let move = iterativeDeepening(depth: depth, breadth: breadth) {
+            return move
+        } else {
+            print("iterative deepening failed. Generating basic move...")
+            return BasicCortex(delegate).getMove()
+        }
     }
     
     private func getDeepeningLayers() -> StrideTo<Int> {
@@ -38,7 +36,7 @@ class IterativeDeepeningCortex: CortexProtocol {
         }
     }
     
-    private func iterativeDeepening(depth: Int, breadth: Int) -> Move {
+    private func iterativeDeepening(depth: Int, breadth: Int) -> Move? {
         iterativeDeepeningCompleted = false
         var bestMove: Move?
         var workItems = [DispatchWorkItem]()
@@ -58,6 +56,8 @@ class IterativeDeepeningCortex: CortexProtocol {
                 zero.startTime = zero2.startTime
                 zero.maxThinkingTime = zero2.maxThinkingTime
                 zero.visDelegate = zero2.visDelegate
+                zero.subjectiveBias = zero2.subjectiveBias
+                zero.randomizedSelection = zero2.randomizedSelection
                 self.setup(zero, d)
                 let bestForDepth = zero.cortex!.getMove()
                 let cancelled = (zero.cortex as! TimeLimitedSearchProtocol).searchCancelledInProgress
@@ -68,7 +68,7 @@ class IterativeDeepeningCortex: CortexProtocol {
                 }
                 zero.visDelegate?.activeMapUpdated(activeMap: nil)
                 let duration = self.time - self.delegate.startTime
-                print("depth = \(d), move = \(bestForDepth), cancelled = \(cancelled), time = \(duration)")
+                print("depth = \(d), co = (\(bestForDepth.co.col), \(bestForDepth.co.row)), score = \(bestForDepth.score) cancelled = \(cancelled), time = \(duration)")
             }
             delegate.asyncedQueue.async(group: group, execute: workItem)
             workItems.append(workItem)
@@ -89,7 +89,7 @@ class IterativeDeepeningCortex: CortexProtocol {
             Thread.sleep(forTimeInterval: 0.01)
         }
         
-        return bestMove!
+        return bestMove
     }
     
     enum Layers: String {

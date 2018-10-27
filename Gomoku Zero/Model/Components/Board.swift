@@ -27,7 +27,11 @@ class Board: ZeroPlusDelegate, HeuristicEvaluatorDelegate {
     var zeroIdentity: Piece = .none
     var zeroPlus = ZeroPlus()
     var zeroPlus2: ZeroPlus? // Secondary AI for skirmish, don't forget to set the delegate!
-    var zeroXzero = false // When this is set to true, zero will play against itself!
+    var zeroXzero = false {
+        didSet {
+            cancel()
+        }
+    }
     var zeroIsThinking = false
     var gameHasEnded = false {
         didSet {
@@ -36,6 +40,8 @@ class Board: ZeroPlusDelegate, HeuristicEvaluatorDelegate {
         }
     }
     let zeroActivityQueue = DispatchQueue(label: "zeroPlus", attributes: .concurrent)
+    var zeroWorkItem: DispatchWorkItem?
+    var zero2WorkItem: DispatchWorkItem?
     
     init(dimension: Int) {
         heuristicEvaluator = HeuristicEvaluator()
@@ -46,15 +52,22 @@ class Board: ZeroPlusDelegate, HeuristicEvaluatorDelegate {
     }
     
     func clear() {
+        cancel()
         pieces = [[Piece]](repeating: Array(repeatElement(Piece.none, count: dimension)), count: dimension)
-    }
-    
-    func restart() {
-        if zeroIsThinking {return}
-        clear()
         curPlayer = .black
         history = History()
         gameHasEnded = false
+    }
+    
+    func cancel() {
+        zeroWorkItem?.cancel()
+        zero2WorkItem?.cancel()
+        zeroWorkItem?.wait()
+        zero2WorkItem?.wait()
+    }
+    
+    func restart() {
+        clear()
         requestZeroBrainStorm()
         delegate?.boardDidUpdate(pieces: pieces)
     }
@@ -213,9 +226,10 @@ class Board: ZeroPlusDelegate, HeuristicEvaluatorDelegate {
     func triggerZero2BrainStorm() {
         if gameHasEnded {return}
         zeroIsThinking = true
-        zeroActivityQueue.async {[unowned self] in
+        zero2WorkItem = DispatchWorkItem {
             self.zeroPlus2?.getMove(for: self.curPlayer)
         }
+        zeroActivityQueue.async(execute: zero2WorkItem!)
     }
     
     /**
@@ -224,9 +238,10 @@ class Board: ZeroPlusDelegate, HeuristicEvaluatorDelegate {
     func triggerZeroBrainstorm() {
         if gameHasEnded {return}
         zeroIsThinking = true
-        zeroActivityQueue.async {[unowned self] in
+        zeroWorkItem = DispatchWorkItem {
             self.zeroPlus.getMove(for: self.curPlayer)
         }
+        zeroActivityQueue.async(execute: zeroWorkItem!)
     }
 
     /**

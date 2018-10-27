@@ -11,7 +11,7 @@ import Foundation
 enum Threat: Int, CustomStringConvertible {
     
     static let win = 1_000_000_000_000_000
-    static let interesting = 6000
+    static let interesting = 3900
     
     var description: String {
         switch self {

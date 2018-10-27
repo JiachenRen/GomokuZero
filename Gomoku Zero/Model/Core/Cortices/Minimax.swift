@@ -26,10 +26,7 @@ import Foundation
 //    14             bestValue := min(bestValue, v)
 //    15         return bestValue
 
-class MinimaxCortex: CortexProtocol, TimeLimitedSearchProtocol {
-    var delegate: CortexDelegate
-    
-    var heuristicEvaluator = HeuristicEvaluator()
+class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
     var depth: Int
     var breadth: Int
     var searchCancelledInProgress = false
@@ -41,12 +38,10 @@ class MinimaxCortex: CortexProtocol, TimeLimitedSearchProtocol {
     init(_ delegate: CortexDelegate, depth: Int, breadth: Int) {
         self.depth = depth
         self.breadth = breadth
-        self.delegate = delegate
-        
-        heuristicEvaluator.delegate = self
+        super.init(delegate)
     }
     
-    func getMove() -> Move {
+    override func getMove() -> Move {
         let move = minimax(depth: depth, player: identity, alpha: Int.min, beta: Int.max)
         if verbose {
             let avgCutDepth = Double(cumCutDepth) / Double(alphaCut + betaCut)
@@ -55,7 +50,13 @@ class MinimaxCortex: CortexProtocol, TimeLimitedSearchProtocol {
             print("recognized sequence groups: \(ThreatEvaluator.seqGroupHashMap.count)")
             print("calc. duration (s): \(Date().timeIntervalSince1970 - delegate.startTime)")
         }
-        return move
+        
+        if let mv = move {
+            return mv
+        }
+        // If the computer is to lose for sure, get a basic move.
+        print("generating basic move...")
+        return BasicCortex(delegate).getMove()
     }
     
     func isTerminal(score: Int) -> Bool {
@@ -72,14 +73,26 @@ class MinimaxCortex: CortexProtocol, TimeLimitedSearchProtocol {
     }
     
     /**
+     - Returns: a list of candidates [Move] arranged in order of greatest threat potential to
+                least threat potential. For standard minimax, it uses the basic method built
+                into the cortex.
+     */
+    func getCandidates() -> [Move] {
+        return getSortedMoves(num: breadth)
+    }
+    
+    /**
      Plain old minimax algorithm with alpha beta pruning.
      Empty implementation for beyondHorizon(_:) - does not attempt to address horizon effect.
      
      - Returns: the best move for the current player in the given delegate.
      */
-    func minimax(depth: Int, player: Piece,  alpha: Int, beta: Int) -> Move {
+    func minimax(depth: Int, player: Piece,  alpha: Int, beta: Int) -> Move? {
         var alpha = alpha, beta = beta, depth = depth // Make alpha beta mutable
-        let score = getHeuristicValue()
+        var score = getHeuristicValue()
+        if delegate.randomizedSelection {
+            score += Int.random(in: 0..<10)
+        }
         
         if isTerminal(score: score) {
             // Terminal state has reached
@@ -91,27 +104,34 @@ class MinimaxCortex: CortexProtocol, TimeLimitedSearchProtocol {
         }
         
         if player == identity {
-            var bestMove = (co: (col: 0, row: 0), score: Int.min)
-            
-            for move in getSortedMoves(num: breadth) {
+            let candidates = getCandidates()
+            if candidates.count == 0 {
+                return nil
+            }
+            var bestMove = candidates[Int.random(in: 0..<candidates.count)]
+            bestMove.score = Int.min
+            for move in candidates {
                 delegate.put(at: move.co)
-                let score = minimax(depth: depth - 1, player: player.next(),alpha: alpha, beta: beta).score
+                let score = minimax(depth: depth - 1, player: player.next(),alpha: alpha, beta: beta)?.score
                 delegate.revert()
-                if score > bestMove.score {
-                    bestMove = move
-                    bestMove.score = score
-                    if score >= Threat.win {
-                        return bestMove
-                    }
-                    
-                    alpha = max(alpha, score)
-                    if beta <= alpha {
-                        bestMove.score = alpha
-                        cumCutDepth += depth
-                        alphaCut += 1
-                        return bestMove
+                if let s = score {
+                    if s > bestMove.score {
+                        bestMove = move
+                        bestMove.score = s
+                        if s >= Threat.win {
+                            return bestMove
+                        }
+                        
+                        alpha = max(alpha, s)
+                        if beta <= alpha {
+                            bestMove.score = alpha
+                            cumCutDepth += depth
+                            alphaCut += 1
+                            return bestMove
+                        }
                     }
                 }
+                    
                 // Time limited threat space search
                 if timeout() {
                     searchCancelledInProgress = true
@@ -120,25 +140,31 @@ class MinimaxCortex: CortexProtocol, TimeLimitedSearchProtocol {
             }
             return bestMove
         } else {
-            var bestMove = (co: (col: 0,row: 0), score: Int.max)
-            
-            for move in getSortedMoves(num: breadth) { // Should these be sorted?
+            let candidates = getSortedMoves(num: breadth)
+            if candidates.count == 0 {
+                return nil
+            }
+            var bestMove = candidates[Int.random(in: 0..<candidates.count)]
+            bestMove.score = Int.max
+            for move in candidates {
                 delegate.put(at: move.co)
-                let score = minimax(depth: depth - 1, player: player.next(), alpha: alpha, beta: beta).score
+                let score = minimax(depth: depth - 1, player: player.next(), alpha: alpha, beta: beta)?.score
                 delegate.revert()
-                if score < bestMove.score {
-                    bestMove = move
-                    bestMove.score = score
-                    if score <= -Threat.win {
-                        return bestMove
-                    }
-                    
-                    beta = min(beta, score)
-                    if beta <= alpha {
-                        bestMove.score = beta
-                        cumCutDepth += depth
-                        betaCut += 1
-                        return bestMove
+                if let s = score {
+                    if s < bestMove.score {
+                        bestMove = move
+                        bestMove.score = s
+                        if s <= -Threat.win {
+                            return bestMove
+                        }
+                        
+                        beta = min(beta, s)
+                        if beta <= alpha {
+                            bestMove.score = beta
+                            cumCutDepth += depth
+                            betaCut += 1
+                            return bestMove
+                        }
                     }
                 }
                 if timeout() {

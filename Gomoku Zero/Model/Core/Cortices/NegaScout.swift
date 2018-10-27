@@ -10,21 +10,9 @@ import Foundation
 
 /// Implementation of PVS (Principal Variation Search)
 /// As of now, it is not working.
-class NegaScoutCortex: CortexProtocol {
-    var delegate: CortexDelegate
+class NegaScoutCortex: MinimaxCortex {
     
-    var heuristicEvaluator = HeuristicEvaluator()
-    var depth: Int
-    var breadth: Int
-    
-    init(_ delegate: CortexDelegate, depth: Int, breadth: Int) {
-        self.delegate = delegate
-        self.breadth = breadth
-        self.depth = depth
-        heuristicEvaluator.delegate = self
-    }
-    
-    func getMove() -> Move {
+    override func getMove() -> Move {
         let alpha = Move(co: (0,0), score: Int.min / 2)
         let beta = Move(co: (0,0), score: Int.max / 2)
         return pvs(depth, alpha, beta, player: identity)

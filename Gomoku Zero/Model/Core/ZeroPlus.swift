@@ -14,12 +14,12 @@ typealias Move = (co: Coordinate, score: Int)
  Zero Plus - Jiachen's fifth attemp at making an unbeatable Gomoku AI
  */
 class ZeroPlus: CortexDelegate {
-    static var useOptimizations = true
+    
     var delegate: ZeroPlusDelegate!
-    var visDelegate: ZeroPlusVisualizationDelegate?
+    var visDelegate: VisualizationDelegate?
     
     var activeMapDiffStack = [[Coordinate]]()
-    var activeCoMap = [[Bool]]()
+    var activeMap = [[Bool]]()
     var dim: Int {
         return delegate.dimension
     }
@@ -33,6 +33,7 @@ class ZeroPlus: CortexDelegate {
     var curPlayer: Piece = .black
     var identity: Piece = .black
     
+    var calcDurations = [TimeInterval]()
     var startTime: TimeInterval = 0
     var maxThinkingTime: TimeInterval = 3
     
@@ -42,16 +43,25 @@ class ZeroPlus: CortexDelegate {
 //    var personality: Personality = .search(depth: 6, breadth: 3)
     var personality: Personality = .monteCarlo(breadth: 3, rollout: 5, random: true, debug: true)
     
+    static var useOptimizations = true
     var iterativeDeepening = true
-    var layers: IterativeDeepeningCortex.Layers = .evens
     
-    var calcDurations = [TimeInterval]()
+    /// If this is set to true, small random numbers are used to break the tie between even moves
+    var randomizedSelection = true
+    
+    /** When subjectiveBias is set to true, the program will evaluate the game state as a whole and lean more
+        toward either offense or defense when selecting candidates for minimax. Otherwise, an equal number of
+        offensive and defensive candidates are selected.
+     */
+    var subjectiveBias = true
+    
+    var layers: IterativeDeepeningCortex.Layers = .evens
     
     /**
      Generate a map that indicates the active coordinates
      */
     func genActiveCoMap() {
-        activeCoMap = [[Bool]](repeating: [Bool](repeating: false, count: dim), count: dim)
+        activeMap = [[Bool]](repeating: [Bool](repeating: false, count: dim), count: dim)
         delegate.history.stack.forEach {updateActiveCoMap(at: $0, recordDiff: false)}
     }
     
@@ -64,18 +74,18 @@ class ZeroPlus: CortexDelegate {
                 }
                 let newCo = (col: co.col + i, row: co.row + j)
                 if delegate.isValid(newCo) && pieces[newCo.row][newCo.col] == .none {
-                    if recordDiff && activeCoMap[newCo.row][newCo.col] == false {
+                    if recordDiff && activeMap[newCo.row][newCo.col] == false {
                         diffCluster.append(newCo)
                     }
-                    activeCoMap[newCo.row][newCo.col] = true
+                    activeMap[newCo.row][newCo.col] = true
                 }
             }
         }
-        if recordDiff && activeCoMap[co.row][co.col] == true {
+        if recordDiff && activeMap[co.row][co.col] == true {
             diffCluster.append(co)
         }
         activeMapDiffStack.append(diffCluster)
-        activeCoMap[co.row][co.col] = false
+        activeMap[co.row][co.col] = false
     }
     
     func getMove(for player: Piece) {
@@ -86,7 +96,7 @@ class ZeroPlus: CortexDelegate {
         activeMapDiffStack = [[Coordinate]]()
         curPlayer = player // Note: this is changed every time put() is called.
         identity = player
-        visDelegate?.activeMapUpdated(activeMap: activeCoMap) // Notify the delegate that active map has updated
+        visDelegate?.activeMapUpdated(activeMap: activeMap) // Notify the delegate that active map has updated
         
         if delegate.history.stack.count == 0 && player == .black { // When ZeroPlus is black, the first move is always at the center
             delegate?.bestMoveExtrapolated(co: (dim / 2, dim / 2))
@@ -159,7 +169,7 @@ class ZeroPlus: CortexDelegate {
         history.push(co)
         updateActiveCoMap(at: co, recordDiff: true) // Push changes to active map to the difference stack
         visDelegate?.historyDidUpdate(history: history)
-        visDelegate?.activeMapUpdated(activeMap: activeCoMap)
+        visDelegate?.activeMapUpdated(activeMap: activeMap)
     }
     
     @discardableResult
@@ -169,7 +179,7 @@ class ZeroPlus: CortexDelegate {
             curPlayer = curPlayer.next()
             revertActiveMapUpdate()
             visDelegate?.historyDidUpdate(history: history)
-            visDelegate?.activeMapUpdated(activeMap: activeCoMap)
+            visDelegate?.activeMapUpdated(activeMap: activeMap)
             return co
         }
         return nil
@@ -180,11 +190,10 @@ class ZeroPlus: CortexDelegate {
      */
     private func revertActiveMapUpdate() {
         for co in activeMapDiffStack.removeLast() {
-            let tmp = activeCoMap[co.row][co.col]
-            activeCoMap[co.row][co.col] = !tmp
+            let tmp = activeMap[co.row][co.col]
+            activeMap[co.row][co.col] = !tmp
         }
     }
-    
     
     private func random() -> Coordinate {
         let row = CGFloat.random(min: 0, max: CGFloat(delegate.pieces.count))
@@ -210,7 +219,7 @@ protocol ZeroPlusDelegate {
     func hasWinner() -> Piece?
 }
 
-protocol ZeroPlusVisualizationDelegate {
+protocol VisualizationDelegate {
     func activeMapUpdated(activeMap: [[Bool]]?)
     func historyDidUpdate(history: History?)
 }

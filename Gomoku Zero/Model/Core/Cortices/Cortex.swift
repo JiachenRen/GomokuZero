@@ -134,7 +134,7 @@ extension CortexProtocol {
             }
         }
         
-        for (i, row) in delegate.activeCoMap.enumerated() {
+        for (i, row) in delegate.activeMap.enumerated() {
             for (q, isActive) in row.enumerated() {
                 if isActive {
                     let co = (col: q, row: i)
@@ -158,9 +158,16 @@ extension CortexProtocol {
     
     func getSortedMoves(num: Int) -> [Move] {
         func finalize(_ movesB: [Move], _ movesW: [Move]) -> [Move] {
-            return [[Move](movesB.prefix(num)), [Move](movesW.prefix(num))].flatMap{$0}
+            if delegate.subjectiveBias {
+                return [Move]([movesB, movesW]
+                    .flatMap{$0}
+                    .sorted(by: {$0.score > $1.score})
+                    .prefix(num))
+            } else {
+                return [[Move](movesB.prefix(num)), [Move](movesW.prefix(num))]
+                .flatMap{$0}
                 .sorted(by: {$0.score > $1.score})
-            
+            }
         }
         if let retrieved = Zobrist.getOrderedMoves(zobrist, for: .black) {
             return finalize(retrieved, Zobrist.getOrderedMoves(zobrist, for: .white)!)
@@ -211,7 +218,7 @@ extension CortexProtocol {
 
 
 protocol CortexDelegate {
-    var activeCoMap: [[Bool]] {get}
+    var activeMap: [[Bool]] {get}
     var pieces: [[Piece]] {get}
     var identity: Piece {get}
     var zobrist: Zobrist {get}
@@ -221,6 +228,8 @@ protocol CortexDelegate {
     var curPlayer: Piece {get}
     var asyncedQueue: DispatchQueue {get}
     var activeMapDiffStack: [[Coordinate]] {get}
+    var randomizedSelection: Bool {get}
+    var subjectiveBias: Bool {get}
     func put(at co: Coordinate)
     @discardableResult
     func revert() -> Coordinate?
@@ -236,21 +245,32 @@ class BasicCortex: CortexProtocol {
         heuristicEvaluator.delegate = self
     }
     
+    /**
+     Add an insignificant random weight to the scores to break apart ties.
+     */
+    func differentiate(_ cands: [Move], maxWeight: Int) -> [Move] {
+        return cands.map {(co: $0.co, score: $0.score + Int.random(in: 0..<maxWeight))}
+    }
+    
     func getMove(for player: Piece) -> Move {
-        let offensiveMoves = genSortedMoves(for: player)
-        let defensiveMoves = genSortedMoves(for: player.next())
+        var offensiveMoves = genSortedMoves(for: player)
+        var defensiveMoves = genSortedMoves(for: player.next())
         if offensiveMoves.count == 0 && defensiveMoves.count == 0 {
             // If ZeroPlus is out of moves...
             return ((-1, -1), 0)
         }
-        let offensiveMove = offensiveMoves[0]
-        let defensiveMove = defensiveMoves[0]
-        if offensiveMove.score >= Threat.win {
-            return offensiveMove
-        } else if defensiveMove.score >= Threat.win {
-            return defensiveMove
+        if delegate.randomizedSelection {
+            offensiveMoves = differentiate(offensiveMoves, maxWeight: 10).sorted{$0.score > $1.score}
+            defensiveMoves = differentiate(defensiveMoves, maxWeight: 10).sorted{$0.score > $1.score}
+        }
+        let attack = offensiveMoves[0]
+        let defend = defensiveMoves[0]
+        if attack.score >= Threat.win {
+            return attack
+        } else if defend.score >= Threat.win {
+            return defend
         } else {
-            return offensiveMove.score > defensiveMove.score ? offensiveMove : defensiveMove
+            return attack.score > defend.score ? attack : defend
         }
     }
     

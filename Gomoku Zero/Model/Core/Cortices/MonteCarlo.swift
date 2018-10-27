@@ -8,10 +8,7 @@
 
 import Foundation
 
-class MonteCarloCortex: CortexProtocol {
-    var delegate: CortexDelegate
-    
-    var heuristicEvaluator = HeuristicEvaluator()
+class MonteCarloCortex: BasicCortex {
     var randomExpansion = true
     var maxSimulationDepth = 10
     var iterations = 0
@@ -27,10 +24,9 @@ class MonteCarloCortex: CortexProtocol {
     var breadth: Int
     
     init(_ delegate: CortexDelegate, breadth: Int) {
-        self.delegate = delegate
         self.breadth = breadth
         self.basicCortex = BasicCortex(delegate)
-        heuristicEvaluator.delegate = self
+        super.init(delegate)
     }
     
     func dPrint(_ items: Any) {
@@ -40,7 +36,7 @@ class MonteCarloCortex: CortexProtocol {
     
     
     
-    func getMove() -> Move {
+    override func getMove() -> Move {
         let rootNode = Node(identity: delegate.curPlayer, co: (0,0))
         iterations = 0
         while !timeout() {
