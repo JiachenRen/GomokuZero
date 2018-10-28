@@ -65,17 +65,22 @@ protocol ViewControllerDelegate {
 }
 
 extension BoardViewController: BoardDelegate {
-    func gameHasEnded(winner: Piece, coordinates: [Coordinate]) {
+    func gameHasEnded(winner: Piece, coordinates: [Coordinate], popDialogue: Bool) {
+        self.boardView.winningCoordinates = coordinates
         DispatchQueue.main.async {
-            self.boardView.winningCoordinates = coordinates
-            let msg = winner == .black ? "Black wins!" : "White wins!"
-            let _  = dialogue(msg: msg, infoTxt: "Hit Shift + Command + R (⇧⌘R) to restart the game.")
+            if popDialogue {
+                let msg = winner == .black ? "Black wins!" : winner == .none ? "Draw!" : "White wins!"
+                let _  = dialogue(msg: msg, infoTxt: "Hit Shift + Command + R (⇧⌘R) to restart the game.")
+            }
         }
     }
     
     func boardDidUpdate(pieces: [[Piece]]) {
         // Transfer the current arrangement of pieces to board view for display
         boardView.pieces = pieces
+//        DispatchQueue.main.async {[unowned self] in
+//            self.boardView.setNeedsDisplay(self.boardView.bounds)
+//        }
     }
     
 }

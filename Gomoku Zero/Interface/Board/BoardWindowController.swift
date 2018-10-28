@@ -14,6 +14,15 @@ class BoardWindowController: NSWindowController, NSOpenSavePanelDelegate, ViewCo
         return viewController.board
     }
     
+    static let openPanel: NSOpenPanel = {
+        let panel = NSOpenPanel(contentRect: .zero, styleMask: .fullSizeContentView, backing: .buffered, defer: true)
+        panel.canChooseDirectories = false
+        panel.allowedFileTypes = ["gzero"]
+        panel.canChooseFiles = true
+        panel.allowsMultipleSelection = true
+        return panel
+    }()
+    
     var viewController: BoardViewController {
         return window!.contentViewController as! BoardViewController
     }
@@ -28,27 +37,20 @@ class BoardWindowController: NSWindowController, NSOpenSavePanelDelegate, ViewCo
     override func windowDidLoad() {
         super.windowDidLoad()
         
+        
+        
         // Establish communication with ViewController
         viewController.delegate = self
     }
     
     static func open(_ completion: (([BoardWindowController]) -> Void)? = nil) {
-        let panel = NSOpenPanel(contentRect: NSRect.zero,
-                                styleMask: .fullSizeContentView,
-                                backing: .buffered,
-                                defer: true)
-        panel.canChooseDirectories = false
-        panel.allowedFileTypes = ["gzero"]
-        panel.canChooseFiles = true
-        panel.allowsMultipleSelection = true
-        
         var controllers = [BoardWindowController]()
         
-        panel.begin() { response in
+        openPanel.begin() { response in
             switch response {
             case .OK:
                 var curFrame = NSApplication.shared.mainWindow?.frame ?? CGRect.zero
-                for url in panel.urls {
+                for url in openPanel.urls {
                     curFrame.origin = CGPoint(x: curFrame.minX + 10, y: curFrame.minY - 10)
                     let boardWindowController = NSStoryboard(name: "Main", bundle: nil)
                         .instantiateController(withIdentifier: "board-window") as! BoardWindowController

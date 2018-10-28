@@ -53,7 +53,7 @@ class ZeroPlus: CortexDelegate {
         toward either offense or defense when selecting candidates for minimax. Otherwise, an equal number of
         offensive and defensive candidates are selected.
      */
-    var subjectiveBias = true
+    var subjectiveBias = false
     
     var layers: IterativeDeepeningCortex.Layers = .evens
     
@@ -104,8 +104,9 @@ class ZeroPlus: CortexDelegate {
             delegate?.bestMoveExtrapolated(co: getSecondMove())
         } else {
             switch personality {
-            case .basic: cortex = BasicCortex(self)
-            case .search(depth: let d, breadth: let b):
+            case .heuristic: cortex = BasicCortex(self)
+            case .zeroSum: cortex = ZeroSumCortex(self)
+            case .minimax(depth: let d, breadth: let b):
                 if iterativeDeepening {
                     cortex = IterativeDeepeningCortex(self, depth: d, breadth: b, layers: layers) {
                         $0.cortex = MinimaxCortex($0, depth: $1, breadth: b)
@@ -203,8 +204,9 @@ class ZeroPlus: CortexDelegate {
 }
 
 enum Personality {
-    case basic
-    case search(depth: Int, breadth: Int)
+    case heuristic
+    case zeroSum
+    case minimax(depth: Int, breadth: Int)
     case negaScout(depth: Int, breadth: Int)
     case monteCarlo(breadth: Int, rollout: Int, random: Bool, debug: Bool)
     case zeroMax(depth: Int, breadth: Int, rolloutPr: Int, simDepth: Int, threshold: Int)

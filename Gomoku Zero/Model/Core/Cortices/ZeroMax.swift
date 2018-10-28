@@ -22,6 +22,8 @@ class ZeroMax: MinimaxCortex {
     /// Simulation deph during rollout.
     var simDepth: Int
     
+    var status: Status = .search
+    
     /**
      - Parameter rollout: an integer b/w 0 and 100 that denotes the probability of simulation at leaf nodes.
      - Parameter threshold: defaults to Threat.interesting. Denotes the threshold beyond which a simulation might be performed.
@@ -51,15 +53,36 @@ class ZeroMax: MinimaxCortex {
      
      - Returns: modified heuristic value of the node.
      */
-    override func beyondHorizon(of score: Int) -> Int {
+    override func beyondHorizon(of score: Int, alpha: Int, beta: Int, player: Piece) -> Int {
         // Overcome horizon effect by looking further into interesting nodes
+        var score = score
         let shouldRollout = rolloutPr != 0 && Int.random(in: 0...(100 - rolloutPr)) == 0
-        if abs(score) > threshold && shouldRollout {
-            let rolloutScore = rollout(depth: simDepth, policy: basicCortex)
-            if isTerminal(score: rolloutScore) {
-                return rolloutScore
+        if let co = delegate.revert() {
+            let white = ThreatEvaluator.analyzeThreats(for: .black, at: co, pieces: zobrist.matrix)
+            let black = ThreatEvaluator.analyzeThreats(for: .white, at: co, pieces: zobrist.matrix)
+            let threatPotential = [white, black].flatMap{$0}
+                .map{$0.rawValue}.sorted(by: >)[0]
+            delegate.put(at: co)
+            if abs(threatPotential) > threshold && shouldRollout && status != .kill {
+                status = .kill
+                if let rolloutScore = minimax(depth: simDepth, player: player, alpha: alpha, beta: beta)?.score {
+                    score = rolloutScore
+                }
+                status = .search
             }
         }
         return score
+    }
+    
+    override func getCandidates() -> [Move] {
+        switch status {
+        case .search: return super.getCandidates()
+        case .kill: return super.getCandidates().filter{$0.score > threshold}
+        }
+    }
+    
+    enum Status {
+        case search
+        case kill
     }
 }

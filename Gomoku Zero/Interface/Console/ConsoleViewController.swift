@@ -49,11 +49,15 @@ class ConsoleViewController: NSViewController {
     @IBOutlet weak var historyStack: NSButton!
     
     @IBOutlet weak var strictEqualityCheck: NSButton!
+    @IBOutlet weak var loopedSkirmish: NSButton!
+    @IBOutlet weak var filePathLabel: NSTextField!
     
-    
+    var boards = [Board]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        filePathLabel.stringValue = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         // Do view setup here.
     }
     
@@ -76,6 +80,8 @@ class ConsoleViewController: NSViewController {
         
         // Configure board properties
         let board = wc.board
+        board.looped = loopedSkirmish.state == .on
+        board.saveDir = filePathLabel.stringValue
         func constraint(_ dim: String) -> Int {
             if let d = Int(dim) {
                 return d > 0 && d <= Zobrist.hashedHeuristicMaps.count ? d : 19
@@ -119,9 +125,10 @@ class ConsoleViewController: NSViewController {
             zero1.layers = resolveLayers(blackLayers)
             
             switch blackAlgorithm.selectedItem!.title {
-            case "Heuristic": zero1.personality = .basic
+            case "Heuristic": zero1.personality = .heuristic
+            case "Zero Sum": zero1.personality = .zeroSum
             case "Minimax":
-                zero1.personality = .search(depth: depth, breadth: breadth)
+                zero1.personality = .minimax(depth: depth, breadth: breadth)
                 zero1.iterativeDeepening = iterativeDeepening
             case "Monte Carlo":
                 zero1.personality = .monteCarlo(breadth: breadth, rollout: simDepth, random: randExpansion, debug: debug)
@@ -146,9 +153,10 @@ class ConsoleViewController: NSViewController {
             zero2.layers = resolveLayers(whiteLayers)
             
             switch whiteAlgorithm.selectedItem!.title {
-            case "Heuristic": zero2.personality = .basic
+            case "Heuristic": zero2.personality = .heuristic
+            case "Zero Sum": zero2.personality = .zeroSum
             case "Minimax":
-                zero2.personality = .search(depth: depth, breadth: breadth)
+                zero2.personality = .minimax(depth: depth, breadth: breadth)
                 zero2.iterativeDeepening = iterativeDeepening
             case "Monte Carlo":
                 zero2.personality = .monteCarlo(breadth: breadth, rollout: simDepth, random: randExpansion, debug: debug)
@@ -176,7 +184,104 @@ class ConsoleViewController: NSViewController {
         }
         
         wc.showWindow(self)
+        boards.append(board)
         board.requestZeroBrainStorm()
+    }
+    
+    @IBAction func generateStatitics(_ sender: NSButton) {
+        let panel = BoardWindowController.openPanel
+        panel.begin() {response in
+            switch response {
+            case .OK: ConsoleViewController.generateStatistics(for: panel.urls)
+            default: break
+            }
+        }
+    }
+    
+    @IBAction func chooseSaveDirectory(_ sender: NSButton) {
+        let panel = NSOpenPanel(contentRect: .zero, styleMask: .fullSizeContentView, backing: .buffered, defer: true)
+        panel.canChooseDirectories = true
+        panel.canChooseFiles = false
+        panel.allowsMultipleSelection = false
+        
+        panel.begin() {response in
+            switch response {
+            case .OK:
+                self.filePathLabel.stringValue = panel.urls[0].path
+            default: break
+            }
+        }
+    }
+    
+    
+    private static func generateStatistics(for urls: [URL]) {
+        var blackWin = 0
+        var whiteWin = 0
+        var draw = 0
+        var incomplete = 0
+        var steps = [Int]()
+        var blackWinSteps = [Int]()
+        var whiteWinSteps = [Int]()
+        var total = urls.count
+        for (idx, url) in urls.enumerated() {
+            do {
+                let game = try String(contentsOf: url, encoding: .utf8)
+                var fileName = url.lastPathComponent
+                fileName = String(fileName[..<fileName.lastIndex(of: ".")!]) // Remove extension
+                print("analyzing \(idx + 1) of \(total), \(fileName)")
+                let board = Board(dimension: 19)
+                board.load(game)
+                let numSteps = board.history.stack.count
+                if let winner = board.hasWinner() {
+                    switch winner {
+                    case .black:
+                        blackWin += 1
+                        blackWinSteps.append(numSteps)
+                    case .white: whiteWin += 1
+                        whiteWinSteps.append(numSteps)
+                    case .none: draw += 1
+                    }
+                } else {
+                    incomplete += 1
+                }
+                steps.append(numSteps)
+            } catch let err {
+                print(err)
+            }
+        }
+        
+        total = total - incomplete
+        func perc(_ n: Int) -> Int {
+            return Int(Double(n) / Double(total) * 100)
+        }
+        func avg(_ steps: [Int]) -> Int {
+            return Int(Double(steps.reduce(0) {$0 + $1}) / Double(steps.count))
+        }
+        
+        let blackWinRatio = perc(blackWin)
+        let whiteWinRatio = perc(whiteWin)
+        let drawRatio = perc(draw)
+        let avgSteps = avg(steps)
+        let bAvgSteps = avg(blackWinSteps)
+        let wAvgSteps = avg(whiteWinSteps)
+
+        let stats = "total:\t\t\(total)\n"
+            + "black wins:\t\(blackWin)\t - \(blackWinRatio)%\n"
+            + "white wins:\t\(whiteWin)\t - \(whiteWinRatio)%\n"
+            + "draws:\t\t\(draw)\t - \(drawRatio)%\n"
+            + "avg. # of steps: \(avgSteps)\n"
+            + "black win steps: \(bAvgSteps)\n"
+            + "white win steps: \(wAvgSteps)\n"
+            + "incomplete: \(incomplete) (excluded from total)"
+        var dir = urls[0].deletingLastPathComponent()
+        dir.appendPathComponent("stats.txt")
+        print(stats)
+        do {
+            print("writing to \(dir)")
+            try stats.write(to: dir, atomically: true, encoding: .utf8)
+        } catch let err {
+            print(err)
+        }
     }
     
     

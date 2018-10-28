@@ -169,8 +169,8 @@ extension CortexProtocol {
                 .sorted(by: {$0.score > $1.score})
             }
         }
-        if let retrieved = Zobrist.getOrderedMoves(zobrist, for: .black) {
-            return finalize(retrieved, Zobrist.getOrderedMoves(zobrist, for: .white)!)
+        if let black = Zobrist.getOrderedMoves(zobrist, for: .black), let white = Zobrist.getOrderedMoves(zobrist, for: .white) {
+            return finalize(black, white)
         } else {
             let blackMoves = genSortedMoves(for: .black)
             let whiteMoves = genSortedMoves(for: .white)

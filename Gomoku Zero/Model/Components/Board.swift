@@ -33,10 +33,21 @@ class Board: ZeroPlusDelegate, HeuristicDataSource {
         }
     }
     var zeroIsThinking = false
+    var calcStartTime: TimeInterval = 0
+    var gameStartTime: TimeInterval = 0
+    var looped: Bool = true
+    var battles: Int = 0
+    var saveDir: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
     var gameHasEnded = false {
         didSet {
+            Zobrist.hashedHeuristicMaps[dimension-1] = HeuristicMap()
             Zobrist.blackOrderedMovesMap = Dictionary<Zobrist, [Move]>() // Clear ordered moves map.
             Zobrist.whiteOrderedMovesMap = Dictionary<Zobrist, [Move]>()
+        }
+        willSet {
+            if !newValue {
+                gameStartTime = Date().timeIntervalSince1970
+            }
         }
     }
     let zeroActivityQueue = DispatchQueue(label: "zeroPlus", attributes: .concurrent)
@@ -62,8 +73,8 @@ class Board: ZeroPlusDelegate, HeuristicDataSource {
     func cancel() {
         zeroWorkItem?.cancel()
         zero2WorkItem?.cancel()
-        zeroWorkItem?.wait()
-        zero2WorkItem?.wait()
+//        zeroWorkItem?.wait()
+//        zero2WorkItem?.wait()
     }
     
     func restart() {
@@ -124,11 +135,35 @@ class Board: ZeroPlusDelegate, HeuristicDataSource {
         set(co, curPlayer)
         history.push(co)
         delegate?.boardDidUpdate(pieces: pieces)
+        print(co)
         
         if let winner = hasWinner() {
             gameHasEnded = true
             let cos = findWinningCoordinates()
-            delegate?.gameHasEnded(winner: winner, coordinates: cos)
+            if looped {
+                var fileName = "battle_\(battles)_"
+                switch winner {
+                case .none: fileName += "draw"
+                case .black: fileName += "b_wins_@step=\(history.stack.count)"
+                case .white: fileName += "w_wins_@step=\(history.stack.count)"
+                }
+                fileName+="_t=\(Date().timeIntervalSince1970 - gameStartTime)s"
+                fileName += ".gzero"
+                let url = URL(fileURLWithPath: saveDir).appendingPathComponent(fileName)
+                do {
+                    print("Saving to \(url)")
+                    try serialize().write(to: url, atomically: true, encoding: .utf8)
+                } catch let err {
+                    print(err)
+                }
+                battles += 1
+                DispatchQueue.global().async {[unowned self] in
+                    Thread.sleep(forTimeInterval: 1)
+                    self.restart()
+                }
+            }
+            
+            delegate?.gameHasEnded(winner: winner, coordinates: cos, popDialogue: !looped)
         }
         
         curPlayer = curPlayer.next()
@@ -136,7 +171,12 @@ class Board: ZeroPlusDelegate, HeuristicDataSource {
     }
     
     func hasWinner() -> Piece? {
-        if history.stack.count == 0 { return nil}
+        if history.stack.count == 0 {
+            return nil
+        } else if history.stack.count == dimension * dimension {
+            // Such a sneaky bug!!! .none is for optional!!!
+            return Piece.none
+        }
         let blackScore = heuristicEvaluator.evaluate(for: .black)
         let whiteScore = heuristicEvaluator.evaluate(for: .white)
         if blackScore > Threat.win || whiteScore >  Threat.win {
@@ -210,9 +250,7 @@ class Board: ZeroPlusDelegate, HeuristicDataSource {
      This would only take effect if it is ZeroPlus's turn.
      */
     func requestZeroBrainStorm() {
-        if zeroIdentity == curPlayer && !gameHasEnded {
-            triggerZeroBrainstorm()
-        } else if zeroXzero {
+        if zeroXzero {
             if let zeroPlus2 = self.zeroPlus2 { // If a second AI configuration is present
                 if curPlayer == zeroPlus2.identity {
                     triggerZero2BrainStorm()
@@ -220,10 +258,13 @@ class Board: ZeroPlusDelegate, HeuristicDataSource {
                     triggerZeroBrainstorm()
                 }
             }
+        } else if zeroIdentity == curPlayer && !gameHasEnded {
+            triggerZeroBrainstorm()
         }
     }
     
     func triggerZero2BrainStorm() {
+        calcStartTime = Date().timeIntervalSince1970
         if gameHasEnded {return}
         zeroIsThinking = true
         zero2WorkItem = DispatchWorkItem {
@@ -236,6 +277,7 @@ class Board: ZeroPlusDelegate, HeuristicDataSource {
      Use this to allow ZeroPlus to make a move
      */
     func triggerZeroBrainstorm() {
+        calcStartTime = Date().timeIntervalSince1970
         if gameHasEnded {return}
         zeroIsThinking = true
         zeroWorkItem = DispatchWorkItem {
@@ -275,7 +317,7 @@ class Board: ZeroPlusDelegate, HeuristicDataSource {
 
 protocol BoardDelegate {
     func boardDidUpdate(pieces: [[Piece]])
-    func gameHasEnded(winner: Piece, coordinates: [Coordinate])
+    func gameHasEnded(winner: Piece, coordinates: [Coordinate], popDialogue: Bool)
 }
 
 extension Board: CustomStringConvertible {

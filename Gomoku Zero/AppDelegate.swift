@@ -80,6 +80,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             activeBoardView?.highlightLastStep = !b
         }
     }
+    @IBAction func toggleCalcDuration(_ sender: NSMenuItem) {
+        if let b = activeBoardView?.showCalcDuration {
+            activeBoardView?.showCalcDuration = !b
+        }
+    }
     
     @IBAction func openConsole(_ sender: NSMenuItem) {
         if consoleWindowController == nil {
@@ -98,12 +103,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @IBAction func zeroPlusPersonality(_ sender: NSMenuItem) {
         switch sender.title {
-        case "Heuristic": activeBoard?.zeroPlus.personality = .basic
+        case "Heuristic": activeBoard?.zeroPlus.personality = .heuristic
         case "Custom Depth & Breadth":
             let config = getMinimaxConfig()
             if let personality = config {
                 switch personality {
-                case .search(let depth, let breadth):
+                case .minimax(let depth, let breadth):
                     depthMI.title = "Depth = \(depth)"
                     breadthMI.title = "Breadth = \(breadth)"
                 default: break
@@ -113,7 +118,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         case "Monte Carlo":
             activeBoard?.zeroPlus.personality = .monteCarlo(breadth: 2, rollout: 5, random: true, debug: true)
         case "Use Default":
-            activeBoard?.zeroPlus.personality = .search(depth: 6, breadth: 3)
+            activeBoard?.zeroPlus.personality = .minimax(depth: 6, breadth: 3)
         case "Iterative Deepening":
             if let tmp = activeBoard?.zeroPlus.iterativeDeepening {
                 activeBoard?.zeroPlus.iterativeDeepening = !tmp
@@ -290,7 +295,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if (response == .alertFirstButtonReturn) {
             let d = Int(depthBox.stringValue) ?? Int(depthBox.placeholderString!)!
             let b = Int(breadthBox.stringValue) ?? Int(breadthBox.placeholderString!)!
-            return Personality.search(depth: d, breadth: b)
+            return Personality.minimax(depth: d, breadth: b)
         } else {
             return nil
         }
@@ -343,7 +348,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 "Show Board Texture" : "Hide Board Texture"
             let zeroPlus = activeBoard!.zeroPlus
             switch zeroPlus.personality {
-            case .search(let depth, let breadth):
+            case .minimax(let depth, let breadth):
                 depthMI.title = "Depth = \(depth)"
                 breadthMI.title = "Breadth = \(breadth)"
                 iterativeDeepening.state = zeroPlus.iterativeDeepening ? .on : .off

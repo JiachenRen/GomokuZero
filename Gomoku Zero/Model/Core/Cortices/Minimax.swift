@@ -47,7 +47,6 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
             let avgCutDepth = Double(cumCutDepth) / Double(alphaCut + betaCut)
             print("alpha cut: \(alphaCut)\t beta cut: \(betaCut)\t avg. cut depth: \(avgCutDepth))")
             print("recognized sequences: \(ThreatEvaluator.seqHashMap.count)")
-            print("recognized sequence groups: \(ThreatEvaluator.seqGroupHashMap.count)")
             print("calc. duration (s): \(Date().timeIntervalSince1970 - delegate.startTime)")
         }
         
@@ -68,7 +67,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
      the algorithm is short sighted and is unable to foresee drastic changes beyond the horizon.
      This can lead to imperfect decision making.
      */
-    func beyondHorizon(of score: Int) -> Int {
+    func beyondHorizon(of score: Int, alpha: Int, beta: Int, player: Piece) -> Int {
         return score
     }
     
@@ -99,7 +98,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
             return Move(co: (0,0), score: score)
         } else if depth == 0 {
             var move = Move(co: (0,0), score: score)
-            move.score = beyondHorizon(of: score)
+            move.score = beyondHorizon(of: score, alpha: alpha, beta: beta, player: player)
             return move
         }
         

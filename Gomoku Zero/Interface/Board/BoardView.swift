@@ -91,19 +91,11 @@ public typealias Coordinate = (col: Int, row: Int)
     var activeMap: [[Bool]]? {
         didSet {
             setNeedsDisplay(bounds)
-//            activeMap?.enumerated().forEach { (r, row) in
-//                row.enumerated().forEach { (c, b) in
-//                    if b {
-//                        setNeedsDisplay(rect(at: (c, r)))
-//                    }
-//                }
-//            }
         }
     }
+    
     var zeroPlusHistory: History? {
         didSet {
-//            zeroPlusHistory?.stack.forEach{setNeedsDisplay(rect(at: $0))}
-//            zeroPlusHistory?.reverted.forEach{setNeedsDisplay(rect(at: $0))}
             setNeedsDisplay(bounds)
         }
     }
@@ -111,6 +103,7 @@ public typealias Coordinate = (col: Int, row: Int)
     var activeMapVisible = true
     var visualizationEnabled = true
     var historyVisible = true
+    var showCalcDuration = false
     var highlightLastStep = true {
         didSet {
             if let co = board.history.stack.last {
@@ -126,7 +119,9 @@ public typealias Coordinate = (col: Int, row: Int)
     
     var winningCoordinates: [Coordinate]? {
         didSet {
-            setNeedsDisplay(bounds)
+            DispatchQueue.main.async {[unowned self] in
+                self.setNeedsDisplay(self.bounds)
+            }
         }
     }
     
@@ -180,15 +175,21 @@ public typealias Coordinate = (col: Int, row: Int)
     
     private func highlightMostRecentStep() {
         if let co = board.history.stack.last {
-            let color: NSColor = pieces![co.row][co.col] == .black ? .green : .red
+            let piece = pieces![co.row][co.col]
+            let color: NSColor = piece == .black ? .green : .red
             color.withAlphaComponent(0.8).setStroke()
-            var rect = self.rect(at: co)
-            rect = CGRect(center: CGPoint(x: rect.midX, y: rect.midY),
-                          size: CGSize(width: rect.width / 4, height: rect.height / 4))
-            let path = NSBezierPath(rect: rect)
-            path.lineWidth = gridLineWidth
-            path.lineJoinStyle = .round
-            path.stroke()
+            if board.zeroIsThinking && showCalcDuration { // Display time lapsed
+                let sec = Int(Date().timeIntervalSince1970 - board.calcStartTime)
+                drawDigitOverlay(num: sec, for: piece, at: co, colorful: true)
+            } else {
+                var rect = self.rect(at: co)
+                rect = CGRect(center: CGPoint(x: rect.midX, y: rect.midY),
+                              size: CGSize(width: rect.width / 4, height: rect.height / 4))
+                let path = NSBezierPath(rect: rect)
+                path.lineWidth = gridLineWidth
+                path.lineJoinStyle = .round
+                path.stroke()
+            }
         }
     }
     
@@ -207,21 +208,23 @@ public typealias Coordinate = (col: Int, row: Int)
     private func drawStepNumberOverlay() {
         var color: Piece = .black
         for (num, co) in board.history.stack.enumerated() {
-            drawStepNumberOverlay(num: num + 1, for: color, at: co, isMostRecent: num == board.history.stack.count - 1)
+            drawDigitOverlay(num: num + 1, for: color, at: co, colorful: num == board.history.stack.count - 1)
             color = color.next()
         }
     }
     
-    private func drawStepNumberOverlay(num: Int, for piece: Piece, at co: Coordinate, isMostRecent: Bool) {
+    private func drawDigitOverlay(num: Int, for piece: Piece, at co: Coordinate, colorful: Bool) {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
         let attributes = [
             NSAttributedString.Key.paragraphStyle  : paragraphStyle,
             .font            : NSFont.systemFont(ofSize: pieceRadius),
-            .foregroundColor : piece == .black ? isMostRecent ? NSColor.green : NSColor.white : isMostRecent ? .red : .black,
+            .foregroundColor : piece == .black ? colorful ? NSColor.green : NSColor.white : colorful ? .red : .black,
         ]
-        
-        let textRect = CGRect(center: onScreen(co), size: CGSize(width: 50, height: pieceRadius))
+        var ctr = onScreen(co)
+//        ctr.x += pieceRadius / 4
+        ctr.y += pieceRadius / 8
+        let textRect = CGRect(center: ctr, size: CGSize(width: pieceRadius * 2, height: pieceRadius))
         let attrString = NSAttributedString(string: "\(num)", attributes: attributes)
         attrString.draw(in: textRect)
     }

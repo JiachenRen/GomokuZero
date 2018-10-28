@@ -10,9 +10,9 @@ import Foundation
 
 class ThreatEvaluator {
     static var seqHashMap: Dictionary<[Piece], Int> = Dictionary()
-    static var seqGroupHashMap: Dictionary<[SequencePair], Int> = Dictionary()
+
     
-    static func map(for player: Piece, at co: Coordinate, pieces: [[Piece]]) -> [SequencePair] {
+    static func map(for player: Piece, at co: Coordinate, pieces: [[Piece]]) -> [[Piece]] {
         let row = co.row, col = co.col, dim = pieces.count
         let opponent = player.next()
         
@@ -23,6 +23,7 @@ class ThreatEvaluator {
         // Linearize the board for higher efficiency
         func explore(x: Int, y: Int) -> [Piece] {
             var seq = [Piece]()
+            var empty = 0
             loop: for i in 1...5  {
                 let curRow = row + y * i, curCol = col + x * i
                 if !isValid(col: curCol, row: curRow) {
@@ -33,6 +34,10 @@ class ThreatEvaluator {
                 switch piece {
                 case .none:
                     seq.append(.none)
+                    if empty > 0 {
+                        break loop
+                    }
+                    empty += 1
                 default:
                     seq.append(piece)
                     if piece == opponent {
@@ -45,27 +50,23 @@ class ThreatEvaluator {
         
         
         
-        func genSequence(x1: Int, y1: Int, x2: Int, y2: Int) -> SequencePair {
+        func genSequence(x1: Int, y1: Int, x2: Int, y2: Int) -> [Piece] {
             var seqA: [Piece] = explore(x: x1, y: y1).reversed()
-            var org = seqA // The sequence without the addition of the new piece, since we are only concerned about difference
             seqA.append(player)
-            org.append(.none)
-            let seqB = explore(x: x2, y: y2)
-            seqA.append(contentsOf: seqB)
-            org.append(contentsOf: seqB)
-            return SequencePair(new: seqA, org: org)
+            seqA.append(contentsOf: explore(x: x2, y: y2))
+            return seqA
         }
         
-        let hSeqPair = genSequence(x1: -1, y1: 0, x2: 1, y2: 0)    // Horizontal (from left to right)
-        let vSeqPair = genSequence(x1: 0, y1: -1, x2: 0, y2: 1)    // Vertical (from up to down)
-        let d1SeqPair = genSequence(x1: -1, y1: 1, x2: 1, y2: -1)  // Diagnally (from lower left to upper right)
-        let d2SeqPair = genSequence(x1: -1, y1: -1, x2: 1, y2: 1) // Diagnally (from upper left to lower right)
+        let hSeq = genSequence(x1: -1, y1: 0, x2: 1, y2: 0)    // Horizontal (from left to right)
+        let vSeq = genSequence(x1: 0, y1: -1, x2: 0, y2: 1)    // Vertical (from up to down)
+        let d1Seq = genSequence(x1: -1, y1: 1, x2: 1, y2: -1)  // Diagnally (from lower left to upper right)
+        let d2Seq = genSequence(x1: -1, y1: -1, x2: 1, y2: 1) // Diagnally (from upper left to lower right)
         
-        return [hSeqPair, vSeqPair, d1SeqPair, d2SeqPair]
+        return [hSeq, vSeq, d1Seq, d2Seq]
     }
     
     static func analyzeThreats(for player: Piece, at co: Coordinate, pieces: [[Piece]]) -> [Threat] {
-        return map(for: player, at: co, pieces: pieces).map{$0.new}
+        return map(for: player, at: co, pieces: pieces)
             .map{analyzeThreats(seq: $0, for: player)}
             .flatMap{$0}
     }
@@ -74,25 +75,12 @@ class ThreatEvaluator {
      Point evaluation
      */
     static func evaluate(for player: Piece, at co: Coordinate, pieces: [[Piece]]) -> Int {
-        return cacheOrGet(seqPairs: map(for: player, at: co, pieces: pieces), for: player)
+        let linearScores = map(for: player, at: co, pieces: pieces).map{ seq -> Int in
+            return cacheOrGet(seq: seq, for: player) // Convert sequences to threat types
+        }
+        return linearScores.reduce(0) {$0 + $1}
     }
     
-    static func cacheOrGet(seqPairs: [SequencePair], for player: Piece) -> Int  {
-//        if let cached = seqGroupHashMap[seqPairs] {
-//            return cached
-//        } else {
-            let linearScores = seqPairs.map{ seqPair -> Int in
-                let newScore = cacheOrGet(seq: seqPair.new, for: player) // Convert sequences to threat types
-                let oldScore = cacheOrGet(seq: seqPair.org, for: player) // Convert sequences to threat types
-                return newScore - oldScore
-            }
-            let score = linearScores.reduce(0) {$0 + $1}
-//            ZeroPlus.syncedQueue.sync {
-//                seqGroupHashMap[seqPairs] = score
-//            }
-            return score
-//        }
-    }
     
     static func convertToScore(threats: [Threat]) -> Int {
         return threats.map{$0.rawValue}  // Convert threat types to score
@@ -229,23 +217,5 @@ class ThreatEvaluator {
         return findPatterns(from: 0, to: seq.count - 1)
             .map{Sequence.resolve(same: $0.same, gap: $0.gap, gapIdx: $0.gapIdx)}
             .map{$0.toThreatType(head: .straight)}
-    }
-    
-    class SequencePair: Hashable {
-        var hashValue: Int {
-            return 0 ^ new.hashValue ^ org.hashValue
-        }
-        
-        static func == (lhs: ThreatEvaluator.SequencePair, rhs: ThreatEvaluator.SequencePair) -> Bool {
-            return lhs.new == rhs.new && lhs.org == rhs.org
-        }
-        
-        var new: [Piece]
-        var org: [Piece]
-        
-        init(new: [Piece], org: [Piece]) {
-            self.new = new
-            self.org = org
-        }
     }
 }

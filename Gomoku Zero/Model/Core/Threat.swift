@@ -11,7 +11,7 @@ import Foundation
 enum Threat: Int, CustomStringConvertible {
     
     static let win = 1_000_000_000_000_000
-    static let interesting = 3900
+    static let interesting = Threat.straightPokedThree.rawValue - 1
     
     var description: String {
         switch self {
@@ -35,14 +35,14 @@ enum Threat: Int, CustomStringConvertible {
     case five = 10_000_000_000_000_000 // Just a large number that nullifies the influence of the rest
     
     case straightFour =  100_000
-    case straightPokedFour = 9000
+    case straightPokedFour = 6000
     case blockedFour =   5000
-    case blockedPokedFour = 4999
+    case blockedPokedFour = 4989
     
     case straightThree = 4000
-    case straightPokedThree = 3999
+    case straightPokedThree = 3989
     case blockedThree =  1000
-    case blockedPokedThree = 999
+    case blockedPokedThree = 989
     
     case straightTwo = 100
     case straightPokedTwo = 90
