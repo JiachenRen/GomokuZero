@@ -35,7 +35,7 @@ class Board: ZeroPlusDelegate, HeuristicDataSource {
     var zeroIsThinking = false
     var calcStartTime: TimeInterval = 0
     var gameStartTime: TimeInterval = 0
-    var looped: Bool = true
+    var looped: Bool = false
     var battles: Int = 0
     var saveDir: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
     var gameHasEnded = false {

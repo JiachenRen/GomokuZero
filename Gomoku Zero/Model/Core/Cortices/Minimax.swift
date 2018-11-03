@@ -107,7 +107,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
             if candidates.count == 0 {
                 return nil
             }
-            var bestMove = candidates[Int.random(in: 0..<candidates.count)]
+            var bestMove = candidates.randomElement()!
             bestMove.score = Int.min
             for move in candidates {
                 delegate.put(at: move.co)
@@ -131,19 +131,27 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
                     }
                 }
                     
-                // Time limited threat space search
+                // If time's up, return the current best move.
                 if timeout() {
                     searchCancelledInProgress = true
                     return bestMove
                 }
             }
+            
+            // No defense measurements can dodge enemy's attack. Losing is inevitable. Select a random defensive move.
+            if bestMove.score < -Threat.win {
+                var mv = genSortedMoves(for: player.next()).sorted{$0.score > $1.score}[0]
+                mv.score = bestMove.score
+                return mv
+            }
+            
             return bestMove
         } else {
             let candidates = getSortedMoves(num: breadth)
             if candidates.count == 0 {
                 return nil
             }
-            var bestMove = candidates[Int.random(in: 0..<candidates.count)]
+            var bestMove = candidates.randomElement()!
             bestMove.score = Int.max
             for move in candidates {
                 delegate.put(at: move.co)

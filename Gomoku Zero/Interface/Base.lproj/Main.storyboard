@@ -520,7 +520,7 @@
                                             </button>
                                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sjp-Mw-TsX">
                                                 <rect key="frame" x="164" y="628" width="112" height="25"/>
-                                                <popUpButtonCell key="cell" type="push" title="Heuristic" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Vge-ja-DAl" id="mwI-D2-YBC">
+                                                <popUpButtonCell key="cell" type="push" title="ZeroMax" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="b4A-YY-LPO" id="mwI-D2-YBC">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="menu"/>
                                                     <menu key="menu" id="eDy-4E-MKu">
@@ -528,8 +528,8 @@
                                                             <menuItem title="Heuristic" id="Vge-ja-DAl"/>
                                                             <menuItem title="Zero Sum" id="svr-hM-XgP" userLabel="Zero Sum"/>
                                                             <menuItem title="Monte Carlo" id="jly-63-SVl"/>
-                                                            <menuItem title="ZeroMax" id="b4A-YY-LPO"/>
-                                                            <menuItem title="Minimax" state="on" id="jm7-SV-U80"/>
+                                                            <menuItem title="ZeroMax" state="on" id="b4A-YY-LPO"/>
+                                                            <menuItem title="Minimax" id="jm7-SV-U80"/>
                                                         </items>
                                                     </menu>
                                                 </popUpButtonCell>
@@ -822,7 +822,7 @@
                                             </button>
                                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5C0-g7-vos">
                                                 <rect key="frame" x="164" y="628" width="112" height="25"/>
-                                                <popUpButtonCell key="cell" type="push" title="Heuristic" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="1V8-VK-VGT" id="Ol9-gU-sxT">
+                                                <popUpButtonCell key="cell" type="push" title="Minimax" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="5XY-gA-PFk" id="Ol9-gU-sxT">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="menu"/>
                                                     <menu key="menu" id="sfq-Jd-BDV">
@@ -870,7 +870,7 @@
                                             </textField>
                                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fue-q2-S8H">
                                                 <rect key="frame" x="20" y="576" width="253" height="22"/>
-                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="20" placeholderString="5" bezelStyle="round" id="KUA-Zo-iCZ">
+                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="10" placeholderString="5" bezelStyle="round" id="KUA-Zo-iCZ">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

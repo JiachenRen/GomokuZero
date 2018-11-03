@@ -34,20 +34,20 @@ enum Threat: Int, CustomStringConvertible {
     
     case five = 10_000_000_000_000_000 // Just a large number that nullifies the influence of the rest
     
-    case straightFour =  100_000
-    case straightPokedFour = 6000
-    case blockedFour =   5000
-    case blockedPokedFour = 4989
+    case straightFour =  1_000_000
+    case straightPokedFour = 100_010
+    case blockedFour =   100_000
+    case blockedPokedFour = 99_990
     
-    case straightThree = 4000
-    case straightPokedThree = 3989
-    case blockedThree =  1000
-    case blockedPokedThree = 989
+    case straightThree = 10_000
+    case straightPokedThree = 9_990
+    case blockedThree =  1_020
+    case blockedPokedThree = 1_010
     
-    case straightTwo = 100
-    case straightPokedTwo = 90
-    case blockedTwo = 80
-    case blockedPokedTwo = 70
+    case straightTwo = 1_000
+    case straightPokedTwo = 990
+    case blockedTwo = 100
+    case blockedPokedTwo = 90
     
     case none = 0
 }

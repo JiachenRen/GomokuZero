@@ -223,6 +223,7 @@ class ConsoleViewController: NSViewController {
         var blackWinSteps = [Int]()
         var whiteWinSteps = [Int]()
         var total = urls.count
+        var games = [Board]()
         for (idx, url) in urls.enumerated() {
             do {
                 let game = try String(contentsOf: url, encoding: .utf8)
@@ -244,6 +245,7 @@ class ConsoleViewController: NSViewController {
                 } else {
                     incomplete += 1
                 }
+                games.append(board)
                 steps.append(numSteps)
             } catch let err {
                 print(err)
@@ -256,6 +258,28 @@ class ConsoleViewController: NSViewController {
         }
         func avg(_ steps: [Int]) -> Int {
             return Int(Double(steps.reduce(0) {$0 + $1}) / Double(steps.count))
+        }
+        
+        print("looking for identical games...")
+        var repeated = 0
+        var repeatedBWin = 0
+        var repeatedWWin = 0
+        var repeatedDraw = 0
+        let tuple = zip(games.map{Zobrist(matrix: $0.pieces)}, games)
+        var val = 0
+        for (zobrist, board) in tuple.sorted(by: {$0.0.hashValue > $1.0.hashValue}) {
+            if zobrist.hashValue != val {
+                val = zobrist.hashValue
+                continue
+            }
+            repeated += 1
+            if let winner = board.hasWinner() {
+                switch winner {
+                case .black: repeatedBWin += 1
+                case .white: repeatedWWin += 1
+                case .none:  repeatedDraw += 1
+                }
+            }
         }
         
         let blackWinRatio = perc(blackWin)
@@ -272,7 +296,13 @@ class ConsoleViewController: NSViewController {
             + "avg. # of steps: \(avgSteps)\n"
             + "black win steps: \(bAvgSteps)\n"
             + "white win steps: \(wAvgSteps)\n"
-            + "incomplete: \(incomplete) (excluded from total)"
+            + "incomplete: \(incomplete) (excluded from total)\n"
+            + "repeated: \(repeated)\n"
+            + "repeated black wins: \(repeatedBWin)\n"
+            + "repeated white wins: \(repeatedWWin)\n"
+            + "repeated draw      : \(repeatedDraw)\n"
+        
+        
         var dir = urls[0].deletingLastPathComponent()
         dir.appendPathComponent("stats.txt")
         print(stats)

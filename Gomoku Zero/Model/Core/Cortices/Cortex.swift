@@ -193,8 +193,8 @@ extension CortexProtocol {
             retrievedCount += 1
             score = retrieved
         } else {
-            let black = heuristicEvaluator.evaluate(for: .black)
-            let white = heuristicEvaluator.evaluate(for: .white)
+            let black = threatCoupledHeuristic(for: .black)
+            let white = threatCoupledHeuristic(for: .white)
             score = black - white
             let newZobrist = Zobrist(zobrist: zobrist)
             if ZeroPlus.useOptimizations {
@@ -205,6 +205,19 @@ extension CortexProtocol {
         }
         
         return player == .black ? score : -score
+    }
+    
+    func threatCoupledHeuristic(for player: Piece) -> Int {
+        var score = 0
+        delegate.zobrist.matrix.enumerated().forEach { (r, row) in
+            for (c, piece) in row.enumerated() {
+                if piece == player {
+                    let co = (col: c, row: r)
+                    score += ThreatEvaluator.evaluate(for: player, at: co, pieces: delegate.zobrist.matrix)
+                }
+            }
+        }
+        return score
     }
     
     func getHeuristicValue() -> Int {
