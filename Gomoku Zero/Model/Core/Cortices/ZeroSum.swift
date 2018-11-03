@@ -15,8 +15,8 @@ class ZeroSumCortex: BasicCortex {
             for (q, isActive) in row.enumerated() {
                 if isActive {
                     let co = (col: q, row: i)
-                    let myOffense = ThreatEvaluator.evaluate(for: player, at: co, pieces: pieces)
-                    let opOffense = ThreatEvaluator.evaluate(for: player.next(), at: co, pieces: pieces)
+                    let myOffense = Threat.evaluate(for: player, at: co, pieces: pieces)
+                    let opOffense = Threat.evaluate(for: player.next(), at: co, pieces: pieces)
                     let score = myOffense + opOffense // 敌人的要点也是我方的要点
                     moves.append((co, score))
                 }

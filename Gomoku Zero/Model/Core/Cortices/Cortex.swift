@@ -141,7 +141,7 @@ extension CortexProtocol {
                     if let score = scoreMap[i][q] {
                         sortedMoves.append((co, score))
                     } else {
-                        let score = ThreatEvaluator.evaluate(for: player, at: co, pieces: pieces)
+                        let score = Threat.evaluate(for: player, at: co, pieces: pieces)
                         let move = (co, score)
                         sortedMoves.append(move)
                     }
@@ -193,9 +193,7 @@ extension CortexProtocol {
             retrievedCount += 1
             score = retrieved
         } else {
-            let black = threatCoupledHeuristic(for: .black)
-            let white = threatCoupledHeuristic(for: .white)
-            score = black - white
+            score = threatCoupledHeuristic()
             let newZobrist = Zobrist(zobrist: zobrist)
             if ZeroPlus.useOptimizations {
                 ZeroPlus.syncedQueue.sync {
@@ -207,17 +205,26 @@ extension CortexProtocol {
         return player == .black ? score : -score
     }
     
-    func threatCoupledHeuristic(for player: Piece) -> Int {
-        var score = 0
+    /**
+     Generates a heuristic score by summing up threats of white
+     and black pieces on the board. This heuristic eval. strategy is
+     based on zero-sum principle.
+     - Returns: heuristic score based on black's point of view.
+     */
+    func threatCoupledHeuristic() -> Int {
+        var zeroSumScore = 0
         delegate.zobrist.matrix.enumerated().forEach { (r, row) in
             for (c, piece) in row.enumerated() {
-                if piece == player {
-                    let co = (col: c, row: r)
-                    score += ThreatEvaluator.evaluate(for: player, at: co, pieces: delegate.zobrist.matrix)
+                if piece == .none {
+                    continue
                 }
+                let co = (col: c, row: r)
+                var score = Threat.evaluate(for: piece, at: co, pieces: delegate.zobrist.matrix)
+                score *= piece == .black ? 1 : -1
+                zeroSumScore += score
             }
         }
-        return score
+        return zeroSumScore
     }
     
     func getHeuristicValue() -> Int {

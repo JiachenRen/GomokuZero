@@ -58,8 +58,8 @@ class ZeroMax: MinimaxCortex {
         var score = score
         let shouldRollout = rolloutPr != 0 && Int.random(in: 0...(100 - rolloutPr)) == 0
         if let co = delegate.revert() {
-            let white = ThreatEvaluator.analyzeThreats(for: .black, at: co, pieces: zobrist.matrix)
-            let black = ThreatEvaluator.analyzeThreats(for: .white, at: co, pieces: zobrist.matrix)
+            let white = Threat.analyze(for: .black, at: co, pieces: zobrist.matrix)
+            let black = Threat.analyze(for: .white, at: co, pieces: zobrist.matrix)
             let threatPotential = [white, black].flatMap{$0}
                 .map{$0.rawValue}.sorted(by: >)[0]
             delegate.put(at: co)

@@ -46,7 +46,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
         if verbose {
             let avgCutDepth = Double(cumCutDepth) / Double(alphaCut + betaCut)
             print("alpha cut: \(alphaCut)\t beta cut: \(betaCut)\t avg. cut depth: \(avgCutDepth))")
-            print("recognized sequences: \(ThreatEvaluator.seqHashMap.count)")
+            print("recognized sequences: \(Threat.seqHashMap.count)")
             print("calc. duration (s): \(Date().timeIntervalSince1970 - delegate.startTime)")
         }
         
