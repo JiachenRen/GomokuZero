@@ -196,7 +196,7 @@ class MonteCarloCortex: BasicCortex {
         /// Expansion phase
         func expand(_ delegate: MonteCarloCortex, _ breadth: Int) -> Node {
             if candidates == nil {
-                candidates = delegate.getSortedMoves(num: breadth)
+                candidates = Array(delegate.getSortedMoves().prefix(breadth))
                 if delegate.randomExpansion {
                     candidates = candidates!.shuffled()
                 }
@@ -210,9 +210,8 @@ class MonteCarloCortex: BasicCortex {
             return newNode
         }
         
-        /**
-         Backpropagation: update the stats of all nodes that were traversed to get to the current node
-         */
+
+        /// Backpropagation: update the stats of all nodes that were traversed to get to the current node
         func backpropagate(winner: Piece?) {
             if let player = winner, let parent = self.parent {
                 numWins += parent.identity == player ? 1 : -1

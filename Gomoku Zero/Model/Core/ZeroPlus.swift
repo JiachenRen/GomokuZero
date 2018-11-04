@@ -38,7 +38,7 @@ class ZeroPlus: CortexDelegate {
     var maxThinkingTime: TimeInterval = 3
     
     let asyncedQueue = DispatchQueue(label: "asyncedQueue", qos: .userInteractive, attributes: .concurrent, autoreleaseFrequency: .workItem, target: nil)
-    static let syncedQueue = DispatchQueue(label: "syncedQueue")
+    
     var cortex: CortexProtocol?
 //    var personality: Personality = .search(depth: 6, breadth: 3)
     var personality: Personality = .monteCarlo(breadth: 3, rollout: 5, random: true, debug: true)
@@ -134,7 +134,7 @@ class ZeroPlus: CortexDelegate {
         let avgDuration = calcDurations.reduce(0){$0 + $1} / Double(calcDurations.count)
         print("cortex: \(String(describing: cortex))\nduration: \(duration)\navg. duration: \(avgDuration)\n")
         
-        let cached = Zobrist.hueristicHash[dim - 1].count
+        let cached = Zobrist.heuristicHash.count
         print("retrieved: \(retrievedCount)\tcached: \(cached)\tratio: \(Double(retrievedCount) / Double(cached))\tcollisions: \(hashCollisions)\tcollision ratio: \(Double(hashCollisions) / Double(retrievedCount))")
         
         visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map

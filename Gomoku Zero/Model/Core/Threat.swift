@@ -58,6 +58,7 @@ extension Threat: CustomStringConvertible {
 /// Core threat evaluation algorithms
 extension Threat {
     static var seqHashMap: Dictionary<[Piece], Int> = Dictionary()
+    static let seqHashQueue = DispatchQueue(label: "seqHashQueue")
     
     static func map(for player: Piece, at co: Coordinate, pieces: [[Piece]]) -> [[Piece]] {
         let row = co.row, col = co.col, dim = pieces.count
@@ -146,10 +147,8 @@ extension Threat {
         } else {
             let threats = analyzeThreats(seq: seq, for: player)
             let score = convertToScore(threats: threats)
-            if ZeroPlus.useOptimizations {
-                ZeroPlus.syncedQueue.sync {
-                    seqHashMap[seq] = score
-                }
+            seqHashQueue.sync {
+                seqHashMap[seq] = score
             }
             return score
         }

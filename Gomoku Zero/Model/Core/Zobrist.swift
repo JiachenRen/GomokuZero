@@ -9,7 +9,6 @@
 import Foundation
 
 typealias ZobristTable = [[[Int]]]
-typealias HeuristicMap = Dictionary<Zobrist, Int>
 
 var hashCollisions: Int = 0
 class Zobrist: Hashable {
@@ -17,19 +16,22 @@ class Zobrist: Hashable {
     // This is for accomodating different board dimensions
     private static var tables = Dictionary<Int,ZobristTable>()
     
-    // Note that the hash maps only supports dimension of up to 19.
-    
     /// Hashed heuristic values of nodes
-    static var hueristicHash = [HeuristicMap](repeatElement(HeuristicMap(), count: 50))
+    static var heuristicHash = Dictionary<Zobrist, Int>()
     
-    ///
-    static var segregatedHMap = Dictionary<Zobrist, [[Int?]]>()
+    /// A map that records scores for each coordinate for a specific game state.
+    /// It is used to elimate re-computations when generating heuristic value of a node.
+    static var scoreMap = Dictionary<Zobrist, [[Int?]]>()
     
     /// Hashed ordered moves
     static var orderedMovesHash = Dictionary<Zobrist, [Move]>()
     
     /// Slightly boosts performance at a neglegible risk of judging two diffenrent game states to be the same.
     static var strictEqualityCheck = false
+    
+    static let orderedMovesQueue = DispatchQueue(label: "orderedMovesQueue")
+    static let heuristicQueue = DispatchQueue(label: "hueristicQueue")
+    static let scoreMapQueue = DispatchQueue(label: "scoreMapQueue")
     
     let dim: Int
     var matrix = [[Piece]]()
@@ -130,6 +132,35 @@ class Zobrist: Hashable {
             table.append(col)
         }
         return table
+    }
+    
+    enum Value {
+        case orderedMoves(_ moves: [Move])
+        case heuristic(_ score: Int)
+        case scoreMap(_ map: [[Int?]])
+    }
+    
+    /// Update the values for the current game state on their corresponding serial threads given the new value.
+    func update(_ value: Value) {
+        let copy = Zobrist(zobrist: self)
+        Zobrist.update(copy, value)
+    }
+    
+    static func update(_ key: Zobrist, _ value: Value) {
+        switch value {
+        case .orderedMoves(let moves):
+            orderedMovesQueue.sync {
+                orderedMovesHash[key] = moves
+            }
+        case .heuristic(let score):
+            heuristicQueue.sync {
+                heuristicHash[key] = score
+            }
+        case .scoreMap(let map):
+            scoreMapQueue.sync {
+                scoreMap[key] = map
+            }
+        }
     }
     
 }

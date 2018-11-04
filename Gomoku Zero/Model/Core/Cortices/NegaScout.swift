@@ -42,7 +42,7 @@ class NegaScoutCortex: MinimaxCortex {
         }
         
         var mv: Move!
-        let moves = getSortedMoves(num: breadth)
+        let moves = getSortedMoves().prefix(breadth)
         for (idx, move) in moves.sorted(by: {$0.score > $1.score}).enumerated() {
             delegate.put(at: move.co)
             if idx == 0 {

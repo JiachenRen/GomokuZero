@@ -57,19 +57,12 @@ class ZeroMax: MinimaxCortex {
         // Overcome horizon effect by looking further into interesting nodes
         var score = score
         let shouldRollout = rolloutPr != 0 && Int.random(in: 0...(100 - rolloutPr)) == 0
-        if let co = delegate.revert() {
-            let white = Threat.analyze(for: .black, at: co, pieces: zobrist.matrix)
-            let black = Threat.analyze(for: .white, at: co, pieces: zobrist.matrix)
-            let threatPotential = [white, black].flatMap{$0}
-                .map{$0.rawValue}.sorted(by: >)[0]
-            delegate.put(at: co)
-            if abs(threatPotential) > threshold && shouldRollout && status != .kill {
-                status = .kill
-                if let rolloutScore = minimax(depth: simDepth, player: player, alpha: alpha, beta: beta)?.score {
-                    score = rolloutScore
-                }
-                status = .search
+        if shouldRollout && status != .kill {
+            status = .kill
+            if let rolloutScore = minimax(depth: simDepth, player: player, alpha: alpha, beta: beta)?.score {
+                score = rolloutScore
             }
+            status = .search
         }
         return score
     }

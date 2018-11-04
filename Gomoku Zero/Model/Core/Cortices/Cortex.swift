@@ -17,19 +17,13 @@ protocol CortexProtocol: HeuristicDataSource {
     var zobrist: Zobrist {get}
     var dim: Int {get}
     
-    /**
-     Not the most efficient way, will do for now.
-     */
+    /// Not the most efficient way, will do for now.
     func genSortedMoves() -> [Move]
     
-    /**
-     Query hashedDecisionMap to find out the best moves.
-     */
-    func getSortedMoves(num: Int) -> [Move]
+    /// Query hashedDecisionMap to find out the best moves.
+    func getSortedMoves() -> [Move]
     
-    /**
-     Computes the heuristic value of the node.
-     */
+    /// Computes the heuristic value of the node.
     func getHeuristicValue() -> Int
     
     func getMove() -> Move
@@ -151,39 +145,30 @@ extension CortexProtocol {
         return sortedMoves.sorted {$0.score > $1.score}
     }
     
-    func getSortedMoves(num: Int) -> [Move] {
-        func finalize(_ moves: [Move]) -> [Move] {
-            return [Move](moves.prefix(num))
-        }
+    /**
+     If cached moves exist for current game state, moves are retrieved from hash;
+     otherwise, sorted moves are generated and hashed.
+     - Returns: all possible moves sorted in order of decreasing threat potential
+     */
+    public func getSortedMoves() -> [Move] {
         if let moves = Zobrist.orderedMovesHash[zobrist] {
-            return finalize(moves)
+            return moves
         } else {
             let moves = genSortedMoves()
-            
-            if ZeroPlus.useOptimizations {
-                ZeroPlus.syncedQueue.sync {
-                    let newZobrist = Zobrist(zobrist: zobrist)
-                    Zobrist.orderedMovesHash[newZobrist] = moves
-                }
-            }
-            return finalize(moves)
+            zobrist.update(.orderedMoves(moves))
+            return moves
         }
     }
     
     func getHeuristicValue(for player: Piece) -> Int {
         var score = 0
         
-        if let retrieved = Zobrist.hueristicHash[dim - 1][zobrist] {
+        if let retrieved = Zobrist.heuristicHash[zobrist] {
             retrievedCount += 1
             score = retrieved
         } else {
             score = threatCoupledHeuristic()
-            let newZobrist = Zobrist(zobrist: zobrist)
-            if ZeroPlus.useOptimizations {
-                ZeroPlus.syncedQueue.sync {
-                    Zobrist.hueristicHash[dim - 1][newZobrist] = score
-                }
-            }
+            zobrist.update(.heuristic(score))
         }
         
         return player == .black ? score : -score
@@ -212,7 +197,7 @@ extension CortexProtocol {
         }
         
         if let co = delegate.revert() {
-            if var retrieved = Zobrist.segregatedHMap[zobrist] {
+            if var retrieved = Zobrist.scoreMap[zobrist] {
                 invalidate(&retrieved, at: co)
                 prevScoreMap = retrieved
             }
@@ -238,12 +223,7 @@ extension CortexProtocol {
             }
         }
         
-        if ZeroPlus.useOptimizations {
-            ZeroPlus.syncedQueue.sync {
-                let newZobrist = Zobrist(zobrist: zobrist)
-                Zobrist.segregatedHMap[newZobrist] = scoreMap
-            }
-        }
+        zobrist.update(.scoreMap(scoreMap))
         
         return zeroSumScore
     }

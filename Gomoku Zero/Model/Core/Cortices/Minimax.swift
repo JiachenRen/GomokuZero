@@ -77,7 +77,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
                 into the cortex.
      */
     func getCandidates() -> [Move] {
-        return getSortedMoves(num: breadth)
+        return Array(getSortedMoves().prefix(breadth))
     }
     
     /**
@@ -140,14 +140,14 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
             
             // No defense measurements can dodge enemy's attack. Losing is inevitable. Select a random defensive move.
             if bestMove.score < -Threat.win {
-                var mv = getSortedMoves(num: breadth).sorted{$0.score > $1.score}[0]
+                var mv = getSortedMoves().sorted{$0.score > $1.score}[0]
                 mv.score = bestMove.score
                 return mv
             }
             
             return bestMove
         } else {
-            let candidates = getSortedMoves(num: breadth)
+            let candidates = getCandidates()
             if candidates.count == 0 {
                 return nil
             }
