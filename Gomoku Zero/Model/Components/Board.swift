@@ -40,9 +40,8 @@ class Board: ZeroPlusDelegate, HeuristicDataSource {
     var saveDir: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
     var gameHasEnded = false {
         didSet {
-            Zobrist.hashedHeuristicMaps[dimension-1] = HeuristicMap()
-            Zobrist.blackOrderedMovesMap = Dictionary<Zobrist, [Move]>() // Clear ordered moves map.
-            Zobrist.whiteOrderedMovesMap = Dictionary<Zobrist, [Move]>()
+            Zobrist.hueristicHash[dimension-1] = HeuristicMap()
+            Zobrist.orderedMovesHash = Dictionary<Zobrist, [Move]>() // Clear ordered moves map.
         }
         willSet {
             if !newValue {

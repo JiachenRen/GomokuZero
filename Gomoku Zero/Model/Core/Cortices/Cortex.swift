@@ -18,14 +18,9 @@ protocol CortexProtocol: HeuristicDataSource {
     var dim: Int {get}
     
     /**
-     Could be optimized with binary insertion technique
-     */
-    func genSortedMoves(for player: Piece) -> [Move]
-    
-    /**
      Not the most efficient way, will do for now.
      */
-    func genSortedMoves(for player: Piece, num: Int) -> [Move]
+    func genSortedMoves() -> [Move]
     
     /**
      Query hashedDecisionMap to find out the best moves.
@@ -91,12 +86,12 @@ extension CortexProtocol {
         return nil
     }
     
-    func genSortedMoves(for player: Piece) -> [Move] {
+    func genSortedMoves() -> [Move] {
         var sortedMoves = [Move]()
         var scoreMap = [[Int?]](repeating: [Int?](repeating: nil, count: dim), count: dim)
         
         if let co = delegate.revert() {
-            if let moves = Zobrist.getOrderedMoves(zobrist, for: player) {
+            if let moves = Zobrist.orderedMovesHash[zobrist] {
                 delegate.put(at: co)
                 moves.forEach{(co, score) in scoreMap[co.row][co.col] = score}
                 
@@ -107,6 +102,7 @@ extension CortexProtocol {
                         }
                         var c = (col: co.col + i, row: co.row + q)
                         var empty = 0
+                        var anchor: Piece? = nil
                         loop: while isValid(c) {
                             let piece = zobrist.get(c)
                             switch piece {
@@ -117,8 +113,10 @@ extension CortexProtocol {
                                     empty += 1
                                 }
                             default:
-                                if piece != player {
-                                    break loop
+                                if anchor == nil {
+                                    anchor = piece
+                                } else if piece != anchor! {
+                                    break
                                 }
                                 empty = 0
                             }
@@ -141,8 +139,9 @@ extension CortexProtocol {
                     if let score = scoreMap[i][q] {
                         sortedMoves.append((co, score))
                     } else {
-                        let score = Threat.evaluate(for: player, at: co, pieces: pieces)
-                        let move = (co, score)
+                        let bScore = Threat.evaluate(for: .black, at: co, pieces: pieces)
+                        let wScore = Threat.evaluate(for: .white, at: co, pieces: pieces)
+                        let move = (co, bScore + wScore)
                         sortedMoves.append(move)
                     }
                 }
@@ -152,44 +151,29 @@ extension CortexProtocol {
         return sortedMoves.sorted {$0.score > $1.score}
     }
     
-    func genSortedMoves(for player: Piece, num: Int) -> [Move] {
-        return [Move](genSortedMoves(for: player).prefix(num))
-    }
-    
     func getSortedMoves(num: Int) -> [Move] {
-        func finalize(_ movesB: [Move], _ movesW: [Move]) -> [Move] {
-            if delegate.subjectiveBias {
-                return [Move]([movesB, movesW]
-                    .flatMap{$0}
-                    .sorted(by: {$0.score > $1.score})
-                    .prefix(num))
-            } else {
-                return [[Move](movesB.prefix(num)), [Move](movesW.prefix(num))]
-                .flatMap{$0}
-                .sorted(by: {$0.score > $1.score})
-            }
+        func finalize(_ moves: [Move]) -> [Move] {
+            return [Move](moves.prefix(num))
         }
-        if let black = Zobrist.getOrderedMoves(zobrist, for: .black), let white = Zobrist.getOrderedMoves(zobrist, for: .white) {
-            return finalize(black, white)
+        if let moves = Zobrist.orderedMovesHash[zobrist] {
+            return finalize(moves)
         } else {
-            let blackMoves = genSortedMoves(for: .black)
-            let whiteMoves = genSortedMoves(for: .white)
+            let moves = genSortedMoves()
             
             if ZeroPlus.useOptimizations {
                 ZeroPlus.syncedQueue.sync {
                     let newZobrist = Zobrist(zobrist: zobrist)
-                    Zobrist.blackOrderedMovesMap[newZobrist] = blackMoves
-                    Zobrist.whiteOrderedMovesMap[newZobrist] = whiteMoves
+                    Zobrist.orderedMovesHash[newZobrist] = moves
                 }
             }
-            return finalize(blackMoves, whiteMoves)
+            return finalize(moves)
         }
     }
     
     func getHeuristicValue(for player: Piece) -> Int {
         var score = 0
         
-        if let retrieved = Zobrist.hashedHeuristicMaps[dim - 1][zobrist] {
+        if let retrieved = Zobrist.hueristicHash[dim - 1][zobrist] {
             retrievedCount += 1
             score = retrieved
         } else {
@@ -197,7 +181,7 @@ extension CortexProtocol {
             let newZobrist = Zobrist(zobrist: zobrist)
             if ZeroPlus.useOptimizations {
                 ZeroPlus.syncedQueue.sync {
-                    Zobrist.hashedHeuristicMaps[dim - 1][newZobrist] = score
+                    Zobrist.hueristicHash[dim - 1][newZobrist] = score
                 }
             }
         }
@@ -212,18 +196,55 @@ extension CortexProtocol {
      - Returns: heuristic score based on black's point of view.
      */
     func threatCoupledHeuristic() -> Int {
+        var scoreMap = [[Int?]](repeating: [Int?](repeating: nil, count: dim), count: dim)
+        var prevScoreMap: [[Int?]]? = nil
+        
+        func invalidate(_ map: inout [[Int?]], at co: Coordinate) {
+            let dirs = [(0, 1),(1, 0),(1, 1),(-1, -1),(-1, 1),(1, -1),(-1, 0),(0, -1)]
+            dirs.forEach { dir in
+                var co = co
+                while isValid(co) {
+                    map[co.row][co.col] = nil
+                    co.col += dir.0
+                    co.row += dir.1
+                }
+            }
+        }
+        
+        if let co = delegate.revert() {
+            if var retrieved = Zobrist.segregatedHMap[zobrist] {
+                invalidate(&retrieved, at: co)
+                prevScoreMap = retrieved
+            }
+            delegate.put(at: co)
+        }
+        
         var zeroSumScore = 0
         delegate.zobrist.matrix.enumerated().forEach { (r, row) in
             for (c, piece) in row.enumerated() {
                 if piece == .none {
                     continue
                 }
-                let co = (col: c, row: r)
-                var score = Threat.evaluate(for: piece, at: co, pieces: delegate.zobrist.matrix)
-                score *= piece == .black ? 1 : -1
-                zeroSumScore += score
+                if let oldScore = prevScoreMap?[r][c] {
+                    scoreMap[r][c] = oldScore
+                    zeroSumScore += oldScore
+                } else {
+                    let co = (col: c, row: r)
+                    var score = Threat.evaluate(for: piece, at: co, pieces: delegate.zobrist.matrix)
+                    score *= piece == .black ? 1 : -1
+                    scoreMap[r][c] = score
+                    zeroSumScore += score
+                }
             }
         }
+        
+        if ZeroPlus.useOptimizations {
+            ZeroPlus.syncedQueue.sync {
+                let newZobrist = Zobrist(zobrist: zobrist)
+                Zobrist.segregatedHMap[newZobrist] = scoreMap
+            }
+        }
+        
         return zeroSumScore
     }
     
@@ -249,7 +270,6 @@ protocol CortexDelegate {
     var asyncedQueue: DispatchQueue {get}
     var activeMapDiffStack: [[Coordinate]] {get}
     var randomizedSelection: Bool {get}
-    var subjectiveBias: Bool {get}
     func put(at co: Coordinate)
     @discardableResult
     func revert() -> Coordinate?
@@ -273,25 +293,16 @@ class BasicCortex: CortexProtocol {
     }
     
     func getMove(for player: Piece) -> Move {
-        var offensiveMoves = genSortedMoves(for: player)
-        var defensiveMoves = genSortedMoves(for: player.next())
-        if offensiveMoves.count == 0 && defensiveMoves.count == 0 {
+        var moves = genSortedMoves()
+        if moves.count == 0 {
             // If ZeroPlus is out of moves...
             return ((-1, -1), 0)
         }
         if delegate.randomizedSelection {
-            offensiveMoves = differentiate(offensiveMoves, maxWeight: 10).sorted{$0.score > $1.score}
-            defensiveMoves = differentiate(defensiveMoves, maxWeight: 10).sorted{$0.score > $1.score}
+            moves = differentiate(moves, maxWeight: 10).sorted{$0.score > $1.score}
         }
-        let attack = offensiveMoves[0]
-        let defend = defensiveMoves[0]
-        if attack.score >= Threat.win {
-            return attack
-        } else if defend.score >= Threat.win {
-            return defend
-        } else {
-            return attack.score > defend.score ? attack : defend
-        }
+        
+        return moves[0]
     }
     
     func getMove() -> Move {

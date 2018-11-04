@@ -49,12 +49,6 @@ class ZeroPlus: CortexDelegate {
     /// If this is set to true, small random numbers are used to break the tie between even moves
     var randomizedSelection = true
     
-    /** When subjectiveBias is set to true, the program will evaluate the game state as a whole and lean more
-        toward either offense or defense when selecting candidates for minimax. Otherwise, an equal number of
-        offensive and defensive candidates are selected.
-     */
-    var subjectiveBias = false
-    
     var layers: IterativeDeepeningCortex.Layers = .evens
     
     /**
@@ -140,7 +134,7 @@ class ZeroPlus: CortexDelegate {
         let avgDuration = calcDurations.reduce(0){$0 + $1} / Double(calcDurations.count)
         print("cortex: \(String(describing: cortex))\nduration: \(duration)\navg. duration: \(avgDuration)\n")
         
-        let cached = Zobrist.hashedHeuristicMaps[dim - 1].count
+        let cached = Zobrist.hueristicHash[dim - 1].count
         print("retrieved: \(retrievedCount)\tcached: \(cached)\tratio: \(Double(retrievedCount) / Double(cached))\tcollisions: \(hashCollisions)\tcollision ratio: \(Double(hashCollisions) / Double(retrievedCount))")
         
         visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map

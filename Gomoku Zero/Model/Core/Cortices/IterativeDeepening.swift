@@ -56,7 +56,6 @@ class IterativeDeepeningCortex: MinimaxCortex {
                 zero.startTime = zero2.startTime
                 zero.maxThinkingTime = zero2.maxThinkingTime
                 zero.visDelegate = zero2.visDelegate
-                zero.subjectiveBias = zero2.subjectiveBias
                 zero.randomizedSelection = zero2.randomizedSelection
                 self.setup(zero, d)
                 let bestForDepth = zero.cortex!.getMove()

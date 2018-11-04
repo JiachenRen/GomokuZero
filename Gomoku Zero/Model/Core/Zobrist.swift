@@ -20,11 +20,13 @@ class Zobrist: Hashable {
     // Note that the hash maps only supports dimension of up to 19.
     
     /// Hashed heuristic values of nodes
-    static var hashedHeuristicMaps = [HeuristicMap](repeatElement(HeuristicMap(), count: 50))
+    static var hueristicHash = [HeuristicMap](repeatElement(HeuristicMap(), count: 50))
+    
+    ///
+    static var segregatedHMap = Dictionary<Zobrist, [[Int?]]>()
     
     /// Hashed ordered moves
-    static var blackOrderedMovesMap = Dictionary<Zobrist, [Move]>()
-    static var whiteOrderedMovesMap = Dictionary<Zobrist, [Move]>()
+    static var orderedMovesHash = Dictionary<Zobrist, [Move]>()
     
     /// Slightly boosts performance at a neglegible risk of judging two diffenrent game states to be the same.
     static var strictEqualityCheck = false
@@ -49,14 +51,6 @@ class Zobrist: Hashable {
             Zobrist.tables[dim] = table
         }
         hashValue = computeInitialHash()
-    }
-    
-    static func getOrderedMoves(_ zobrist: Zobrist, for player: Piece) -> [Move]?{
-        switch player {
-        case .black: return blackOrderedMovesMap[zobrist]
-        case .white: return whiteOrderedMovesMap[zobrist]
-        default: fatalError()
-        }
     }
     
     /**

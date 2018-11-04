@@ -24,7 +24,6 @@ class ConsoleViewController: NSViewController {
     @IBOutlet weak var blackThreshold: NSTextField!
     @IBOutlet weak var blackLayers: NSSegmentedControl!
     @IBOutlet weak var blackRandomizedSelection: NSButton!
-    @IBOutlet weak var blackSubjectiveBias: NSButton!
     
     @IBOutlet weak var whiteCheckBox: NSButton!
     @IBOutlet weak var whiteAlgorithm: NSPopUpButton!
@@ -39,7 +38,6 @@ class ConsoleViewController: NSViewController {
     @IBOutlet weak var whiteThreshold: NSTextField!
     @IBOutlet weak var whiteLayers: NSSegmentedControl!
     @IBOutlet weak var whiteRandomizedSelection: NSButton!
-    @IBOutlet weak var whiteSubjectiveBias: NSButton!
     
     @IBOutlet weak var boardDimension: NSComboBox! // Done
     @IBOutlet weak var showStepNumber: NSButton! // Done
@@ -84,7 +82,7 @@ class ConsoleViewController: NSViewController {
         board.saveDir = filePathLabel.stringValue
         func constraint(_ dim: String) -> Int {
             if let d = Int(dim) {
-                return d > 0 && d <= Zobrist.hashedHeuristicMaps.count ? d : 19
+                return d > 0 && d <= Zobrist.hueristicHash.count ? d : 19
             }
             return 19
         }
@@ -121,7 +119,6 @@ class ConsoleViewController: NSViewController {
             let simDepth = Int(blackSimulationDepth.stringValue) ?? 10
             let randExpansion = blackRandomExpansion.state == .on
             zero1.randomizedSelection = blackRandomizedSelection.state == .on
-            zero1.subjectiveBias = blackSubjectiveBias.state == .on
             zero1.layers = resolveLayers(blackLayers)
             
             switch blackAlgorithm.selectedItem!.title {
@@ -149,7 +146,6 @@ class ConsoleViewController: NSViewController {
             let simDepth = Int(whiteSimulationDepth.stringValue) ?? 10
             let randExpansion = whiteRandomExpansion.state == .on
             zero2.randomizedSelection = whiteRandomizedSelection.state == .on
-            zero2.subjectiveBias = whiteSubjectiveBias.state == .on
             zero2.layers = resolveLayers(whiteLayers)
             
             switch whiteAlgorithm.selectedItem!.title {

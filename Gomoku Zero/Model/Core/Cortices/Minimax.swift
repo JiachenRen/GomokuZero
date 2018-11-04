@@ -140,7 +140,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
             
             // No defense measurements can dodge enemy's attack. Losing is inevitable. Select a random defensive move.
             if bestMove.score < -Threat.win {
-                var mv = genSortedMoves(for: player.next()).sorted{$0.score > $1.score}[0]
+                var mv = getSortedMoves(num: breadth).sorted{$0.score > $1.score}[0]
                 mv.score = bestMove.score
                 return mv
             }
