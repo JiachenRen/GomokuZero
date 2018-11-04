@@ -80,69 +80,89 @@ extension CortexProtocol {
         return nil
     }
     
+    /**
+     Generate moves and sort them in decreasing order of threat potential.
+     After the initial moves are generated, most of these older ones are reused
+     by later game states. With every advance in game state, the older moves that
+     horizontally, vertically, or diagnolly align to the new coordinate are invalidated;
+     their scores are updated and carried on to the next game state, and so on.
+     This allows a significant speed-up.
+     
+     - Returns: all possible moves sorted in descending order of threat potential.
+     */
     func genSortedMoves() -> [Move] {
         var sortedMoves = [Move]()
         var scoreMap = [[Int?]](repeating: [Int?](repeating: nil, count: dim), count: dim)
         
+        // Revert to previous game state if it exists.
         if let co = delegate.revert() {
+            // Extract the calculated moves from that game state.
             if let moves = Zobrist.orderedMovesHash[zobrist] {
+                // Restore to current game state.
                 delegate.put(at: co)
                 moves.forEach{(co, score) in scoreMap[co.row][co.col] = score}
-                
-                for i in -1...1 {
-                    for q in -1...1 {
-                        if i == 0 && q == 0 {
-                            continue
-                        }
-                        var c = (col: co.col + i, row: co.row + q)
-                        var empty = 0
-                        var anchor: Piece? = nil
-                        loop: while isValid(c) {
-                            let piece = zobrist.get(c)
-                            switch piece {
-                            case .none:
-                                if empty > 1 {
-                                    break loop
-                                } else {
-                                    empty += 1
-                                }
-                            default:
-                                if anchor == nil {
-                                    anchor = piece
-                                } else if piece != anchor! {
-                                    break
-                                }
-                                empty = 0
-                            }
-                            scoreMap[c.row][c.col] = nil
-                            c.col += i
-                            c.row += q
-                        }
-                    }
-                }
-                
+                // Invalidate old moves that are affected by the difference b/w current game state and the old game state.
+                invalidate(&scoreMap, at: co)
             } else {
                 delegate.put(at: co)
             }
         }
         
-        for (i, row) in delegate.activeMap.enumerated() {
-            for (q, isActive) in row.enumerated() {
-                if isActive {
-                    let co = (col: q, row: i)
-                    if let score = scoreMap[i][q] {
-                        sortedMoves.append((co, score))
-                    } else {
-                        let bScore = Threat.evaluate(for: .black, at: co, pieces: pieces)
-                        let wScore = Threat.evaluate(for: .white, at: co, pieces: pieces)
-                        let move = (co, bScore + wScore)
-                        sortedMoves.append(move)
-                    }
-                }
+        // Only look at coordinates that are relevant, i.e. in the same 3 x 3 matrix with an adjacent piece.
+        delegate.activeCoordinates.forEach { co in
+            if let score = scoreMap[co.row][co.col] {
+                sortedMoves.append((co, score))
+            } else {
+                let bScore = Threat.evaluate(for: .black, at: co, pieces: pieces)
+                let wScore = Threat.evaluate(for: .white, at: co, pieces: pieces)
+                // Enemy's strategic positions are also our strategic positions.
+                let score = bScore + wScore
+                let move = (co, score)
+                sortedMoves.append(move)
             }
         }
         
+        // Sort by descending order.
         return sortedMoves.sorted {$0.score > $1.score}
+    }
+    
+    /**
+     After a new move is made, mark coordinates that need to be updated as nil.
+     - Parameter map: 2D matrix containing coordinates to be marked as outdated
+     - Parameter co: The coordinate at which the most recent change is made
+     */
+    public func invalidate<T>(_ map: inout [[Optional<T>]], at co: Coordinate) {
+        for i in -1...1 {
+            for q in -1...1 {
+                if i == 0 && q == 0 {
+                    continue
+                }
+                var c = (col: co.col + i, row: co.row + q)
+                var empty = 0
+                var anchor: Piece? = nil
+                loop: while isValid(c) {
+                    let piece = zobrist.get(c)
+                    switch piece {
+                    case .none:
+                        if empty > 1 {
+                            break loop
+                        } else {
+                            empty += 1
+                        }
+                    default:
+                        if anchor == nil {
+                            anchor = piece
+                        } else if piece != anchor! {
+                            break
+                        }
+                        empty = 0
+                    }
+                    map[c.row][c.col] = nil
+                    c.col += i
+                    c.row += q
+                }
+            }
+        }
     }
     
     /**
@@ -239,7 +259,7 @@ extension CortexProtocol {
 
 
 protocol CortexDelegate {
-    var activeMap: [[Bool]] {get}
+    var activeCoordinates: [Coordinate] {get}
     var pieces: [[Piece]] {get}
     var identity: Piece {get}
     var zobrist: Zobrist {get}
@@ -248,7 +268,6 @@ protocol CortexDelegate {
     var dim: Int {get}
     var curPlayer: Piece {get}
     var asyncedQueue: DispatchQueue {get}
-    var activeMapDiffStack: [[Coordinate]] {get}
     var randomizedSelection: Bool {get}
     func put(at co: Coordinate)
     @discardableResult
@@ -275,7 +294,7 @@ class BasicCortex: CortexProtocol {
     func getMove(for player: Piece) -> Move {
         var moves = genSortedMoves()
         if moves.count == 0 {
-            // If ZeroPlus is out of moves...
+            // ZeroPlus is out of moves...
             return ((-1, -1), 0)
         }
         if delegate.randomizedSelection {

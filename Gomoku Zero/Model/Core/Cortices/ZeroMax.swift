@@ -24,6 +24,9 @@ class ZeroMax: MinimaxCortex {
     
     var status: Status = .search
     
+    static var threatMatrices = Dictionary<Zobrist, [[[Threat]]]>()
+    static var matricesQueue = DispatchQueue(label: "matricesQueue")
+    
     /**
      - Parameter rollout: an integer b/w 0 and 100 that denotes the probability of simulation at leaf nodes.
      - Parameter threshold: defaults to Threat.interesting. Denotes the threshold beyond which a simulation might be performed.

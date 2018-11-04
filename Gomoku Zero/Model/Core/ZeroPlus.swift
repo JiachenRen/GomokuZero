@@ -20,6 +20,14 @@ class ZeroPlus: CortexDelegate {
     
     var activeMapDiffStack = [[Coordinate]]()
     var activeMap = [[Bool]]()
+    var activeCoordinates: [Coordinate] {
+        return activeMap.enumerated().map {r, row in
+            return row.enumerated().filter{$0.element}.map {c, _ in
+                return Coordinate(col: c, row: r)
+            }
+            }.flatMap{$0}
+    }
+    
     var dim: Int {
         return delegate.dimension
     }
@@ -43,7 +51,6 @@ class ZeroPlus: CortexDelegate {
 //    var personality: Personality = .search(depth: 6, breadth: 3)
     var personality: Personality = .monteCarlo(breadth: 3, rollout: 5, random: true, debug: true)
     
-    static var useOptimizations = true
     var iterativeDeepening = true
     
     /// If this is set to true, small random numbers are used to break the tie between even moves

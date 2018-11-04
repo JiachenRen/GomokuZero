@@ -11,16 +11,11 @@ import Foundation
 class ZeroSumCortex: BasicCortex {
     override func getMove(for player: Piece) -> Move {
         var moves = [Move]()
-        for (i, row) in delegate.activeMap.enumerated() {
-            for (q, isActive) in row.enumerated() {
-                if isActive {
-                    let co = (col: q, row: i)
-                    let myOffense = Threat.evaluate(for: player, at: co, pieces: pieces)
-                    let opOffense = Threat.evaluate(for: player.next(), at: co, pieces: pieces)
-                    let score = max(myOffense, opOffense) // 敌人的要点也是我方的要点
-                    moves.append((co, score))
-                }
-            }
+        delegate.activeCoordinates.forEach { co in
+            let myOffense = Threat.evaluate(for: player, at: co, pieces: pieces)
+            let opOffense = Threat.evaluate(for: player.next(), at: co, pieces: pieces)
+            let score = max(myOffense, opOffense) // 敌人的要点也是我方的要点
+            moves.append((co, score))
         }
         if delegate.randomizedSelection {
             moves = differentiate(moves, maxWeight: 10)
