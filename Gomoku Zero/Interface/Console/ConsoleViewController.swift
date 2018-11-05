@@ -21,7 +21,6 @@ class ConsoleViewController: NSViewController {
     @IBOutlet weak var blackSimulationDepth: NSTextField! // Done
     @IBOutlet weak var blackRandomExpansion: NSButton! // Done
     @IBOutlet weak var blackRolloutProbability: NSTextField!
-    @IBOutlet weak var blackThreshold: NSTextField!
     @IBOutlet weak var blackLayers: NSSegmentedControl!
     @IBOutlet weak var blackRandomizedSelection: NSButton!
     
@@ -35,7 +34,6 @@ class ConsoleViewController: NSViewController {
     @IBOutlet weak var whiteSimulationDepth: NSTextField!
     @IBOutlet weak var whiteRandomExpansion: NSButton!
     @IBOutlet weak var whiteRolloutProbability: NSTextField!
-    @IBOutlet weak var whiteThreshold: NSTextField!
     @IBOutlet weak var whiteLayers: NSSegmentedControl!
     @IBOutlet weak var whiteRandomizedSelection: NSButton!
     
@@ -131,8 +129,7 @@ class ConsoleViewController: NSViewController {
                 zero1.personality = .monteCarlo(breadth: breadth, rollout: simDepth, random: randExpansion, debug: debug)
             case "ZeroMax":
                 let rolloutPr = Int(blackRolloutProbability.stringValue) ?? 100
-                let threshold = Int(blackThreshold.stringValue) ?? Threat.interesting
-                zero1.personality = .zeroMax(depth: depth, breadth: breadth, rolloutPr: rolloutPr, simDepth: simDepth, threshold: threshold)
+                zero1.personality = .zeroMax(depth: depth, breadth: breadth, rolloutPr: rolloutPr, simDepth: simDepth)
             default: break
             }
             zero1.maxThinkingTime = TimeInterval(blackMaxThinkingTime.stringValue) ?? 5
@@ -158,8 +155,7 @@ class ConsoleViewController: NSViewController {
                 zero2.personality = .monteCarlo(breadth: breadth, rollout: simDepth, random: randExpansion, debug: debug)
             case "ZeroMax":
                 let rolloutPr = Int(whiteRolloutProbability.stringValue) ?? 100
-                let threshold = Int(whiteThreshold.stringValue) ?? Threat.interesting
-                zero2.personality = .zeroMax(depth: depth, breadth: breadth, rolloutPr: rolloutPr, simDepth: simDepth, threshold: threshold)
+                zero2.personality = .zeroMax(depth: depth, breadth: breadth, rolloutPr: rolloutPr, simDepth: simDepth)
             default: break
             }
             zero2.maxThinkingTime = TimeInterval(whiteMaxThinkingTime.stringValue) ?? 5

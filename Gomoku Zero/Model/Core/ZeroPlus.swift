@@ -145,13 +145,13 @@ class ZeroPlus: CortexDelegate {
                 mtCortex.maxSimulationDepth = p
                 mtCortex.randomExpansion = r
                 mtCortex.debug = d
-            case .zeroMax(depth: let d, breadth: let b, rolloutPr: let r, simDepth: let s, threshold: let t):
+            case .zeroMax(depth: let d, breadth: let b, rolloutPr: let r, simDepth: let s):
                 if iterativeDeepening {
                     cortex = IterativeDeepeningCortex(self, depth: d, breadth: b, layers: layers) {
-                        $0.cortex = ZeroMax($0, depth: $1, breadth: b, rollout: r, threshold: t, simDepth: s)
+                        $0.cortex = ZeroMax($0, depth: $1, breadth: b, rollout: r, simDepth: s)
                     }
                 } else {
-                    cortex = ZeroMax(self, depth: d, breadth: b, rollout: r, threshold: t, simDepth: s)
+                    cortex = ZeroMax(self, depth: d, breadth: b, rollout: r, simDepth: s)
                 }
             }
             delegate.bestMoveExtrapolated(co: cortex!.getMove().co)
@@ -233,7 +233,7 @@ enum Personality {
     case minimax(depth: Int, breadth: Int)
     case negaScout(depth: Int, breadth: Int)
     case monteCarlo(breadth: Int, rollout: Int, random: Bool, debug: Bool)
-    case zeroMax(depth: Int, breadth: Int, rolloutPr: Int, simDepth: Int, threshold: Int)
+    case zeroMax(depth: Int, breadth: Int, rolloutPr: Int, simDepth: Int)
 }
 
 protocol ZeroPlusDelegate {

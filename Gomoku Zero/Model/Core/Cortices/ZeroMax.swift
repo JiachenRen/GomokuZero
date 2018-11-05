@@ -16,9 +16,6 @@ class ZeroMax: MinimaxCortex {
     /// An Int b/w 0 and 100 that denotes the probability in which a simulation should be performed.
     var rolloutPr: Int
     
-    /// Defaults to Threat.interesting. Denotes the threshold beyond which a simulation might be performed.
-    var threshold: Int
-    
     /// Simulation deph during rollout.
     var simDepth: Int
     
@@ -37,13 +34,11 @@ class ZeroMax: MinimaxCortex {
     
     /**
      - Parameter rollout: an integer b/w 0 and 100 that denotes the probability of simulation at leaf nodes.
-     - Parameter threshold: defaults to Threat.interesting. Denotes the threshold beyond which a simulation might be performed.
      - Parameter simDepth: depth of rollouts to be carried. Defaults to 10.
      */
-    init(_ delegate: CortexDelegate, depth: Int, breadth: Int, rollout: Int, threshold: Int = Threat.interesting, simDepth: Int = 10) {
+    init(_ delegate: CortexDelegate, depth: Int, breadth: Int, rollout: Int, simDepth: Int = 10) {
         self.basicCortex = BasicCortex(delegate)
         self.rolloutPr = rollout
-        self.threshold  = threshold
         self.simDepth = simDepth
         super.init(delegate, depth: depth, breadth: breadth)
     }
