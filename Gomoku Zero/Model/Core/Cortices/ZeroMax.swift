@@ -64,13 +64,13 @@ class ZeroMax: MinimaxCortex {
      
      - Returns: modified heuristic value of the node.
      */
-    override func beyondHorizon(of score: Int, alpha: Int, beta: Int, player: Piece) -> Int {
+    override func beyondHorizon(_ score: Int, _ alpha: Int, _ beta: Int, _ player: Piece) -> Int {
         // Overcome horizon effect by looking further into interesting nodes
         var score = score
         let shouldRollout = rolloutPr != 0 && Int.random(in: 0...(100 - rolloutPr)) == 0
         if shouldRollout && status != .exterminate {
             status = .exterminate
-            if let rolloutScore = minimax(depth: simDepth, player: player, alpha: alpha, beta: beta)?.score {
+            if let rolloutScore = minimax(simDepth, player, alpha, beta)?.score {
                 score = rolloutScore
             }
             status = .search
@@ -192,7 +192,7 @@ class ZeroMax: MinimaxCortex {
         }
         
         // Only explore moves that bring threats to my opponent. This makes me aggressive!
-        return me
+        return [me].flatMap{$0}.sorted{$0.score > $1.score}
     }
     
     private static func update(_ key: Zobrist, _ bTMatrix: [[[Threat]?]], _ wTMatrix: [[[Threat]?]]) {

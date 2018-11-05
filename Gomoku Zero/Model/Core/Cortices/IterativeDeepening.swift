@@ -9,7 +9,7 @@
 import Foundation
 
 class IterativeDeepeningCortex: MinimaxCortex {
-    var iterativeDeepeningCompleted = false
+    var completed = false
     var setup: (ZeroPlus, Int) -> ()
     var layers: Layers
     
@@ -37,7 +37,7 @@ class IterativeDeepeningCortex: MinimaxCortex {
     }
     
     private func iterativeDeepening(depth: Int, breadth: Int) -> Move? {
-        iterativeDeepeningCompleted = false
+        completed = false
         var bestMove: Move?
         var workItems = [DispatchWorkItem]()
         var maxDepth = 0
@@ -45,18 +45,8 @@ class IterativeDeepeningCortex: MinimaxCortex {
         
         for d in getDeepeningLayers() {
             let workItem = DispatchWorkItem {
-                let zero = ZeroPlus()
                 let zero2 = self.delegate as! ZeroPlus
-                zero.delegate = zero2.delegate
-                zero.zobrist = Zobrist(zobrist: zero2.zobrist)
-                zero.genActiveCoMap()
-                zero.activeMapDiffStack = [[Coordinate]]()
-                zero.curPlayer = zero2.curPlayer
-                zero.identity = zero2.identity
-                zero.startTime = zero2.startTime
-                zero.maxThinkingTime = zero2.maxThinkingTime
-                zero.visDelegate = zero2.visDelegate
-                zero.randomizedSelection = zero2.randomizedSelection
+                let zero = ZeroPlus(zero2)
                 self.setup(zero, d)
                 let bestForDepth = zero.cortex!.getMove()
                 let cancelled = (zero.cortex as! TimeLimitedSearchProtocol).searchCancelledInProgress
@@ -74,14 +64,14 @@ class IterativeDeepeningCortex: MinimaxCortex {
         }
         
         group.notify(queue: DispatchQueue.global()) {
-            self.iterativeDeepeningCompleted = true
+            self.completed = true
         }
         
         
         while true {
             let timeElapsed = Date().timeIntervalSince1970 - delegate.startTime
             let timeExceeded = timeElapsed > delegate.maxThinkingTime
-            if iterativeDeepeningCompleted || (timeExceeded && bestMove != nil) {
+            if completed || (timeExceeded && bestMove != nil) {
                 workItems.forEach{$0.cancel()}
                 break
             }

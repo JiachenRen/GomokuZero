@@ -12,12 +12,8 @@ enum Piece: String {
     case black = "*", white = "o", none = "-"
     
     static func random() -> Piece {
-        switch Int(CGFloat.random(min: 0, max: 3)) {
-        case 0: return Piece.black
-        case 1: return Piece.white
-        case 2: return Piece.none
-        default: assert(false)
-        }
+        let pieces: [Piece] = [.black, .white, .none]
+        return pieces.randomElement()!
     }
     
     func next() -> Piece {

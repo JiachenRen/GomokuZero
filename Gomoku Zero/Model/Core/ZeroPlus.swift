@@ -48,7 +48,6 @@ class ZeroPlus: CortexDelegate {
     let asyncedQueue = DispatchQueue(label: "asyncedQueue", qos: .userInteractive, attributes: .concurrent, autoreleaseFrequency: .workItem, target: nil)
     
     var cortex: CortexProtocol?
-//    var personality: Personality = .search(depth: 6, breadth: 3)
     var personality: Personality = .monteCarlo(breadth: 3, rollout: 5, random: true, debug: true)
     
     var iterativeDeepening = true
@@ -58,9 +57,30 @@ class ZeroPlus: CortexDelegate {
     
     var layers: IterativeDeepeningCortex.Layers = .evens
     
-    /**
-     Generate a map that indicates the active coordinates
-     */
+    /// Default initializer
+    init() {
+        
+    }
+    
+    init(_ other: ZeroPlus) {
+        delegate = other.delegate
+        visDelegate = other.visDelegate
+        
+        zobrist = Zobrist(zobrist: other.zobrist)
+        personality = other.personality
+        activeMapDiffStack = [[Coordinate]]()
+        activeMap = other.activeMap
+        curPlayer = other.curPlayer
+        identity = other.identity
+        startTime = other.startTime
+        maxThinkingTime = other.maxThinkingTime
+        randomizedSelection = other.randomizedSelection
+        iterativeDeepening = other.iterativeDeepening
+        
+    }
+    
+
+    /// Generate a 2D matrix of active coordinates
     func genActiveCoMap() {
         activeMap = [[Bool]](repeating: [Bool](repeating: false, count: dim), count: dim)
         delegate.history.stack.forEach {updateActiveCoMap(at: $0, recordDiff: false)}
@@ -202,6 +222,9 @@ class ZeroPlus: CortexDelegate {
         let col = CGFloat.random(min: 0, max: CGFloat(delegate.pieces.count))
         return (col: Int(col), row: Int(row))
     }
+    
+    
+    
 }
 
 enum Personality {

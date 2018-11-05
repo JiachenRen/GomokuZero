@@ -42,7 +42,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
     }
     
     override func getMove() -> Move {
-        let move = minimax(depth: depth, player: identity, alpha: Int.min, beta: Int.max)
+        let move = minimax(depth, identity, Int.min, Int.max)
         if verbose {
             let avgCutDepth = Double(cumCutDepth) / Double(alphaCut + betaCut)
             print("alpha cut: \(alphaCut)\t beta cut: \(betaCut)\t avg. cut depth: \(avgCutDepth))")
@@ -67,7 +67,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
      the algorithm is short sighted and is unable to foresee drastic changes beyond the horizon.
      This can lead to imperfect decision making.
      */
-    func beyondHorizon(of score: Int, alpha: Int, beta: Int, player: Piece) -> Int {
+    func beyondHorizon(_ score: Int, _ alpha: Int, _ beta: Int, _ player: Piece) -> Int {
         return score
     }
     
@@ -86,7 +86,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
      
      - Returns: the best move for the current player in the given delegate.
      */
-    func minimax(depth: Int, player: Piece,  alpha: Int, beta: Int) -> Move? {
+    func minimax(_ depth: Int, _ player: Piece,  _ alpha: Int, _ beta: Int) -> Move? {
         var alpha = alpha, beta = beta, depth = depth // Make alpha beta mutable
         var score = getHeuristicValue()
         if delegate.randomizedSelection {
@@ -98,7 +98,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
             return Move(co: (0,0), score: score)
         } else if depth == 0 {
             var move = Move(co: (0,0), score: score)
-            move.score = beyondHorizon(of: score, alpha: alpha, beta: beta, player: player)
+            move.score = beyondHorizon(score, alpha, beta, player)
             return move
         }
         
@@ -111,7 +111,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
             bestMove.score = Int.min
             for move in candidates {
                 delegate.put(at: move.co)
-                let score = minimax(depth: depth - 1, player: player.next(),alpha: alpha, beta: beta)?.score
+                let score = minimax(depth - 1, player.next(),alpha, beta)?.score
                 delegate.revert()
                 if let s = score {
                     if s > bestMove.score {
@@ -155,7 +155,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
             bestMove.score = Int.max
             for move in candidates {
                 delegate.put(at: move.co)
-                let score = minimax(depth: depth - 1, player: player.next(), alpha: alpha, beta: beta)?.score
+                let score = minimax(depth - 1, player.next(), alpha, beta)?.score
                 delegate.revert()
                 if let s = score {
                     if s < bestMove.score {
