@@ -82,7 +82,7 @@ class ConsoleViewController: NSViewController {
         board.saveDir = filePathLabel.stringValue
         func constraint(_ dim: String) -> Int {
             if let d = Int(dim) {
-                return d > 0 && d <= Zobrist.heuristicHash.count ? d : 19
+                return d > 0 ? d : 19
             }
             return 19
         }

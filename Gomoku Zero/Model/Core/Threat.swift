@@ -34,6 +34,12 @@ enum Threat: Int {
     case none = 0
 }
 
+extension Threat: Comparable {
+    static func < (lhs: Threat, rhs: Threat) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+}
+
 extension Threat: CustomStringConvertible {
     var description: String {
         switch self {
@@ -155,7 +161,7 @@ extension Threat {
     }
     
     // The results could be hashed!!!
-    static func analyzeThreats(seq: [Piece], for player: Piece) -> [Threat] {
+    private static func analyzeThreats(seq: [Piece], for player: Piece) -> [Threat] {
         let opponent = player.next()
         let leftBlocked = seq.first! == opponent
         let rightBlocked = seq.last! == opponent
