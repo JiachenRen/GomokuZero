@@ -180,7 +180,7 @@ class Board: ZeroPlusDelegate {
         zeroPlus.zobrist = Zobrist(matrix: pieces)
         let score = cortex.threatCoupledHeuristic()
         
-        if abs(score) >= Threat.win {
+        if abs(score) >= Evaluator.win {
             return score > 0 ? .black : .white
         }
         

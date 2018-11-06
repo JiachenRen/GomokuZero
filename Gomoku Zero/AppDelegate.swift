@@ -120,14 +120,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         case "Use Default":
             activeBoard?.zeroPlus.personality = .minimax(depth: 6, breadth: 3)
         case "Iterative Deepening":
-            if let tmp = activeBoard?.zeroPlus.iterativeDeepening {
-                activeBoard?.zeroPlus.iterativeDeepening = !tmp
+            if let tmp = activeBoard?.zeroPlus.strategy.iterativeDeepening {
+                activeBoard?.zeroPlus.strategy.iterativeDeepening = !tmp
                 iterativeDeepening.state = tmp ? .off : .on
             }
         case "Set Time Limit":
             let timeLimit = setTimeLimitDialogue()
             if timeLimit < 0 {return}
-            activeBoard?.zeroPlus.maxThinkingTime = timeLimit
+            activeBoard?.zeroPlus.strategy.timeLimit = timeLimit
             maxSearchTime.title = "Max Search Time: \(timeLimit)"
         default: break
         }
@@ -351,7 +351,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             case .minimax(let depth, let breadth):
                 depthMI.title = "Depth = \(depth)"
                 breadthMI.title = "Breadth = \(breadth)"
-                iterativeDeepening.state = zeroPlus.iterativeDeepening ? .on : .off
+                iterativeDeepening.state = zeroPlus.strategy.iterativeDeepening ? .on : .off
             default: break
             }
         }

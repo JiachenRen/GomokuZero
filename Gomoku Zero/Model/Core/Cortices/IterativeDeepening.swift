@@ -44,7 +44,7 @@ class IterativeDeepeningCortex: MinimaxCortex {
         let group = DispatchGroup()
         
         for d in getDeepeningLayers() {
-            let workItem = DispatchWorkItem {
+            let workItem = DispatchWorkItem{ [unowned self] in
                 let zero2 = self.delegate as! ZeroPlus
                 let zero = ZeroPlus(zero2)
                 self.setup(zero, d)
@@ -56,8 +56,7 @@ class IterativeDeepeningCortex: MinimaxCortex {
                     maxDepth = d
                 }
                 zero.visDelegate?.activeMapUpdated(activeMap: nil)
-                let duration = self.time - self.delegate.startTime
-                print("depth = \(d), co = (\(bestForDepth.co.col), \(bestForDepth.co.row)), score = \(bestForDepth.score) cancelled = \(cancelled), time = \(duration)")
+                print("depth = \(d), co = (\(bestForDepth.co.col), \(bestForDepth.co.row)), score = \(bestForDepth.score) cancelled = \(cancelled), time = \(self.delegate.duration)")
             }
             delegate.asyncedQueue.async(group: group, execute: workItem)
             workItems.append(workItem)
@@ -69,9 +68,7 @@ class IterativeDeepeningCortex: MinimaxCortex {
         
         
         while true {
-            let timeElapsed = Date().timeIntervalSince1970 - delegate.startTime
-            let timeExceeded = timeElapsed > delegate.maxThinkingTime
-            if completed || (timeExceeded && bestMove != nil) {
+            if completed || (delegate.timeout && bestMove != nil) {
                 workItems.forEach{$0.cancel()}
                 break
             }

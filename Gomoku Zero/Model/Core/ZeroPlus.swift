@@ -13,7 +13,7 @@ typealias Move = (co: Coordinate, score: Int)
 /**
  Zero Plus - Jiachen's fifth attemp at making an unbeatable Gomoku AI
  */
-class ZeroPlus: CortexDelegate {
+class ZeroPlus: CortexDelegate, EvaluatorDataSource {
     
     var delegate: ZeroPlusDelegate!
     var visDelegate: VisualizationDelegate?
@@ -33,32 +33,33 @@ class ZeroPlus: CortexDelegate {
     }
     
     var zobrist: Zobrist = Zobrist(matrix: [[Piece]]())
+    var history = History()
     var pieces: [[Piece]] {
         return zobrist.matrix
     }
-    var history = History()
     
     var curPlayer: Piece = .black
     var identity: Piece = .black
     
     var calcDurations = [TimeInterval]()
     var startTime: TimeInterval = 0
-    var maxThinkingTime: TimeInterval = 3
+    
     
     let asyncedQueue = DispatchQueue(label: "asyncedQueue", qos: .userInteractive, attributes: .concurrent, autoreleaseFrequency: .workItem, target: nil)
     
     var cortex: CortexProtocol
     var personality: Personality = .zeroMax(depth: 2, breadth: 8, rolloutPr: 100, simDepth: 6)
+    var strategy: Strategy
+    var evaluator: Evaluator
     
-    /// Whether to use small random numbers to break the tie between even moves
-    var randomizedSelection = true
-    var iterativeDeepening = true
-    var layers: IterativeDeepeningCortex.Layers = .evens
     
     /// Default initializer
     init() {
+        strategy = Strategy()
         cortex = BasicCortex(nil)
+        evaluator = Evaluator(nil)
         cortex.delegate = self
+        evaluator.dataSource = self
     }
     
     convenience init(_ other: ZeroPlus) {
@@ -73,9 +74,8 @@ class ZeroPlus: CortexDelegate {
         curPlayer = other.curPlayer
         identity = other.identity
         startTime = other.startTime
-        maxThinkingTime = other.maxThinkingTime
-        randomizedSelection = other.randomizedSelection
-        iterativeDeepening = other.iterativeDeepening
+        strategy = other.strategy
+        evaluator = other.evaluator
     }
     
 
@@ -127,8 +127,8 @@ class ZeroPlus: CortexDelegate {
             case .heuristic: cortex = BasicCortex(self)
             case .zeroSum: cortex = ZeroSumCortex(self)
             case .minimax(depth: let d, breadth: let b):
-                if iterativeDeepening {
-                    cortex = IterativeDeepeningCortex(self, depth: d, breadth: b, layers: layers) {
+                if strategy.iterativeDeepening {
+                    cortex = IterativeDeepeningCortex(self, depth: d, breadth: b, layers: strategy.layers) {
                         $0.cortex = MinimaxCortex($0, depth: $1, breadth: b)
                     }
                 } else {
@@ -145,8 +145,8 @@ class ZeroPlus: CortexDelegate {
                 mtCortex.randomExpansion = r
                 mtCortex.debug = d
             case .zeroMax(depth: let d, breadth: let b, rolloutPr: let r, simDepth: let s):
-                if iterativeDeepening {
-                    cortex = IterativeDeepeningCortex(self, depth: d, breadth: b, layers: layers) {
+                if strategy.iterativeDeepening {
+                    cortex = IterativeDeepeningCortex(self, depth: d, breadth: b, layers: strategy.layers) {
                         $0.cortex = ZeroMax($0, depth: $1, breadth: b, rollout: r, simDepth: s)
                     }
                 } else {
@@ -179,6 +179,14 @@ class ZeroPlus: CortexDelegate {
             return getSecondMove()
         }
         return co
+    }
+    
+    var duration: TimeInterval {
+        return Date().timeIntervalSince1970 - startTime
+    }
+    
+    var timeout: Bool {
+        return duration > strategy.timeLimit
     }
     
     /**
@@ -231,6 +239,14 @@ enum Personality {
     case negaScout(depth: Int, breadth: Int)
     case monteCarlo(breadth: Int, rollout: Int, random: Bool, debug: Bool)
     case zeroMax(depth: Int, breadth: Int, rolloutPr: Int, simDepth: Int)
+}
+
+struct Strategy {
+    /// Whether to use small random numbers to break the tie between even moves
+    var randomizedSelection = true
+    var iterativeDeepening = true
+    var timeLimit: TimeInterval = 3
+    var layers: IterativeDeepeningCortex.Layers = .evens
 }
 
 protocol ZeroPlusDelegate {

@@ -46,8 +46,8 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
         if verbose {
             let avgCutDepth = Double(cumCutDepth) / Double(alphaCut + betaCut)
             print("alpha cut: \(alphaCut)\t beta cut: \(betaCut)\t avg. cut depth: \(avgCutDepth))")
-            print("recognized sequences: \(Threat.seqHashMap.count)")
-            print("calc. duration (s): \(Date().timeIntervalSince1970 - delegate.startTime)")
+            print("recognized sequences: \(evaluator.seqHashMap.count)")
+            print("calc. duration (s): \(delegate.duration)")
         }
         
         if let mv = move {
@@ -59,7 +59,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
     }
     
     func isTerminal(score: Int) -> Bool {
-        return score >= Threat.win || score <= -Threat.win
+        return score >= Evaluator.win || score <= -Evaluator.win
     }
     
     /**
@@ -89,7 +89,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
     func minimax(_ depth: Int, _ player: Piece,  _ alpha: Int, _ beta: Int) -> Move? {
         var alpha = alpha, beta = beta, depth = depth // Make alpha beta mutable
         var score = getHeuristicValue()
-        if delegate.randomizedSelection {
+        if delegate.strategy.randomizedSelection {
             score += Int.random(in: 0..<10)
         }
         
@@ -117,7 +117,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
                     if s > bestMove.score {
                         bestMove = move
                         bestMove.score = s
-                        if s >= Threat.win {
+                        if s >= Evaluator.win {
                             return bestMove
                         }
                         
@@ -132,14 +132,14 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
                 }
                     
                 // If time's up, return the current best move.
-                if timeout() {
+                if delegate.timeout {
                     searchCancelledInProgress = true
                     return bestMove
                 }
             }
             
             // No defense measurements can dodge enemy's attack. Losing is inevitable. Select a random defensive move.
-            if bestMove.score < -Threat.win {
+            if bestMove.score < -Evaluator.win {
                 var mv = getSortedMoves().sorted{$0.score > $1.score}[0]
                 mv.score = bestMove.score
                 return mv
@@ -161,7 +161,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
                     if s < bestMove.score {
                         bestMove = move
                         bestMove.score = s
-                        if s <= -Threat.win {
+                        if s <= -Evaluator.win {
                             return bestMove
                         }
                         
@@ -174,7 +174,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
                         }
                     }
                 }
-                if timeout() {
+                if delegate.timeout {
                     searchCancelledInProgress = true
                     return bestMove
                 }

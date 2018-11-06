@@ -27,11 +27,6 @@ class ZeroMax: MinimaxCortex {
     static var exterminationHash = Dictionary<Zobrist, [Move]>()
     static var syncedQueue = DispatchQueue(label: "ZeroMax.syncedQueue")
     
-    private let sp3 = Threat.straightPokedThree.rawValue
-    private let bp4 = Threat.blockedPokedFour.rawValue
-    private let bp2 = Threat.blockedPokedTwo.rawValue
-    private let s4 = Threat.straightFour.rawValue
-    
     /**
      - Parameter rollout: an integer b/w 0 and 100 that denotes the probability of simulation at leaf nodes.
      - Parameter simDepth: depth of rollouts to be carried. Defaults to 10.
@@ -119,12 +114,12 @@ class ZeroMax: MinimaxCortex {
         }
 
         delegate.activeCoordinates.forEach {co in
-            let bts = bTMatrix[co.row][co.col] ?? Threat.analyze(for: .black, at: co, pieces: pieces)
-            let wts = wTMatrix[co.row][co.col] ?? Threat.analyze(for: .white, at: co, pieces: pieces)
+            let bts = bTMatrix[co.row][co.col] ?? evaluator.analyze(for: .black, at: co)
+            let wts = wTMatrix[co.row][co.col] ?? evaluator.analyze(for: .white, at: co)
             bTMatrix[co.row][co.col] = bts
             wTMatrix[co.row][co.col] = wts
-            bCands.append((co, bts, bts.reduce(0){$0 + $1.rawValue}))
-            wCands.append((co, wts, wts.reduce(0){$0 + $1.rawValue}))
+            bCands.append((co, bts, bts.reduce(0){$0 + val($1)}))
+            wCands.append((co, wts, wts.reduce(0){$0 + val($1)}))
         }
 
         ZeroMax.update(zobrist, bTMatrix, wTMatrix)
@@ -134,11 +129,12 @@ class ZeroMax: MinimaxCortex {
         }
         
         // We are only concerned about threes and fours
-        bCands = bCands.filter{$0.score > sp3 + bp2}
-            .filter{$0.threats.count > 1 || $0.score >= s4}
+        let threshold = val(.straightPokedThree) + val(.blockedPokedTwo)
+        bCands = bCands.filter{$0.score > threshold}
+            .filter{$0.threats.count > 1 || $0.score >= val(.straightFour)}
             .sorted{$0.score > $1.score}
-        wCands = wCands.filter{$0.score > sp3 + bp2}
-            .filter{$0.threats.count > 1 || $0.score >= s4}
+        wCands = wCands.filter{$0.score > threshold}
+            .filter{$0.threats.count > 1 || $0.score >= val(.straightFour)}
             .sorted{$0.score > $1.score}
         
         if bCands.isEmpty {
@@ -164,11 +160,15 @@ class ZeroMax: MinimaxCortex {
      - Parameter you: candidates for the next player
      */
     private func terminalPolicy(_ me: [Candidate], _ you: [Candidate]) -> [Candidate] {
-        if me.first!.score >= Threat.win {
+        if me.first!.score >= Evaluator.win {
             return [me.first!]
-        } else if you.first!.score >= Threat.win {
+        } else if you.first!.score >= Evaluator.win {
             return [you.first!]
         }
+        
+        let s4 = val(.straightFour)
+        let bp4 = val(.straightPokedFour)
+        let sp3 = val(.straightPokedThree)
         
         // You can form s4 next turn, thus I can only play fours or block your three
         if you.first!.score >= s4 {

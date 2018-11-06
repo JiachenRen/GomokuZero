@@ -39,7 +39,7 @@ class MonteCarloCortex: BasicCortex {
     override func getMove() -> Move {
         let rootNode = Node(identity: delegate.curPlayer, co: (0,0))
         iterations = 0
-        while !timeout() {
+        while !delegate.timeout {
             dPrint("begin\t------------------------------------------------")
             dPrint(">> initial root node: \n\(rootNode)")
             let node = rootNode.select()
@@ -86,7 +86,7 @@ class MonteCarloCortex: BasicCortex {
         delegate.put(at: node.coordinate!)
         if let winner = hasWinner() { // if the node is terminal node
             delegate.revert()
-            return winner == .black ? Threat.win : -Threat.win
+            return winner == .black ? Evaluator.win : -Evaluator.win
         }
         for i in 0..<depth {
             let move = cortex.getMove()
@@ -95,7 +95,7 @@ class MonteCarloCortex: BasicCortex {
                 //                print("simulated winner: \(winner)\t sim. depth = \(i)")
                 //                print(delegate.zobrist)
                 revert(num: i + 2)
-                return winner == .black ? Threat.win : -Threat.win
+                return winner == .black ? Evaluator.win : -Evaluator.win
             }
         }
         let score = threatCoupledHeuristic()
@@ -171,7 +171,7 @@ class MonteCarloCortex: BasicCortex {
             if identity == .white {
                 avgScore *= -1
             }
-            let exploitation = map(avgScore, Double(-Threat.win), Double(Threat.win), -1, 1)
+            let exploitation = map(avgScore, Double(-Evaluator.win), Double(Evaluator.win), -1, 1)
             let exploration = MonteCarloCortex.expFactor * sqrt(log(Double(parent!.numVisits)) / log(M_E) / Double(numVisits))
             return exploitation + exploration
         }
@@ -191,10 +191,10 @@ class MonteCarloCortex: BasicCortex {
                     }
                 }
                 
-                let bp4 = Threat.blockedPokedFour.rawValue
-                let sp3 = Threat.straightPokedThree.rawValue
+                let bp4 = delegate.val(.blockedPokedFour)
+                let sp3 = delegate.val(.straightPokedThree)
                 
-                filter(&candidates!, thres: Threat.win) // 5
+                filter(&candidates!, thres: Evaluator.win) // 5
                 filter(&candidates!, thres: bp4) // 4
                 filter(&candidates!, thres: bp4 + sp3) // 4 x 3
                 filter(&candidates!, thres: sp3 * 2) // 3 x 3

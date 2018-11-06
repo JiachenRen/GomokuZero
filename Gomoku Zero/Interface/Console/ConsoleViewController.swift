@@ -116,15 +116,15 @@ class ConsoleViewController: NSViewController {
             let debug = blackDebug.state == .on
             let simDepth = Int(blackSimulationDepth.stringValue) ?? 10
             let randExpansion = blackRandomExpansion.state == .on
-            zero1.randomizedSelection = blackRandomizedSelection.state == .on
-            zero1.layers = resolveLayers(blackLayers)
+            zero1.strategy.randomizedSelection = blackRandomizedSelection.state == .on
+            zero1.strategy.layers = resolveLayers(blackLayers)
             
             switch blackAlgorithm.selectedItem!.title {
             case "Heuristic": zero1.personality = .heuristic
             case "Zero Sum": zero1.personality = .zeroSum
             case "Minimax":
                 zero1.personality = .minimax(depth: depth, breadth: breadth)
-                zero1.iterativeDeepening = iterativeDeepening
+                zero1.strategy.iterativeDeepening = iterativeDeepening
             case "Monte Carlo":
                 zero1.personality = .monteCarlo(breadth: breadth, rollout: simDepth, random: randExpansion, debug: debug)
             case "ZeroMax":
@@ -132,7 +132,7 @@ class ConsoleViewController: NSViewController {
                 zero1.personality = .zeroMax(depth: depth, breadth: breadth, rolloutPr: rolloutPr, simDepth: simDepth)
             default: break
             }
-            zero1.maxThinkingTime = TimeInterval(blackMaxThinkingTime.stringValue) ?? 5
+            zero1.strategy.timeLimit = TimeInterval(blackMaxThinkingTime.stringValue) ?? 5
             board.zeroPlus = zero1
         }
         if whiteCheckBox.state == .on {
@@ -142,15 +142,15 @@ class ConsoleViewController: NSViewController {
             let debug = whiteDebug.state == .on
             let simDepth = Int(whiteSimulationDepth.stringValue) ?? 10
             let randExpansion = whiteRandomExpansion.state == .on
-            zero2.randomizedSelection = whiteRandomizedSelection.state == .on
-            zero2.layers = resolveLayers(whiteLayers)
+            zero2.strategy.randomizedSelection = whiteRandomizedSelection.state == .on
+            zero2.strategy.layers = resolveLayers(whiteLayers)
             
             switch whiteAlgorithm.selectedItem!.title {
             case "Heuristic": zero2.personality = .heuristic
             case "Zero Sum": zero2.personality = .zeroSum
             case "Minimax":
                 zero2.personality = .minimax(depth: depth, breadth: breadth)
-                zero2.iterativeDeepening = iterativeDeepening
+                zero2.strategy.iterativeDeepening = iterativeDeepening
             case "Monte Carlo":
                 zero2.personality = .monteCarlo(breadth: breadth, rollout: simDepth, random: randExpansion, debug: debug)
             case "ZeroMax":
@@ -158,7 +158,7 @@ class ConsoleViewController: NSViewController {
                 zero2.personality = .zeroMax(depth: depth, breadth: breadth, rolloutPr: rolloutPr, simDepth: simDepth)
             default: break
             }
-            zero2.maxThinkingTime = TimeInterval(whiteMaxThinkingTime.stringValue) ?? 5
+            zero2.strategy.timeLimit = TimeInterval(whiteMaxThinkingTime.stringValue) ?? 5
             board.zeroPlus2 = zero2
         }
         

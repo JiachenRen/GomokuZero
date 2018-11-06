@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1F4270DD2169A1480081DBFC /* ZeroPlus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270DC2169A1480081DBFC /* ZeroPlus.swift */; };
 		1F4270E12169BCEA0081DBFC /* Threat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270E02169BCEA0081DBFC /* Threat.swift */; };
+		1F5CF1A32192287E00CA4372 /* Evaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CF1A22192287E00CA4372 /* Evaluator.swift */; };
 		1F60C3622168232C00580C99 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3612168232C00580C99 /* AppDelegate.swift */; };
 		1F60C3642168232C00580C99 /* BoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3632168232C00580C99 /* BoardViewController.swift */; };
 		1F60C3672168232C00580C99 /* Gomoku_Zero.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3652168232C00580C99 /* Gomoku_Zero.xcdatamodeld */; };
@@ -57,6 +58,7 @@
 /* Begin PBXFileReference section */
 		1F4270DC2169A1480081DBFC /* ZeroPlus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPlus.swift; sourceTree = "<group>"; };
 		1F4270E02169BCEA0081DBFC /* Threat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Threat.swift; sourceTree = "<group>"; };
+		1F5CF1A22192287E00CA4372 /* Evaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Evaluator.swift; sourceTree = "<group>"; };
 		1F60C35E2168232C00580C99 /* Gomoku Zero.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Gomoku Zero.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F60C3612168232C00580C99 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F60C3632168232C00580C99 /* BoardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardViewController.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 			children = (
 				1F4270DC2169A1480081DBFC /* ZeroPlus.swift */,
 				1F4270E02169BCEA0081DBFC /* Threat.swift */,
+				1F5CF1A22192287E00CA4372 /* Evaluator.swift */,
 				1F64DC4B216BF38000467F78 /* Zobrist.swift */,
 				1F8A8B7321815B7500355EB3 /* Cortices */,
 			);
@@ -417,6 +420,7 @@
 				1F4270DD2169A1480081DBFC /* ZeroPlus.swift in Sources */,
 				1F64DC4C216BF38000467F78 /* Zobrist.swift in Sources */,
 				1F83A557217BF95800285999 /* MonteCarlo.swift in Sources */,
+				1F5CF1A32192287E00CA4372 /* Evaluator.swift in Sources */,
 				1F60C3932168265C00580C99 /* BoardView.swift in Sources */,
 				1F83A54A217B91F700285999 /* Cortex.swift in Sources */,
 				1F4270E12169BCEA0081DBFC /* Threat.swift in Sources */,

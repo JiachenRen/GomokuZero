@@ -37,7 +37,7 @@ class NegaScoutCortex: MinimaxCortex {
         var alpha = alpha, beta = beta, depth = depth
         let score = getHeuristicValue()
         
-        if score >= Threat.win || score <= -Threat.win || depth == 0 {
+        if score >= Evaluator.win || score <= -Evaluator.win || depth == 0 {
             return Move(co: (0,0), score: score)
         }
         
