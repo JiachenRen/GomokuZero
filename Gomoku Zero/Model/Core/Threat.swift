@@ -21,8 +21,8 @@ enum Threat: Int {
     case blockedFour =   100_000
     case blockedPokedFour = 99_990
     
-    case straightThree = 10_000
-    case straightPokedThree = 9_990
+    case straightThree = 50_200 // 3 x 3 > 4
+    case straightPokedThree = 50190
     case blockedThree =  1_020
     case blockedPokedThree = 1_010
     
