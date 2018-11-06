@@ -53,9 +53,9 @@ class MonteCarloCortex: BasicCortex {
             print("level: \(count), iterations: \(iterations)")
             let newNode = node.expand(self, breadth)
             dPrint(">> expanded node: \n\(newNode)")
-            let player = rollout(depth: simDepth, node: newNode)
-            dPrint(">> playout winner: \(player == nil ? "none" : "\(player!)")")
-            newNode.backpropagate(winner: player)
+            let score = rollout(depth: simDepth, node: newNode)
+            dPrint(">> playout score: \(score)")
+            newNode.backpropagate(score)
             revert(num: stackTrace.count)
             iterations += 1
             dPrint(">> iterations completed: \(iterations)")
@@ -68,32 +68,11 @@ class MonteCarloCortex: BasicCortex {
             if bestNode == nil {
                 bestNode = node
             } else if node.numVisits > bestNode!.numVisits {
-                print("winning ratio: \(node.winningRatio), visits: \(node.numVisits), co: \(node.coordinate!)")
+                print("avg. Score: \(node.avgScore), visits: \(node.numVisits), co: \(node.coordinate!)")
                 bestNode = node
             }
         }
         let move = (bestNode!.coordinate!, bestNode!.numVisits)
-        return move
-    }
-    
-    /**
-     Checks the output of the Monte Carlo Search, since sometimes it can get really wierd!
-     Ideally, this function should not exist. Or am I mistaken?
-     */
-    func guardSolution(move: Move) -> Move {
-        let node = Node(identity: delegate.curPlayer, co: move.co)
-        let threshold = 10
-        if let piece = rollout(depth: threshold, node: node) {
-            // A winner emerges with Monte Carlo's solution
-            if piece == node.identity {
-                return move
-            } else {
-                // If Monte Carlo loses by choosing the current move,
-                // a basic move is generated using heuristics.
-                print("monte carlo solution invalidated - generating basic move")
-                return cortex.getMove()
-            }
-        }
         return move
     }
     
@@ -103,39 +82,39 @@ class MonteCarloCortex: BasicCortex {
      Performs quick simulation with target node
      - Returns: null for draw, .black if black emerges as winner.
      */
-    func rollout(depth: Int, node: Node) -> Piece? {
+    func rollout(depth: Int, node: Node) -> Int {
         delegate.put(at: node.coordinate!)
-        if let winnner = hasWinner() { // if the node is terminal node
+        if let winner = hasWinner() { // if the node is terminal node
             delegate.revert()
-            return winnner
+            return winner == .black ? Threat.win : -Threat.win
         }
         for i in 0..<depth {
             let move = cortex.getMove()
             delegate.put(at: move.co)
             if let winner = hasWinner() {
-//                print("simulated winner: \(winner)\t sim. depth = \(i)")
-//                print(delegate.zobrist)
+                //                print("simulated winner: \(winner)\t sim. depth = \(i)")
+                //                print(delegate.zobrist)
                 revert(num: i + 2)
-                return winner
+                return winner == .black ? Threat.win : -Threat.win
             }
         }
-        let winner: Piece = threatCoupledHeuristic() > 0 ? .black : .white
+        let score = threatCoupledHeuristic()
         revert(num: depth + 1)
-        return winner
+        return score
     }
     
     
     /// Monte Carlo Tree Node
     class Node {
-        var numWins: Int = 0
+        var cumScore: Int = 0
         var numVisits: Int = 0
         var identity: Piece
         var coordinate: Coordinate?
         var children = [Node]()
         var parent: Node?
         var candidates: [Move]?
-        var winningRatio: Double {
-            return Double(numWins) / Double(numVisits)
+        var avgScore: Double {
+            return Double(cumScore) / Double(numVisits)
         }
         
         convenience init(identity: Piece, co: Coordinate) {
@@ -188,9 +167,17 @@ class MonteCarloCortex: BasicCortex {
         
         /// Upper Confidence Bound 1 algorithm, used to balance exploiration and exploration
         func ucb1() -> Double {
-            let exploitation = Double(numWins) / Double(numVisits)
+            var avgScore = Double(cumScore) / Double(numVisits)
+            if identity == .white {
+                avgScore *= -1
+            }
+            let exploitation = map(avgScore, Double(-Threat.win), Double(Threat.win), -1, 1)
             let exploration = MonteCarloCortex.expFactor * sqrt(log(Double(parent!.numVisits)) / log(M_E) / Double(numVisits))
             return exploitation + exploration
+        }
+        
+        private func map(_ n: Double, _ lb1: Double, _ ub1: Double, _ lb2: Double, _ ub2: Double) -> Double {
+            return (n - lb1) / (ub1 - lb1) * (ub2 - lb2) + lb2
         }
         
         
@@ -225,15 +212,13 @@ class MonteCarloCortex: BasicCortex {
             return newNode
         }
         
-
+        
         /// Backpropagation: update the stats of all nodes that were traversed to get to the current node
-        func backpropagate(winner: Piece?) {
-            if let player = winner, let parent = self.parent {
-                numWins += parent.identity == player ? 1 : 0
-            }
+        func backpropagate(_ score: Int) {
+            cumScore += score
             numVisits += 1
             if let parent = self.parent {
-                parent.backpropagate(winner: winner)
+                parent.backpropagate(score)
             }
         }
     }
@@ -243,7 +228,7 @@ class MonteCarloCortex: BasicCortex {
 extension MonteCarloCortex.Node: CustomStringConvertible {
     var description: String {
         let coStr = coordinate == nil ? "nil" : "\(coordinate!)"
-        let this = "wins: \(numWins)\tvisits: \(numVisits)\tidentity: \(identity)\tco: \(coStr)\tchildren: \(children.count)"
+        let this = "avg_score: \(avgScore)\tvisits: \(numVisits)\tidentity: \(identity)\tco: \(coStr)\tchildren: \(children.count)"
         return self.children.map{$0.description}
             .reduce(this){"\($0)\n\(indentation)\($1)"}
     }
