@@ -73,20 +73,20 @@ class MonteCarloCortex: BasicCortex {
             }
         }
         let move = (bestNode!.coordinate!, bestNode!.numVisits)
-        return move
+        return guardSolution(move)
     }
     
     /**
      Checks the output of the Monte Carlo Search, since sometimes it can get really wierd!
      Ideally, this function should not exist. Or am I mistaken?
      */
-    func guardSolution(move: Move) -> Move {
-        let node = Node(identity: delegate.curPlayer, co: move.co)
-        let threshold = 10
+    func guardSolution(_ mcts: Move) -> Move {
+        let node = Node(identity: delegate.curPlayer, co: mcts.co)
+        let threshold = 6
         if let piece = rollout(depth: threshold, node: node) {
             // A winner emerges with Monte Carlo's solution
             if piece == node.identity {
-                return move
+                return mcts
             } else {
                 // If Monte Carlo loses by choosing the current move,
                 // a basic move is generated using heuristics.
@@ -94,7 +94,7 @@ class MonteCarloCortex: BasicCortex {
                 return cortex.getMove()
             }
         }
-        return move
+        return mcts
     }
     
     
