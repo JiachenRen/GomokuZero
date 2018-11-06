@@ -48,7 +48,7 @@ class IterativeDeepeningCortex: MinimaxCortex {
                 let zero2 = self.delegate as! ZeroPlus
                 let zero = ZeroPlus(zero2)
                 self.setup(zero, d)
-                let bestForDepth = zero.cortex!.getMove()
+                let bestForDepth = zero.cortex.getMove()
                 let cancelled = (zero.cortex as! TimeLimitedSearchProtocol).searchCancelledInProgress
                 if d > maxDepth && !cancelled {
                     // The deepter the depth, the more reliable the generated move.

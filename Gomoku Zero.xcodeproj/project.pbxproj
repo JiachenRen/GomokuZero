@@ -32,7 +32,6 @@
 		1F83A557217BF95800285999 /* MonteCarlo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A556217BF95800285999 /* MonteCarlo.swift */; };
 		1FB0F3E92182431A00E28001 /* all-features.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB0F3E82182431A00E28001 /* all-features.png */; };
 		1FB0F3EB2186085A00E28001 /* ZeroSum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB0F3EA2186085A00E28001 /* ZeroSum.swift */; };
-		1FE063E2216B028E00E07006 /* HeuristicEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE063E1216B028E00E07006 /* HeuristicEvaluator.swift */; };
 		1FE928DC217D1C62000B55CF /* ConsoleWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */; };
 		1FE928DE217D1EDA000B55CF /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */; };
 		1FE928E3217D6B43000B55CF /* ZeroMax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928E2217D6B43000B55CF /* ZeroMax.swift */; };
@@ -88,7 +87,6 @@
 		1F83A556217BF95800285999 /* MonteCarlo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonteCarlo.swift; sourceTree = "<group>"; };
 		1FB0F3E82182431A00E28001 /* all-features.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "all-features.png"; sourceTree = "<group>"; };
 		1FB0F3EA2186085A00E28001 /* ZeroSum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroSum.swift; sourceTree = "<group>"; };
-		1FE063E1216B028E00E07006 /* HeuristicEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeuristicEvaluator.swift; sourceTree = "<group>"; };
 		1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleWindowController.swift; sourceTree = "<group>"; };
 		1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		1FE928E2217D6B43000B55CF /* ZeroMax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMax.swift; sourceTree = "<group>"; };
@@ -173,7 +171,6 @@
 			children = (
 				1F4270DC2169A1480081DBFC /* ZeroPlus.swift */,
 				1F4270E02169BCEA0081DBFC /* Threat.swift */,
-				1FE063E1216B028E00E07006 /* HeuristicEvaluator.swift */,
 				1F64DC4B216BF38000467F78 /* Zobrist.swift */,
 				1F8A8B7321815B7500355EB3 /* Cortices */,
 			);
@@ -435,7 +432,6 @@
 				1F60C3A921692B0900580C99 /* BoardTextureView.swift in Sources */,
 				1FE928DE217D1EDA000B55CF /* ConsoleViewController.swift in Sources */,
 				1F60C39521682F6C00580C99 /* Piece.swift in Sources */,
-				1FE063E2216B028E00E07006 /* HeuristicEvaluator.swift in Sources */,
 				1F60C3622168232C00580C99 /* AppDelegate.swift in Sources */,
 				1F83A54E217B9E5900285999 /* IterativeDeepening.swift in Sources */,
 				1F60C3672168232C00580C99 /* Gomoku_Zero.xcdatamodeld in Sources */,

@@ -10,12 +10,12 @@ import Foundation
 
 class MonteCarloCortex: BasicCortex {
     var randomExpansion = true
-    var maxSimulationDepth = 10
+    var simDepth = 10
     var iterations = 0
     var debug = true
     
     // BasicCortex for performing fast simulation.
-    var basicCortex: BasicCortex
+    var cortex: CortexProtocol
     
     /// The exploration factor
     static let expFactor: Double = sqrt(2.0)
@@ -25,7 +25,7 @@ class MonteCarloCortex: BasicCortex {
     
     init(_ delegate: CortexDelegate, breadth: Int) {
         self.breadth = breadth
-        self.basicCortex = BasicCortex(delegate)
+        self.cortex = BasicCortex(delegate)
         super.init(delegate)
     }
     
@@ -45,12 +45,15 @@ class MonteCarloCortex: BasicCortex {
             let node = rootNode.select()
             dPrint(">> selected node: \n\(node)")
             let stackTrace = node.stackTrace()
+            var count = 0
             for node in stackTrace {
                 delegate.put(at: node.coordinate!)
+                count += 1
             }
+            print("level: \(count), iterations: \(iterations)")
             let newNode = node.expand(self, breadth)
             dPrint(">> expanded node: \n\(newNode)")
-            let player = rollout(depth: maxSimulationDepth, node: newNode)
+            let player = rollout(depth: simDepth, node: newNode)
             dPrint(">> playout winner: \(player == nil ? "none" : "\(player!)")")
             newNode.backpropagate(winner: player)
             revert(num: stackTrace.count)
@@ -64,12 +67,13 @@ class MonteCarloCortex: BasicCortex {
         for node in rootNode.children {
             if bestNode == nil {
                 bestNode = node
-            } else if node.winningRatio > bestNode!.winningRatio {
+            } else if node.numVisits > bestNode!.numVisits {
+                print("winning ratio: \(node.winningRatio), visits: \(node.numVisits), co: \(node.coordinate!)")
                 bestNode = node
             }
         }
         let move = (bestNode!.coordinate!, bestNode!.numVisits)
-        return guardSolution(move: move)
+        return move
     }
     
     /**
@@ -87,7 +91,7 @@ class MonteCarloCortex: BasicCortex {
                 // If Monte Carlo loses by choosing the current move,
                 // a basic move is generated using heuristics.
                 print("monte carlo solution invalidated - generating basic move")
-                return basicCortex.getMove(for: delegate.curPlayer)
+                return cortex.getMove()
             }
         }
         return move
@@ -102,12 +106,11 @@ class MonteCarloCortex: BasicCortex {
     func rollout(depth: Int, node: Node) -> Piece? {
         delegate.put(at: node.coordinate!)
         if let winnner = hasWinner() { // if the node is terminal node
-            node.isTerminal = true
             delegate.revert()
             return winnner
         }
         for i in 0..<depth {
-            let move = basicCortex.getMove(for: delegate.curPlayer)
+            let move = cortex.getMove()
             delegate.put(at: move.co)
             if let winner = hasWinner() {
 //                print("simulated winner: \(winner)\t sim. depth = \(i)")
@@ -116,8 +119,9 @@ class MonteCarloCortex: BasicCortex {
                 return winner
             }
         }
+        let winner: Piece = threatCoupledHeuristic() > 0 ? .black : .white
         revert(num: depth + 1)
-        return nil
+        return winner
     }
     
     
@@ -133,7 +137,6 @@ class MonteCarloCortex: BasicCortex {
         var winningRatio: Double {
             return Double(numWins) / Double(numVisits)
         }
-        var isTerminal = false
         
         convenience init(identity: Piece, co: Coordinate) {
             self.init(parent: nil, identity: identity, co: co)
@@ -166,7 +169,6 @@ class MonteCarloCortex: BasicCortex {
             var maxUcb1 = -Double.infinity
             for idx in 0..<children.count {
                 let node = children[idx]
-                if node.isTerminal {continue}
                 let ucb1 = node.ucb1()
                 if ucb1 > maxUcb1 {
                     maxUcb1 = ucb1
@@ -175,7 +177,6 @@ class MonteCarloCortex: BasicCortex {
             }
             
             if selected == nil { // If all of the child nodes are terminal
-                isTerminal = true
                 if let parent = self.parent {
                     return parent.select()
                 } else { // If root node is terminal
@@ -197,6 +198,20 @@ class MonteCarloCortex: BasicCortex {
         func expand(_ delegate: MonteCarloCortex, _ breadth: Int) -> Node {
             if candidates == nil {
                 candidates = Array(delegate.getSortedMoves().prefix(breadth))
+                func filter(_ cands: inout [Move], thres: Int) {
+                    if cands.contains(where: {$0.score >= thres}) {
+                        cands = cands.filter{$0.score >= thres}
+                    }
+                }
+                
+                let bp4 = Threat.blockedPokedFour.rawValue
+                let sp3 = Threat.straightPokedThree.rawValue
+                
+                filter(&candidates!, thres: Threat.win) // 5
+                filter(&candidates!, thres: bp4) // 4
+                filter(&candidates!, thres: bp4 + sp3) // 4 x 3
+                filter(&candidates!, thres: sp3 * 2) // 3 x 3
+                
                 if delegate.randomExpansion {
                     candidates = candidates!.shuffled()
                 }
@@ -214,7 +229,7 @@ class MonteCarloCortex: BasicCortex {
         /// Backpropagation: update the stats of all nodes that were traversed to get to the current node
         func backpropagate(winner: Piece?) {
             if let player = winner, let parent = self.parent {
-                numWins += parent.identity == player ? 1 : -1
+                numWins += parent.identity == player ? 1 : 0
             }
             numVisits += 1
             if let parent = self.parent {

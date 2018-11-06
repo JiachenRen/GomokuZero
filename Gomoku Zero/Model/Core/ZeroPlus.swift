@@ -47,22 +47,22 @@ class ZeroPlus: CortexDelegate {
     
     let asyncedQueue = DispatchQueue(label: "asyncedQueue", qos: .userInteractive, attributes: .concurrent, autoreleaseFrequency: .workItem, target: nil)
     
-    var cortex: CortexProtocol?
-    var personality: Personality = .monteCarlo(breadth: 3, rollout: 5, random: true, debug: true)
+    var cortex: CortexProtocol
+    var personality: Personality = .zeroMax(depth: 2, breadth: 8, rolloutPr: 100, simDepth: 6)
     
-    var iterativeDeepening = true
-    
-    /// If this is set to true, small random numbers are used to break the tie between even moves
+    /// Whether to use small random numbers to break the tie between even moves
     var randomizedSelection = true
-    
+    var iterativeDeepening = true
     var layers: IterativeDeepeningCortex.Layers = .evens
     
     /// Default initializer
     init() {
-        
+        cortex = BasicCortex(nil)
+        cortex.delegate = self
     }
     
-    init(_ other: ZeroPlus) {
+    convenience init(_ other: ZeroPlus) {
+        self.init()
         delegate = other.delegate
         visDelegate = other.visDelegate
         
@@ -76,7 +76,6 @@ class ZeroPlus: CortexDelegate {
         maxThinkingTime = other.maxThinkingTime
         randomizedSelection = other.randomizedSelection
         iterativeDeepening = other.iterativeDeepening
-        
     }
     
 
@@ -142,7 +141,7 @@ class ZeroPlus: CortexDelegate {
             case .monteCarlo(breadth: let b, rollout: let p, random: let r, debug: let d):
                 cortex = MonteCarloCortex(self, breadth: b)
                 let mtCortex = cortex as! MonteCarloCortex
-                mtCortex.maxSimulationDepth = p
+                mtCortex.simDepth = p
                 mtCortex.randomExpansion = r
                 mtCortex.debug = d
             case .zeroMax(depth: let d, breadth: let b, rolloutPr: let r, simDepth: let s):
@@ -154,7 +153,7 @@ class ZeroPlus: CortexDelegate {
                     cortex = ZeroMax(self, depth: d, breadth: b, rollout: r, simDepth: s)
                 }
             }
-            delegate.bestMoveExtrapolated(co: cortex!.getMove().co)
+            delegate.bestMoveExtrapolated(co: cortex.getMove().co)
         }
         let duration = Date().timeIntervalSince1970 - startTime
         calcDurations.append(duration)
@@ -222,8 +221,6 @@ class ZeroPlus: CortexDelegate {
         let col = CGFloat.random(min: 0, max: CGFloat(delegate.pieces.count))
         return (col: Int(col), row: Int(row))
     }
-    
-    
     
 }
 

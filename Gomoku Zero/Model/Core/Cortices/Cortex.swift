@@ -9,9 +9,8 @@
 import Foundation
 
 /// The cortex packages basic evaluation functions.
-protocol CortexProtocol: HeuristicDataSource {
-    var delegate: CortexDelegate {get}
-    var heuristicEvaluator: HeuristicEvaluator {get}
+protocol CortexProtocol {
+    var delegate: CortexDelegate! {get set}
     var pieces: [[Piece]] {get}
     var identity: Piece {get}
     var zobrist: Zobrist {get}
@@ -72,10 +71,9 @@ extension CortexProtocol {
     }
     
     func hasWinner() -> Piece? {
-        let blackScore = heuristicEvaluator.evaluate(for: .black)
-        let whiteScore = heuristicEvaluator.evaluate(for: .white)
-        if blackScore > Threat.win || whiteScore > Threat.win {
-            return blackScore > whiteScore ? .black : .white
+        let score = threatCoupledHeuristic()
+        if abs(score) >= Threat.win {
+            return score > 0 ? .black : .white
         }
         return nil
     }
@@ -275,13 +273,14 @@ protocol CortexDelegate {
 }
 
 class BasicCortex: CortexProtocol {
-    var delegate: CortexDelegate
+    var delegate: CortexDelegate!
     
-    var heuristicEvaluator = HeuristicEvaluator()
-    
-    init(_ delegate: CortexDelegate) {
+    init(_ delegate: CortexDelegate?) {
         self.delegate = delegate
-        heuristicEvaluator.dataSource = self
+    }
+    
+    convenience init() {
+        self.init(nil)
     }
     
     /**
@@ -292,11 +291,24 @@ class BasicCortex: CortexProtocol {
     }
     
     func getMove(for player: Piece) -> Move {
-        var moves = genSortedMoves()
+        var moves = [Move]()
+        for co in delegate.activeCoordinates {
+            let myScore = Threat.evaluate(for: player, at: co, pieces: pieces)
+            let yourScore = Threat.evaluate(for: player.next(), at: co, pieces: pieces)
+            if myScore > Threat.win {
+                return (co, myScore)
+            }
+            let score = myScore + yourScore
+            let move = (co, score)
+            moves.append(move)
+        }
+        moves.sort{$0.score > $1.score}
+        
         if moves.count == 0 {
             // ZeroPlus is out of moves...
             return ((-1, -1), 0)
         }
+        
         if delegate.randomizedSelection {
             moves = differentiate(moves, maxWeight: 10).sorted{$0.score > $1.score}
         }

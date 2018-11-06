@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Board: ZeroPlusDelegate, HeuristicDataSource {
+class Board: ZeroPlusDelegate {
     var dimension: Int {
         didSet {
             if dimension != oldValue {
@@ -17,11 +17,14 @@ class Board: ZeroPlusDelegate, HeuristicDataSource {
         }
     }
     
+    var cortex: CortexProtocol {
+        return zeroPlus.cortex
+    }
+    
     // The arrangement of pieces on the board. A 2D array.
     var pieces = [[Piece]]()
     var delegate: BoardDelegate?
     var history = History()
-    var heuristicEvaluator: HeuristicEvaluator
     
     var curPlayer: Piece = .black
     var zeroIdentity: Piece = .none
@@ -54,9 +57,7 @@ class Board: ZeroPlusDelegate, HeuristicDataSource {
     var zero2WorkItem: DispatchWorkItem?
     
     init(dimension: Int) {
-        heuristicEvaluator = HeuristicEvaluator()
         self.dimension = dimension
-        heuristicEvaluator.dataSource = self
         zeroPlus.delegate = self
         restart()
     }
@@ -176,11 +177,14 @@ class Board: ZeroPlusDelegate, HeuristicDataSource {
             // Such a sneaky bug!!! .none is for optional!!!
             return Piece.none
         }
-        let blackScore = heuristicEvaluator.evaluate(for: .black)
-        let whiteScore = heuristicEvaluator.evaluate(for: .white)
-        if blackScore > Threat.win || whiteScore >  Threat.win {
-            return blackScore > whiteScore ? .black : .white
+        zeroPlus.zobrist = Zobrist(matrix: pieces)
+        let score = cortex.threatCoupledHeuristic()
+        
+        if abs(score) >= Threat.win {
+            return score > 0 ? .black : .white
         }
+        
+        // Game is still in progress
         return nil
     }
     
