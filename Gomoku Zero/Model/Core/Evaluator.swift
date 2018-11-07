@@ -20,7 +20,7 @@ class Evaluator {
         return dataSource.pieces
     }
     
-    static let win = 10_000_000_000_000_00
+    static let win = 10_000_000_000_000_000
     var weights: Dictionary<Threat, Int> = [
         .five: 10_000_000_000_000_000, // 5
         .straightFour: 1_000_000,      // s4

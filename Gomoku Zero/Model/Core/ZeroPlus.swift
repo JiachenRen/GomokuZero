@@ -76,6 +76,7 @@ class ZeroPlus: CortexDelegate, EvaluatorDataSource {
         startTime = other.startTime
         strategy = other.strategy
         evaluator = other.evaluator
+        evaluator.dataSource = self // Consider use a different data structure, this is very confusing!
     }
     
 

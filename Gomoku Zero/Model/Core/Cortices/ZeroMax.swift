@@ -167,7 +167,7 @@ class ZeroMax: MinimaxCortex {
         }
         
         let s4 = val(.straightFour)
-        let bp4 = val(.straightPokedFour)
+        let bp4 = val(.blockedPokedFour)
         let sp3 = val(.straightPokedThree)
         
         // You can form s4 next turn, thus I can only play fours or block your three
