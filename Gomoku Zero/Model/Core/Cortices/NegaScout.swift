@@ -9,15 +9,15 @@
 import Foundation
 
 /// Implementation of PVS (Principal Variation Search)
-/// As of now, it is not working.
+/// A very lightweight algorithm, kinda dumb though
 class NegaScoutCortex: MinimaxCortex {
     
-    override func getMove() -> Move {
-        let alpha = Move(co: (0,0), score: Int.min / 2)
-        let beta = Move(co: (0,0), score: Int.max / 2)
-        return pvs(depth, alpha, beta, player: identity)
-    }
+    var bestMove: Move?
     
+    override func getMove() -> Move {
+        print("best move: \(pvs(depth, Int.min + 1, Int.max - 1))")
+        return bestMove!
+    }
     
     //     function pvs(node, depth, α, β, color) is
     //        if depth = 0 or node is a terminal node then
@@ -33,49 +33,36 @@ class NegaScoutCortex: MinimaxCortex {
     //            if α ≥ β then
     //                break (* beta cut-off *)
     //        return α
-    func pvs(_ depth: Int, _ alpha: Move, _ beta: Move, player: Piece) -> Move {
-        var alpha = alpha, beta = beta, depth = depth
-        let score = getHeuristicValue()
-        
-        if score >= Evaluator.win || score <= -Evaluator.win || depth == 0 {
-            return Move(co: (0,0), score: score)
+    func pvs(_ depth: Int, _ alpha: Int, _ beta: Int) -> Int {
+        var score = getHeuristicValue(for: delegate.curPlayer), alpha = alpha
+        if delegate.strategy.randomizedSelection {
+            score += Int.random(in: 0..<10)
         }
         
-        var mv: Move!
-        let moves = getSortedMoves().prefix(breadth)
-        for (idx, move) in moves.sorted(by: {$0.score > $1.score}).enumerated() {
-            delegate.put(at: move.co)
-            if idx == 0 {
-                var tmpBeta = beta
-                tmpBeta.co = move.co
-                tmpBeta.score *= -1
-                var tmpAlpha = alpha
-                tmpAlpha.co = move.co
-                tmpAlpha.score *= -1
-                mv = pvs(depth - 1, tmpBeta, tmpAlpha, player: player.next())
-                mv.co = move.co
-                mv.score = -mv.score
-            } else {
-                var tmpAlpha1 = alpha
-                tmpAlpha1.score = tmpAlpha1.score * -1 - 1
-                var tmpAlpha = alpha
-                tmpAlpha.score *= -1
-                mv = pvs(depth - 1, tmpAlpha1, tmpAlpha, player: player.next())
-                mv.co = move.co
-                mv.score = -mv.score
-                if alpha.score < mv.score && mv.score < beta.score {
-                    var tmpBeta = beta
-                    tmpBeta.score *= -1
-                    var tmpMv = mv!
-                    tmpMv.score *= -1
-                    mv = pvs(depth - 1, tmpBeta, tmpMv, player: player.next())
-                    mv.co = move.co
-                    mv.score = -mv.score
+        if isTerminal(score: score) || depth == 0 {
+            return score
+        }
+        
+        let candidates = getCandidates()
+        
+        for (idx, cand) in candidates.enumerated() {
+            delegate.put(at: cand.co)
+            if idx == 0 { // First child
+                score = -pvs(depth - 1, -beta, -alpha)
+            } else  {
+                score = -pvs(depth - 1, -alpha - 1, -alpha)
+                if alpha < score && score < beta {
+                    score = -pvs(depth - 1, -beta, -score)
                 }
             }
             delegate.revert()
-            alpha = alpha.score > mv.score ? alpha : mv
-            if alpha.score >= beta.score {
+            if score > alpha {
+                alpha = score
+                if depth == self.depth {
+                    bestMove = (co: cand.co, score: alpha)
+                }
+            }
+            if alpha > beta {
                 break
             }
         }
