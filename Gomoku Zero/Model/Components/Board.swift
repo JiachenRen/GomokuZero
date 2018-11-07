@@ -129,7 +129,7 @@ class Board: ZeroPlusDelegate {
         if zeroIsThinking || gameHasEnded {
             return
         }
-        if !isValid(co) || pieces[co.row][co.col] != .none  {
+        if !isValid(co, dimension) || pieces[co.row][co.col] != .none  {
             return
         }
         set(co, curPlayer)
@@ -201,7 +201,7 @@ class Board: ZeroPlusDelegate {
             // Vertical
             for q in i...(i+4) {
                 let co = Coordinate(col: col + q, row: row)
-                if !isValid(co) || pieces[co.row][co.col] == .none || pieces[co.row][co.col] != color {
+                if !isValid(co, dimension) || pieces[co.row][co.col] == .none || pieces[co.row][co.col] != color {
                     buff.removeAll()
                     break
                 }
@@ -213,7 +213,7 @@ class Board: ZeroPlusDelegate {
             // Horizontal
             for q in i...(i+4) {
                 let co = Coordinate(col: col, row: row + q)
-                if !isValid(co) || pieces[co.row][co.col] == .none || pieces[co.row][co.col] != color {
+                if !isValid(co, dimension) || pieces[co.row][co.col] == .none || pieces[co.row][co.col] != color {
                     buff.removeAll()
                     break
                 }
@@ -225,7 +225,7 @@ class Board: ZeroPlusDelegate {
             // Diagnol slope = 1
             for q in i...(i+4) {
                 let co = Coordinate(col: col + q, row: row + q)
-                if !isValid(co) || pieces[co.row][co.col] == .none || pieces[co.row][co.col] != color {
+                if !isValid(co, dimension) || pieces[co.row][co.col] == .none || pieces[co.row][co.col] != color {
                     buff.removeAll()
                     break
                 }
@@ -237,7 +237,7 @@ class Board: ZeroPlusDelegate {
             //diagnol slope = -1
             for q in i...(i+4) {
                 let co = Coordinate(col: col + q, row: row - q)
-                if !isValid(co) || pieces[co.row][co.col] == .none || pieces[co.row][co.col] != color {
+                if !isValid(co, dimension) || pieces[co.row][co.col] == .none || pieces[co.row][co.col] != color {
                     buff.removeAll()
                     break
                 }
@@ -296,10 +296,6 @@ class Board: ZeroPlusDelegate {
         zeroIsThinking = false
         put(at: co)
     }
-    
-    func isValid(_ co: Coordinate) -> Bool {
-        return co.col >= 0 && co.row >= 0 && co.row < dimension && co.col < dimension
-    }
 
     func serialize() -> String {
         return "\(dimension)|" + history.serialize()
@@ -340,4 +336,8 @@ extension Board: CustomStringConvertible {
             return str
         }
     }
+}
+
+func isValid(_ co: Coordinate, _ dim: Int) -> Bool {
+    return co.col >= 0 && co.row >= 0 && co.row < dim && co.col < dim
 }

@@ -114,8 +114,8 @@ class ZeroMax: MinimaxCortex {
         }
 
         delegate.activeCoordinates.forEach {co in
-            let bts = bTMatrix[co.row][co.col] ?? evaluator.analyze(for: .black, at: co)
-            let wts = wTMatrix[co.row][co.col] ?? evaluator.analyze(for: .white, at: co)
+            let bts = bTMatrix[co.row][co.col] ?? analyze(for: .black, at: co)
+            let wts = wTMatrix[co.row][co.col] ?? analyze(for: .white, at: co)
             bTMatrix[co.row][co.col] = bts
             wTMatrix[co.row][co.col] = wts
             bCands.append((co, bts, bts.reduce(0){$0 + val($1)}))

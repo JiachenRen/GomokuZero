@@ -12,8 +12,8 @@ class ZeroSumCortex: BasicCortex {
     override func getMove(for player: Piece) -> Move {
         var moves = [Move]()
         for co in delegate.activeCoordinates {
-            let myOffense = evaluator.evaluate(for: player, at: co)
-            let opOffense = evaluator.evaluate(for: player.next(), at: co)
+            let myOffense = eval(for: player, at: co)
+            let opOffense = eval(for: player.next(), at: co)
             
             // If I can win right now, do it without hesitation!
             if myOffense > Evaluator.win {

@@ -15,10 +15,6 @@ import Foundation
 class Evaluator {
     var seqHashMap: Dictionary<[Piece], Int> = Dictionary()
     let seqHashQueue = DispatchQueue(label: "seqHashQueue")
-    var dataSource: EvaluatorDataSource!
-    var pieces: [[Piece]] {
-        return dataSource.pieces
-    }
     
     static let win = 10_000_000_000_000_000
     var weights: Dictionary<Threat, Int> = [
@@ -38,11 +34,6 @@ class Evaluator {
         .none: 0
     ]
     
-    
-    init(_ dataSource: EvaluatorDataSource?) {
-        self.dataSource = dataSource
-    }
-    
     /**
      Extract the weight for a specific threat type.
      - Returns: weight assignment for the threat
@@ -51,7 +42,7 @@ class Evaluator {
         return weights[threat]!
     }
     
-    func sequentialize(for player: Piece, at co: Coordinate) -> [[Piece]] {
+    func sequentialize(_ pieces: [[Piece]], for player: Piece, at co: Coordinate) -> [[Piece]] {
         let row = co.row, col = co.col, dim = pieces.count
         let opponent = player.next()
         
@@ -107,8 +98,8 @@ class Evaluator {
     /**
      - Returns: An array containing identified threats, e.g. [.straightPokedThree, .blockedFour]
      */
-    func analyze(for player: Piece, at co: Coordinate) -> [Threat] {
-        return sequentialize(for: player, at: co)
+    func analyze(_ pieces: [[Piece]], for player: Piece, at co: Coordinate) -> [Threat] {
+        return sequentialize(pieces, for: player, at: co)
             .map{analyzeThreats(seq: $0, for: player)}
             .flatMap{$0}
     }
@@ -116,8 +107,8 @@ class Evaluator {
     /**
      Point evaluation
      */
-    func evaluate(for player: Piece, at co: Coordinate) -> Int {
-        let linearScores = sequentialize(for: player, at: co).map{ seq -> Int in
+    func evaluate(_ pieces: [[Piece]], for player: Piece, at co: Coordinate) -> Int {
+        let linearScores = sequentialize(pieces, for: player, at: co).map{ seq -> Int in
             return cacheOrGet(seq: seq, for: player) // Convert sequences to threat types
         }
         return linearScores.reduce(0) {$0 + $1}

@@ -362,7 +362,7 @@ public typealias Coordinate = (col: Int, row: Int)
      */
     private func drawPendingPiece() {
         if let co = pendingPieceCo, mouseInScope {
-            if !board.isValid(co) { return }
+            if !isValid(co, dimension) { return }
             if pieces == nil || pieces![co.row][co.col] == .none { // If the coordinate is not occupied
                 let rect = self.rect(at: co)
                 if board.curPlayer == .black {

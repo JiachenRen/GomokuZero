@@ -11,10 +11,12 @@ import Foundation
 /// The cortex packages basic evaluation functions.
 protocol CortexProtocol {
     var delegate: CortexDelegate! {get set}
+    var evaluator: Evaluator {get set}
     var pieces: [[Piece]] {get}
     var identity: Piece {get}
     var zobrist: Zobrist {get}
     var dim: Int {get}
+    
     
     /// Not the most efficient way, will do for now.
     func genSortedMoves() -> [Move]
@@ -26,28 +28,14 @@ protocol CortexProtocol {
     func getHeuristicValue() -> Int
     
     func getMove() -> Move
-    
 }
 
 var retrievedCount = 0
 extension CortexProtocol {
     var pieces: [[Piece]] {return delegate.pieces}
     var identity: Piece {return delegate.identity}
-    var dim: Int {return delegate.dim}
+    var dim: Int {return zobrist.dim}
     var zobrist: Zobrist {return delegate.zobrist}
-    var evaluator: Evaluator {return delegate.evaluator}
-    var time: TimeInterval {
-        return Date().timeIntervalSince1970
-    }
-    
-    func val(_ threat: Threat) -> Int {
-        return evaluator.val(threat)
-    }
-    
-    func eval(for piece: Piece, at co: Coordinate) -> Int {
-        return evaluator.evaluate(for: piece, at: co)
-    }
-    
     
     /**
      Perform a fast simulation on the current game state.
@@ -116,8 +104,8 @@ extension CortexProtocol {
             if let score = scoreMap[co.row][co.col] {
                 sortedMoves.append((co, score))
             } else {
-                let bScore = evaluator.evaluate(for: .black, at: co)
-                let wScore = evaluator.evaluate(for: .white, at: co)
+                let bScore = eval(for: .black, at: co)
+                let wScore = eval(for: .white, at: co)
                 // Enemy's strategic positions are also our strategic positions.
                 let score = bScore + wScore
                 let move = (co, score)
@@ -238,7 +226,7 @@ extension CortexProtocol {
                     zeroSumScore += oldScore
                 } else {
                     let co = (col: c, row: r)
-                    var score = evaluator.evaluate(for: piece, at: co)
+                    var score = eval(for: piece, at: co)
                     score *= piece == .black ? 1 : -1
                     scoreMap[r][c] = score
                     zeroSumScore += score
@@ -255,6 +243,18 @@ extension CortexProtocol {
         return getHeuristicValue(for: identity)
     }
     
+    func val(_ threat: Threat) -> Int {
+        return evaluator.val(threat)
+    }
+    
+    func eval(for player: Piece, at co: Coordinate) -> Int {
+        return evaluator.evaluate(pieces, for: player, at: co)
+    }
+    
+    func analyze(for player: Piece, at co: Coordinate) -> [Threat] {
+        return evaluator.analyze(pieces, for: player, at: co)
+    }
+    
     func isValid(_ c: Coordinate) -> Bool {
         return c.col >= 0 && c.col < dim && c.row >= 0 && c.row < dim
     }
@@ -266,8 +266,6 @@ protocol CortexDelegate {
     var pieces: [[Piece]] {get}
     var identity: Piece {get}
     var zobrist: Zobrist {get}
-    var evaluator: Evaluator {get}
-    var dim: Int {get}
     var curPlayer: Piece {get}
     var asyncedQueue: DispatchQueue {get}
     var strategy: Strategy {get}
@@ -280,9 +278,11 @@ protocol CortexDelegate {
 
 class BasicCortex: CortexProtocol {
     var delegate: CortexDelegate!
+    var evaluator: Evaluator
     
     init(_ delegate: CortexDelegate?) {
         self.delegate = delegate
+        evaluator = Evaluator()
     }
     
     convenience init() {
@@ -299,8 +299,8 @@ class BasicCortex: CortexProtocol {
     func getMove(for player: Piece) -> Move {
         var moves = [Move]()
         for co in delegate.activeCoordinates {
-            let myScore = evaluator.evaluate(for: player, at: co)
-            let yourScore = evaluator.evaluate(for: player.next(), at: co)
+            let myScore = eval(for: player, at: co)
+            let yourScore = eval(for: player.next(), at: co)
             if myScore > Evaluator.win {
                 return (co, myScore)
             }
