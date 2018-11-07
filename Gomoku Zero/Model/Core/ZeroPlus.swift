@@ -108,7 +108,7 @@ class ZeroPlus: CortexDelegate, EvaluatorDataSource {
             }
             delegate.bestMoveExtrapolated(co: cortex.getMove().co)
         }
-        let duration = Date().timeIntervalSince1970 - startTime
+        
         calcDurations.append(duration)
         let avgDuration = calcDurations.reduce(0){$0 + $1} / Double(calcDurations.count)
         print("cortex: \(String(describing: cortex))\nduration: \(duration)\navg. duration: \(avgDuration)\n")
