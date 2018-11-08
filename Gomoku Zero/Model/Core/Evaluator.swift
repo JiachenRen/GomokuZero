@@ -13,7 +13,7 @@ import Foundation
  threat types. Assign score for a specific point or game state based on threat potential
  */
 class Evaluator {
-    var seqHashMap: Dictionary<[Piece], Int> = Dictionary()
+    var seqHashMap: Dictionary<[Piece], [Threat]> = Dictionary()
     let seqHashQueue = DispatchQueue(label: "seqHashQueue")
     
     static let win = 10_000_000_000_000_000
@@ -100,7 +100,7 @@ class Evaluator {
      */
     func analyze(_ pieces: [[Piece]], for player: Piece, at co: Coordinate) -> [Threat] {
         return sequentialize(pieces, for: player, at: co)
-            .map{analyzeThreats(seq: $0, for: player)}
+            .map{cacheOrGet(seq: $0, for: player)} // Convert sequences to threat types
             .flatMap{$0}
     }
     
@@ -108,36 +108,28 @@ class Evaluator {
      Point evaluation
      */
     func evaluate(_ pieces: [[Piece]], for player: Piece, at co: Coordinate) -> Int {
-        let linearScores = sequentialize(pieces, for: player, at: co).map{ seq -> Int in
-            return cacheOrGet(seq: seq, for: player) // Convert sequences to threat types
-        }
-        return linearScores.reduce(0) {$0 + $1}
-    }
-    
-    
-    func convertToScore(threats: [Threat]) -> Int {
-        return threats.map{val($0)}  // Convert threat types to score
+        return analyze(pieces, for: player, at: co)
+            .map{val($0)}  // Convert threat types to score
             .reduce(0){$0 + $1} // Sum it up
     }
     
     /**
      Results in 1/3 speed up
      */
-    private func cacheOrGet(seq: [Piece], for player: Piece) -> Int {
+    private func cacheOrGet(seq: [Piece], for player: Piece) -> [Threat] {
         if let cached = seqHashMap[seq] {
             return cached
         } else {
-            let threats = analyzeThreats(seq: seq, for: player)
-            let score = convertToScore(threats: threats)
+            let threats = analyzeThreats(seq, for: player)
             seqHashQueue.sync {
-                seqHashMap[seq] = score
+                seqHashMap[seq] = threats
             }
-            return score
+            return threats
         }
     }
     
     // The results could be hashed!!!
-    private func analyzeThreats(seq: [Piece], for player: Piece) -> [Threat] {
+    private func analyzeThreats(_ seq: [Piece], for player: Piece) -> [Threat] {
         let opponent = player.next()
         let leftBlocked = seq.first! == opponent
         let rightBlocked = seq.last! == opponent
@@ -214,7 +206,7 @@ class Evaluator {
             return identifiedPatterns.filter{$0.same > 1}
         }
         
-        // Some inefficiency here... if one or both ends terminate with an opponent piece
+        // If one or both ends terminate with an opponent piece
         if leftBlocked && rightBlocked {
             if seq.count - 2 < 5 {
                 return [.none]

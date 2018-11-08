@@ -131,7 +131,7 @@ extension CortexProtocol {
                 var c = (col: co.col + i, row: co.row + q)
                 var empty = 0
                 var anchor: Piece? = nil
-                loop: while isValid(c) {
+                loop: while isValid(c, dim) {
                     let piece = zobrist.get(c)
                     switch piece {
                     case .none:
@@ -199,7 +199,7 @@ extension CortexProtocol {
             let dirs = [(0, 1),(1, 0),(1, 1),(-1, -1),(-1, 1),(1, -1),(-1, 0),(0, -1)]
             dirs.forEach { dir in
                 var co = co
-                while isValid(co) {
+                while isValid(co, dim) {
                     map[co.row][co.col] = nil
                     co.col += dir.0
                     co.row += dir.1
@@ -253,10 +253,6 @@ extension CortexProtocol {
     
     func analyze(for player: Piece, at co: Coordinate) -> [Threat] {
         return evaluator.analyze(pieces, for: player, at: co)
-    }
-    
-    func isValid(_ c: Coordinate) -> Bool {
-        return c.col >= 0 && c.col < dim && c.row >= 0 && c.row < dim
     }
 }
 
