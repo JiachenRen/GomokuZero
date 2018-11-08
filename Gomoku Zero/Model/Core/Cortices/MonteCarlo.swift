@@ -126,7 +126,7 @@ class MonteCarloCortex: BasicCortex {
     
     
     /// Monte Carlo Tree Node
-    class Node {
+    internal class Node {
         var numWins: Int = 0
         var numVisits: Int = 0
         var identity: Piece
@@ -236,6 +236,10 @@ class MonteCarloCortex: BasicCortex {
                 parent.backpropagate(winner: winner)
             }
         }
+    }
+    
+    override var description: String {
+        return "MonteCarlo(breadth: \(breadth), randExp: \(randomExpansion), simDepth: \(simDepth)) <-> \(cortex)"
     }
     
 }

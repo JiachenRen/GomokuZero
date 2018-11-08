@@ -82,4 +82,10 @@ class IterativeDeepeningCortex: MinimaxCortex {
         case all, odds, evens
     }
     
+    override var description: String {
+        let tmpZP = ZeroPlus()
+        setup(tmpZP, depth)
+        return "IterativeDeepening(depth: \(depth), breadth: \(breadth), layers: \(layers)) <-> \(tmpZP.cortex)"
+    }
+    
 }

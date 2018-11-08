@@ -69,5 +69,7 @@ class NegaScoutCortex: MinimaxCortex {
         return alpha
     }
     
-    
+    override var description: String {
+        return "NegaScout(depth: \(depth), breadth: \(breadth))"
+    }
 }

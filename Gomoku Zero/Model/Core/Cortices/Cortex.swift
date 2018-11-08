@@ -9,7 +9,7 @@
 import Foundation
 
 /// The cortex packages basic evaluation functions.
-protocol CortexProtocol {
+protocol CortexProtocol: CustomStringConvertible {
     var delegate: CortexDelegate! {get set}
     var evaluator: Evaluator {get set}
     var pieces: [[Piece]] {get}
@@ -275,6 +275,10 @@ protocol CortexDelegate {
 class BasicCortex: CortexProtocol {
     var delegate: CortexDelegate!
     var evaluator: Evaluator
+    
+    @objc var description: String {
+        return "BasicCortex"
+    }
     
     init(_ delegate: CortexDelegate?) {
         self.delegate = delegate

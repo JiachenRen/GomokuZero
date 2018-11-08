@@ -182,4 +182,8 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
             return bestMove
         }
     }
+    
+    override var description: String {
+        return "Minimax(depth: \(depth), breadth: \(breadth))"
+    }
 }

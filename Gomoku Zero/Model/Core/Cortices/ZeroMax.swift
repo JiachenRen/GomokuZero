@@ -202,4 +202,8 @@ class ZeroMax: MinimaxCortex {
         case search
         case exterminate
     }
+    
+    override var description: String {
+        return "ZeroMax(depth: \(depth), breadth: \(breadth), rolloutPr: \(rolloutPr), simDepth: \(simDepth))"
+    }
 }

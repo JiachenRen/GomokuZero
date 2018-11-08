@@ -27,4 +27,8 @@ class ZeroSumCortex: BasicCortex {
         }
         return moves.sorted{$0.score > $1.score}[0]
     }
+    
+    override var description: String {
+        return "ZeroSum"
+    }
 }
