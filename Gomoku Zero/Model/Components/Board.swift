@@ -28,8 +28,19 @@ class Board: ZeroPlusDelegate {
     
     var curPlayer: Piece = .black
     var zeroIdentity: Piece = .none
-    var zeroPlus = ZeroPlus()
-    var zeroPlus2: ZeroPlus? // Secondary AI for skirmish, don't forget to set the delegate!
+    var zeroPlus = ZeroPlus() {
+        didSet {
+            zeroPlus.delegate = self
+        }
+    }
+    
+    // Secondary AI for skirmish, don't forget to set the delegate!
+    var zeroPlus2: ZeroPlus? {
+        didSet {
+            zeroPlus2?.delegate = self
+        }
+    }
+    
     var zeroXzero = false {
         didSet {
             cancel()
@@ -38,6 +49,8 @@ class Board: ZeroPlusDelegate {
     var zeroIsThinking = false
     var calcStartTime: TimeInterval = 0
     var gameStartTime: TimeInterval = 0
+    var gameCompletionHandler: ((Piece) -> Void)?
+    var restartDelay: TimeInterval = 1
     var looped: Bool = false
     var battles: Int = 0
     var saveDir: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
@@ -135,30 +148,15 @@ class Board: ZeroPlusDelegate {
         set(co, curPlayer)
         history.push(co)
         delegate?.boardDidUpdate(pieces: pieces)
-        print(co)
         
         if let winner = hasWinner() {
             gameHasEnded = true
             let cos = findWinningCoordinates()
             if looped {
-                var fileName = "battle_\(battles)_"
-                switch winner {
-                case .none: fileName += "draw"
-                case .black: fileName += "b_wins_@step=\(history.stack.count)"
-                case .white: fileName += "w_wins_@step=\(history.stack.count)"
-                }
-                fileName+="_t=\(Date().timeIntervalSince1970 - gameStartTime)s"
-                fileName += ".gzero"
-                let url = URL(fileURLWithPath: saveDir).appendingPathComponent(fileName)
-                do {
-                    print("Saving to \(url)")
-                    try serialize().write(to: url, atomically: true, encoding: .utf8)
-                } catch let err {
-                    print(err)
-                }
-                battles += 1
+                log(winner)
+                gameCompletionHandler?(winner)
                 DispatchQueue.global().async {[unowned self] in
-                    Thread.sleep(forTimeInterval: 1)
+                    Thread.sleep(forTimeInterval: self.restartDelay)
                     self.restart()
                 }
             }
@@ -168,6 +166,30 @@ class Board: ZeroPlusDelegate {
         
         curPlayer = curPlayer.next()
         requestZeroBrainStorm()
+    }
+    
+    func log(_ winner: Piece) {
+        var fileName = "battle_\(battles)_"
+        let steps = history.stack.count
+        switch winner {
+        case .none: fileName += "draw"
+        case .black: fileName += "b_wins_@step=\(steps)"
+        case .white: fileName += "w_wins_@step=\(steps)"
+        }
+        let timeElapsed = Date().timeIntervalSince1970 - gameStartTime
+        fileName += "_t=\(timeElapsed)s"
+        fileName += ".gzero"
+        let url = URL(fileURLWithPath: saveDir).appendingPathComponent(fileName)
+        do {
+            print("battle # \(battles), \(winner) wins @ step = \(steps)")
+            print("time elapsed: \(timeElapsed)")
+            print("board: \n\(Zobrist(matrix: pieces))")
+            print("saving to \(url)")
+            try serialize().write(to: url, atomically: true, encoding: .utf8)
+        } catch let err {
+            print(err)
+        }
+        battles += 1
     }
     
     func hasWinner() -> Piece? {
@@ -317,25 +339,6 @@ class Board: ZeroPlusDelegate {
 protocol BoardDelegate {
     func boardDidUpdate(pieces: [[Piece]])
     func gameHasEnded(winner: Piece, coordinates: [Coordinate], popDialogue: Bool)
-}
-
-extension Board: CustomStringConvertible {
-    public var description: String {
-        get {
-            var str = ""
-            pieces.forEach { row in
-                row.forEach { col in
-                    switch col {
-                    case .none: str += "- "
-                    case .black: str += "* "
-                    case .white: str += "o "
-                    }
-                }
-                str += "\n"
-            }
-            return str
-        }
-    }
 }
 
 func isValid(_ co: Coordinate, _ dim: Int) -> Bool {

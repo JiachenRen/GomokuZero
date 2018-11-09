@@ -104,10 +104,8 @@ class ConsoleViewController: NSViewController {
         // Configure Zero+ AI
         let zero1 = ZeroPlus(), zero2 = ZeroPlus()
         zero1.identity = .black
-        zero1.delegate = board
         zero1.visDelegate = vc
         zero2.identity = .white
-        zero2.delegate = board
         zero2.visDelegate = vc
         if blackCheckBox.state == .on {
             let depth = Int(blackDepth.stringValue) ?? 6

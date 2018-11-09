@@ -56,7 +56,9 @@ class IterativeDeepeningCortex: MinimaxCortex {
                     maxDepth = d
                 }
                 zero.visDelegate?.activeMapUpdated(activeMap: nil)
-                print("depth = \(d), co = (\(bestForDepth.co.col), \(bestForDepth.co.row)), score = \(bestForDepth.score) cancelled = \(cancelled), time = \(self.delegate.duration)")
+                if self.delegate.verbose {
+                    print("depth = \(d), co = (\(bestForDepth.co.col), \(bestForDepth.co.row)), score = \(bestForDepth.score) cancelled = \(cancelled), time = \(self.delegate.duration)")
+                }
             }
             delegate.asyncedQueue.async(group: group, execute: workItem)
             workItems.append(workItem)

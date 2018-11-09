@@ -203,7 +203,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func copyToClipboard(_ sender: NSMenuItem) {
         let pasteboard = NSPasteboard.general
         pasteboard.declareTypes([NSPasteboard.PasteboardType.string], owner: nil)
-        pasteboard.setString(activeBoard?.description ?? "", forType: .string)
+        if let pieces = activeBoard?.pieces {
+            pasteboard.setString(Zobrist(matrix: pieces).description, forType: .string)
+        }
     }
     
     @IBAction func paste(_ sender: Any) {

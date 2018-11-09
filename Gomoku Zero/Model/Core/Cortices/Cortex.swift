@@ -267,6 +267,7 @@ protocol CortexDelegate {
     var strategy: Strategy {get}
     var duration: TimeInterval {get}
     var timeout: Bool {get}
+    var verbose: Bool {get}
     func put(at co: Coordinate)
     @discardableResult
     func revert() -> Coordinate?

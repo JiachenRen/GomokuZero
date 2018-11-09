@@ -38,6 +38,8 @@ class ZeroPlus: CortexDelegate, EvaluatorDataSource {
     var personality: Personality = .zeroMax(depth: 2, breadth: 8, rolloutPr: 100, simDepth: 6)
     var strategy: Strategy
     
+    var verbose = true
+    
     /// Default initializer
     init() {
         strategy = Strategy()
@@ -71,10 +73,13 @@ class ZeroPlus: CortexDelegate, EvaluatorDataSource {
         identity = player
         visDelegate?.activeMapUpdated(activeMap: activeMap) // Notify the delegate that active map has updated
         
-        if delegate.history.stack.count == 0 && player == .black { // When ZeroPlus is black, the first move is always at the center
+        if delegate.history.stack.count == 0 && player == .black {
+            // When ZeroPlus is black, the first move is always at the center
             delegate?.bestMoveExtrapolated(co: (zobrist.dim / 2, zobrist.dim / 2))
         } else if delegate.history.stack.count == 1 && player == .white {
-            delegate?.bestMoveExtrapolated(co: getSecondMove())
+            // The second move is around the first move, within the 3 x 3 or 4 x 4 matrix
+            let mv = getSecondMove()
+            delegate?.bestMoveExtrapolated(co: mv)
         } else {
             switch personality {
             case .heuristic: cortex = BasicCortex(self)
@@ -106,16 +111,27 @@ class ZeroPlus: CortexDelegate, EvaluatorDataSource {
                     cortex = ZeroMax(self, depth: d, breadth: b, rollout: r, simDepth: s)
                 }
             }
-            delegate.bestMoveExtrapolated(co: cortex.getMove().co)
+            
+            // Customize weights used to evaluator
+            if let weights = strategy.weights {
+                cortex.evaluator.weights = weights
+            }
+            let move = cortex.getMove()
+            if verbose {
+                print("move: \(move)")
+            }
+            delegate.bestMoveExtrapolated(co: move.co)
         }
         
         calcDurations.append(duration)
-        let avgDuration = calcDurations.reduce(0){$0 + $1} / Double(calcDurations.count)
-        print("cortex: \(String(describing: cortex))\nduration: \(duration)\navg. duration: \(avgDuration)\n")
         
-        let cached = Zobrist.heuristicHash.count
-        print("retrieved: \(retrievedCount)\tcached: \(cached)\tratio: \(Double(retrievedCount) / Double(cached))\tcollisions: \(hashCollisions)\tcollision ratio: \(Double(hashCollisions) / Double(retrievedCount))")
-        
+        if verbose {
+            let avgDuration = calcDurations.reduce(0){$0 + $1} / Double(calcDurations.count)
+            print("cortex: \(String(describing: cortex))\nduration: \(duration)\navg. duration: \(avgDuration)\n")
+            
+            let cached = Zobrist.heuristicHash.count
+            print("retrieved: \(retrievedCount)\tcached: \(cached)\tratio: \(Double(retrievedCount) / Double(cached))\tcollisions: \(hashCollisions)\tcollision ratio: \(Double(hashCollisions) / Double(retrievedCount))")
+        }
         visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map
     }
     
@@ -245,6 +261,7 @@ struct Strategy {
     var iterativeDeepening = true
     var timeLimit: TimeInterval = 3
     var layers: IterativeDeepeningCortex.Layers = .evens
+    var weights: Dictionary<Threat, Int>?
 }
 
 protocol ZeroPlusDelegate {
