@@ -8,6 +8,8 @@
 
 import Foundation
 
+public typealias Coordinate = (col: Int, row: Int)
+
 enum Piece: String {
     case black = "*", white = "o", none = "-"
     

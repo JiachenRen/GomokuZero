@@ -9,8 +9,6 @@
 import Cocoa
 import CoreGraphics
 
-public typealias Coordinate = (col: Int, row: Int)
-
 @IBDesignable class BoardView: NSView {
     
     @IBInspectable var pieceScale: CGFloat = 0.95

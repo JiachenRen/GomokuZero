@@ -7,6 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F2E82E32197B443005C3353 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82E22197B443005C3353 /* main.swift */; };
+		1F2E82E72197B48A005C3353 /* Piece.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39421682F6C00580C99 /* Piece.swift */; };
+		1F2E82E82197B48A005C3353 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39621682FE800580C99 /* Board.swift */; };
+		1F2E82E92197B48A005C3353 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39C216863F000580C99 /* History.swift */; };
+		1F2E82EA2197B48A005C3353 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3A021690EFD00580C99 /* Notification.swift */; };
+		1F2E82EB2197B48A005C3353 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39821685A8B00580C99 /* Utilities.swift */; };
+		1F2E82EC2197B48A005C3353 /* ZeroPlus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270DC2169A1480081DBFC /* ZeroPlus.swift */; };
+		1F2E82ED2197B48A005C3353 /* Threat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270E02169BCEA0081DBFC /* Threat.swift */; };
+		1F2E82EE2197B48A005C3353 /* Evaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CF1A22192287E00CA4372 /* Evaluator.swift */; };
+		1F2E82EF2197B48A005C3353 /* Zobrist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F64DC4B216BF38000467F78 /* Zobrist.swift */; };
+		1F2E82F02197B48A005C3353 /* Cortex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A549217B91F700285999 /* Cortex.swift */; };
+		1F2E82F12197B48A005C3353 /* Minimax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A54B217B9E1B00285999 /* Minimax.swift */; };
+		1F2E82F22197B48A005C3353 /* ZeroMax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928E2217D6B43000B55CF /* ZeroMax.swift */; };
+		1F2E82F32197B48A005C3353 /* IterativeDeepening.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A54D217B9E5800285999 /* IterativeDeepening.swift */; };
+		1F2E82F42197B48A005C3353 /* NegaScout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A554217BB27000285999 /* NegaScout.swift */; };
+		1F2E82F52197B48A005C3353 /* MonteCarlo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A556217BF95800285999 /* MonteCarlo.swift */; };
+		1F2E82F62197B48A005C3353 /* ZeroSum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB0F3EA2186085A00E28001 /* ZeroSum.swift */; };
+		1F2E82F82197BDC4005C3353 /* Weights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82F72197BDC4005C3353 /* Weights.swift */; };
+		1F2E82FA2197BDE8005C3353 /* Stat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82F92197BDE8005C3353 /* Stat.swift */; };
 		1F4270DD2169A1480081DBFC /* ZeroPlus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270DC2169A1480081DBFC /* ZeroPlus.swift */; };
 		1F4270E12169BCEA0081DBFC /* Threat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270E02169BCEA0081DBFC /* Threat.swift */; };
 		1F5CF1A32192287E00CA4372 /* Evaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CF1A22192287E00CA4372 /* Evaluator.swift */; };
@@ -55,7 +74,23 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		1F2E82DE2197B443005C3353 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		1F2E82E02197B443005C3353 /* GZeroCommandLine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GZeroCommandLine; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F2E82E22197B443005C3353 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		1F2E82F72197BDC4005C3353 /* Weights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weights.swift; sourceTree = "<group>"; };
+		1F2E82F92197BDE8005C3353 /* Stat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stat.swift; sourceTree = "<group>"; };
 		1F4270DC2169A1480081DBFC /* ZeroPlus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPlus.swift; sourceTree = "<group>"; };
 		1F4270E02169BCEA0081DBFC /* Threat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Threat.swift; sourceTree = "<group>"; };
 		1F5CF1A22192287E00CA4372 /* Evaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Evaluator.swift; sourceTree = "<group>"; };
@@ -95,6 +130,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1F2E82DD2197B443005C3353 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1F60C35B2168232C00580C99 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -119,12 +161,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1F2E82E12197B443005C3353 /* GZeroCommandLine */ = {
+			isa = PBXGroup;
+			children = (
+				1F2E82E22197B443005C3353 /* main.swift */,
+				1F2E82F72197BDC4005C3353 /* Weights.swift */,
+				1F2E82F92197BDE8005C3353 /* Stat.swift */,
+			);
+			path = GZeroCommandLine;
+			sourceTree = "<group>";
+		};
 		1F60C3552168232C00580C99 = {
 			isa = PBXGroup;
 			children = (
 				1F60C3602168232C00580C99 /* Gomoku Zero */,
 				1F60C3762168232E00580C99 /* Gomoku ZeroTests */,
 				1F60C3812168232E00580C99 /* Gomoku ZeroUITests */,
+				1F2E82E12197B443005C3353 /* GZeroCommandLine */,
 				1F60C35F2168232C00580C99 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -135,6 +188,7 @@
 				1F60C35E2168232C00580C99 /* Gomoku Zero.app */,
 				1F60C3732168232E00580C99 /* Gomoku ZeroTests.xctest */,
 				1F60C37E2168232E00580C99 /* Gomoku ZeroUITests.xctest */,
+				1F2E82E02197B443005C3353 /* GZeroCommandLine */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -276,6 +330,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		1F2E82DF2197B443005C3353 /* GZeroCommandLine */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1F2E82E62197B443005C3353 /* Build configuration list for PBXNativeTarget "GZeroCommandLine" */;
+			buildPhases = (
+				1F2E82DC2197B443005C3353 /* Sources */,
+				1F2E82DD2197B443005C3353 /* Frameworks */,
+				1F2E82DE2197B443005C3353 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GZeroCommandLine;
+			productName = GZeroCommandLine;
+			productReference = 1F2E82E02197B443005C3353 /* GZeroCommandLine */;
+			productType = "com.apple.product-type.tool";
+		};
 		1F60C35D2168232C00580C99 /* Gomoku Zero */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1F60C3872168232E00580C99 /* Build configuration list for PBXNativeTarget "Gomoku Zero" */;
@@ -335,10 +406,13 @@
 		1F60C3562168232C00580C99 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1000;
+				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Jiachen Ren";
 				TargetAttributes = {
+					1F2E82DF2197B443005C3353 = {
+						CreatedOnToolsVersion = 10.1;
+					};
 					1F60C35D2168232C00580C99 = {
 						CreatedOnToolsVersion = 10.0;
 						SystemCapabilities = {
@@ -379,6 +453,7 @@
 				1F60C35D2168232C00580C99 /* Gomoku Zero */,
 				1F60C3722168232E00580C99 /* Gomoku ZeroTests */,
 				1F60C37D2168232E00580C99 /* Gomoku ZeroUITests */,
+				1F2E82DF2197B443005C3353 /* GZeroCommandLine */,
 			);
 		};
 /* End PBXProject section */
@@ -411,6 +486,32 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1F2E82DC2197B443005C3353 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F2E82E72197B48A005C3353 /* Piece.swift in Sources */,
+				1F2E82E82197B48A005C3353 /* Board.swift in Sources */,
+				1F2E82E92197B48A005C3353 /* History.swift in Sources */,
+				1F2E82EA2197B48A005C3353 /* Notification.swift in Sources */,
+				1F2E82EB2197B48A005C3353 /* Utilities.swift in Sources */,
+				1F2E82FA2197BDE8005C3353 /* Stat.swift in Sources */,
+				1F2E82EC2197B48A005C3353 /* ZeroPlus.swift in Sources */,
+				1F2E82ED2197B48A005C3353 /* Threat.swift in Sources */,
+				1F2E82EE2197B48A005C3353 /* Evaluator.swift in Sources */,
+				1F2E82EF2197B48A005C3353 /* Zobrist.swift in Sources */,
+				1F2E82F02197B48A005C3353 /* Cortex.swift in Sources */,
+				1F2E82F12197B48A005C3353 /* Minimax.swift in Sources */,
+				1F2E82F22197B48A005C3353 /* ZeroMax.swift in Sources */,
+				1F2E82F32197B48A005C3353 /* IterativeDeepening.swift in Sources */,
+				1F2E82F42197B48A005C3353 /* NegaScout.swift in Sources */,
+				1F2E82F52197B48A005C3353 /* MonteCarlo.swift in Sources */,
+				1F2E82F62197B48A005C3353 /* ZeroSum.swift in Sources */,
+				1F2E82E32197B443005C3353 /* main.swift in Sources */,
+				1F2E82F82197BDC4005C3353 /* Weights.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1F60C35A2168232C00580C99 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -485,6 +586,26 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		1F2E82E42197B443005C3353 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Debug;
+		};
+		1F2E82E52197B443005C3353 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
 		1F60C3852168232E00580C99 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -725,6 +846,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1F2E82E62197B443005C3353 /* Build configuration list for PBXNativeTarget "GZeroCommandLine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1F2E82E42197B443005C3353 /* Debug */,
+				1F2E82E52197B443005C3353 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		1F60C3592168232C00580C99 /* Build configuration list for PBXProject "Gomoku Zero" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
