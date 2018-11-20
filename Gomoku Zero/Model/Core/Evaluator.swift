@@ -16,21 +16,21 @@ class Evaluator {
     var seqHashMap: Dictionary<[Piece], [Threat]> = Dictionary()
     let seqHashQueue = DispatchQueue(label: "seqHashQueue")
     
-    static let win = 10_000_000_000_000_000
+    static let win: Int = Int(1E14)
     var weights: Dictionary<Threat, Int> = [
-        .five: 10_000_000_000_000_000, // 5
-        .straightFour: 1_000_000,      // s4
-        .straightPokedFour: 100_010,   // sp4
-        .blockedFour: 100_000,         // b4
-        .blockedPokedFour: 99_990,     // bp4
-        .straightThree: 50_200,        // s3
-        .straightPokedThree: 50190,    // sp3
-        .blockedThree: 16740,          // b3
-        .blockedPokedThree: 16720,     // bp3
-        .straightTwo: 15000,           // s2
-        .straightPokedTwo: 14990,      // sp2
-        .blockedTwo: 5000,             // b2
-        .blockedPokedTwo: 4990,        // bp2
+        .five: Int(1E15), // 5
+        .straightFour: Int(1E5),      // s4
+        .straightPokedFour: Int(1E4),   // sp4
+        .blockedFour: Int(1E4),         // b4
+        .blockedPokedFour: Int(1E4),     // bp4
+        .straightThree: Int(5E3),        // s3
+        .straightPokedThree: Int(5E3),    // sp3
+        .blockedThree: 1670,          // b3
+        .blockedPokedThree: 1670,     // bp3
+        .straightTwo: 1500,           // s2
+        .straightPokedTwo: 1500,      // sp2
+        .blockedTwo: 500,             // b2
+        .blockedPokedTwo: 300,        // bp2
         .none: 0
     ]
     
