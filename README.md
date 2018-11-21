@@ -196,8 +196,18 @@ In order to figure out the optimal weight assignment for each threat type, Zero+
 Refer to [here](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/GZeroCommandLine/main.swift) for complete implementation.
 
 To spawn a customized looped skirmish, use the **Zero+ Console**. The short-cut for opening the console is `⌃⇧C` (Control-Shift-C). Make sure that `Looped` is checked. You can optionally save the skirmishes to a designated location. To generate stats from saved skirmishes, click `Generate Stats`. 
+
 ![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Screenshots/console.png "Console Screenshot")
 
+The following .gif shows a looped play of two heuristic AIs happening in real time:
+
+![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Screenshots/self-play.gif "self-play.gif")
+
+One of the cool features proprietary to Zero+ is the visualization of the AI. The visualization offers a peek into the inner-workings of the algorithm (i.e. what it is doing, either updating the active map or performing simulations) in real time. The following is a snap-shot of visualization of ZeroMax playing against MCTS. Note that visualization would be different for different algorithms since they would be doing different things!
+
+![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Screenshots/max-vs-mcts.gif)
+
+To enable visualization, make sure the check box is checked in the console. (Alternatively, use the short cut `⌃⌥A` (Control-Option-A)).
 
 
 ## Features Snapshot
