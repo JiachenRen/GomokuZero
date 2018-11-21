@@ -94,7 +94,7 @@ sortedMoves.append(move)
 
 ### Sequence & Threat Types
 The `ThreatEvaluator` works by linearizing a certain position on the 2D board into 1D arrays called `Sequence`. For example, this is what the linearization of the coordinate `(6, 7)` looks like:
-```css
+```
 - - - - - - - - - - - - - - - 
 - - - - - - - - - - - - - - - 
 - - - - - - - - - - - - - - - 
@@ -111,30 +111,37 @@ The `ThreatEvaluator` works by linearizing a certain position on the 2D board in
 - - - - - - - - - - - - - - - 
 - - - - - - - - - - - - - - - 
 ```
-Horizontally, we have 
-```css
-* o o o o - * * *
+Horizontally, we have `* o o o o - * * *`, vertically, we have `o o * * - o o o *`, diagonally (top left to bottom right), we have `o * *`, and diagonally from bottom left to top right, we have `o * - o o`.
+
+The linearization of 2D patterns into 1D sequences offers a huge advantage - rather than having to develop an algorithm that evaluates linear patterns for threats that could be very complex, a simpler general algorithm could be used to categorize each sequence, let it be horizontal, vertical, or diagonal (since it does not matter in the end), into `Threat` types. There are several threat types, and each is assigned a specific score. In Zero +, the values are assigned intuitively:
+```swift
+var weights: Dictionary<Threat, Int> = [
+    .five: Int(1E15), // 5
+    .straightFour: Int(1E5),        // s4
+    .straightPokedFour: Int(1E4),   // sp4
+    .blockedFour: Int(1E4),         // b4
+    .blockedPokedFour: Int(1E4),    // bp4
+    .straightThree: Int(5E3),       // s3
+    .straightPokedThree: Int(5E3),  // sp3
+    .blockedThree: 1670,            // b3
+    .blockedPokedThree: 1670,       // bp3
+    .straightTwo: 1500,             // s2
+    .straightPokedTwo: 1500,        // sp2
+    .blockedTwo: 500,               // b2
+    .blockedPokedTwo: 300,          // bp2
+    .none: 0
+]
 ```
-Vertically, we have 
-```css
-o o * * - o o o *
-```
-Diagonally (top left to bottom right), we have
-```css
-o * *
-```
-Diagonally (bottom left to top right), we have
-```css
-o * - o o
-```
-The linearization of 2D patterns into 1D sequences offers a huge advantage - rather than having to develop an algorithm that evaluates linear patterns for threats that could be very complex, a simpler general algorithm could be used to categorize each sequence, let it be horizontal, vertical, or diagonal (since it does not matter in the end), into `Threat` types. There are several threat types, and each is assigned a specific score. In Zero +, the values are assigned intuitively; nevertheless, these arbitrary values should be assigned by the program itself. In order to do so, the algorithm has to play against itself many times to figure out the optimal scores to be assigned to the threat types. To find out more about self-play capabilities, refer to **Self-Play** section. Once the categorizing of a sequence is done, the result is stored into a map such that when the same linear sequence is encountered later, the threat type is directly extracted from the map rather than resolved by running it through the identification algorithm all over again. This might not seem like much, but in practice it offers a **30% speed-up**, which is way more than what I expected!
+Note that these arbitrary could be assigned by the program itself. In order to do so, the algorithm has to play against itself many times to figure out the optimal weights. A neural network is perhaps best suited for this task. This is left to be done in future projects. In Zero+, the weights are approximated using a simpler but quite effective algorithm based on mutation and evolution. To find out more about the implementation, refer to **Self-Play** section. 
+
+Once the categorizing of a sequence is done, the result is stored into a map such that when the same linear sequence is encountered later, the threat type is directly extracted from the map rather than resolved by running it through the identification algorithm all over again. This might not seem like much, but in practice it offers a **30% speed-up**.
 
 ### Iterative Deepening
 For algorithms like minimax that resemble [brute-force search](https://en.wikipedia.org/wiki/Brute-force_search) when not optimized, increasing the branching factor or search depth exponentially increases the the amount of calculation. In practice, minimax can only reach a very shallow depth given limited time, even with alpha-beta pruning and various other hashing algorithms.
 
 To address this issue, we need to take advantage of multiple cores and utilize all computational power at hand. To give an overview, Zero+ uses iterative deepening to concurrently calculate each depth on a separate thread. The threads are progressively deeper, i.e. the first thread searches up to depth = 2, the 2nd searches up to depth = 4, and so on. Note that only even depth are searched, this is because searching odd depths would cause heuristic evaluation to bias toward the current player. We will discuss this in later sections.
 
-With iterative deepening, the time growth with each increment of depth is no longer exponential - since all threads have synchronized access to shared hash maps (heuristic, ordered moves, sequence types, etc.), the results of the computations done by shallower threads are re-used by threads that carry out deeper, more complex calculations.
+With iterative deepening, the time growth with each increment of depth is no longer exponential - since all threads have [synchronized](https://en.wikipedia.org/wiki/Synchronization_(computer_science)) access to shared hash maps (heuristic, ordered moves, sequence types, etc.), the results of the computations done by shallower threads are re-used by threads that carry out deeper, more complex calculations.
 
 
 
