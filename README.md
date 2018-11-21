@@ -190,6 +190,13 @@ To address this issue, we need to take advantage of multiple cores and utilize a
 With iterative deepening, the time growth with each increment of depth is no longer exponential - since all threads have [synchronized](https://en.wikipedia.org/wiki/Synchronization_(computer_science)) access to shared hash maps (heuristic, ordered moves, sequence types, etc.), the results of the computations done by shallower threads are re-used by threads that carry out deeper, more complex calculations.
 
 
+## Self-Play
+In order to figure out the optimal weight assignment for each threat type, Zero+ plays against itself. This is currently a work in progress, but starting with zero knowlege about the game except the rules, the algorithm is able to converge toward a reasonable weight assignment given enough time. 
+
+Refer to [here](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/GZeroCommandLine/main.swift) for complete implementation.
+
+To spawn a customized looped skirmish, use the **Zero+ Console**. The short-cut for opening the console is `⌃⇧C` (Control-Shift-C). Make sure that `Looped` is checked. You can optionally save the skirmishes to a designated location. To generate stats from saved skirmishes, click `Generate Stats`. 
+![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Screenshots/console.png "Console Screenshot")
 
 
 
