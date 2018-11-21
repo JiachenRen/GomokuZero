@@ -162,19 +162,19 @@ Horizontally, we have `* o o o o - * * *`, vertically, we have `o o * * - o o o 
 The linearization of 2D patterns into 1D sequences offers a huge advantage - rather than having to develop an algorithm that evaluates linear patterns for threats that could be very complex, a simpler general algorithm could be used to categorize each sequence, let it be horizontal, vertical, or diagonal (since it does not matter in the end), into `Threat` types. There are several threat types, and each is assigned a specific score. In Zero +, the values are assigned intuitively:
 ```swift
 var weights: Dictionary<Threat, Int> = [
-    .five: Int(1E15), // 5
-    .straightFour: Int(1E5),        // s4
-    .straightPokedFour: Int(1E4),   // sp4
-    .blockedFour: Int(1E4),         // b4
-    .blockedPokedFour: Int(1E4),    // bp4
-    .straightThree: Int(5E3),       // s3
-    .straightPokedThree: Int(5E3),  // sp3
-    .blockedThree: 1670,            // b3
-    .blockedPokedThree: 1670,       // bp3
-    .straightTwo: 1500,             // s2
-    .straightPokedTwo: 1500,        // sp2
-    .blockedTwo: 500,               // b2
-    .blockedPokedTwo: 300,          // bp2
+    .five: Int(1E15),
+    .straightFour: Int(1E5),
+    .straightPokedFour: Int(1E4),
+    .blockedFour: Int(1E4),
+    .blockedPokedFour: Int(1E4),
+    .straightThree: Int(5E3),
+    .straightPokedThree: Int(5E3),
+    .blockedThree: 1670,
+    .blockedPokedThree: 1670,
+    .straightTwo: 1500,
+    .straightPokedTwo: 1500,
+    .blockedTwo: 500,
+    .blockedPokedTwo: 300,
     .none: 0
 ]
 ```
