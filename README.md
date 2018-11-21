@@ -1,5 +1,5 @@
 #  ![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Assets.xcassets/AppIcon.appiconset/icon_128x128.png "Zero + App Icon") Zero +
-Zero+ is an OSX application built with Swift 4. Based multiple conventional algorithms that performs threat space search, Zero+ linearizes the 2D matrix of the board and extrapolates the best defensive and offensive moves that feed into minimax by using an original algorithm that evaluates and hashes linear patterns to achieve significant speedup. First, a 2D map of active coordinates is updated with each increment of depth and changes made to the history stack, and each active coordinate is evaluated for threat potential and sorted into an array to serve as candidates. Then, a slightly modified Zobrist transposition table coupled with heuristics evaluation is used at every leaf node to achieve further speedup. 
+Zero+ is an AI for Gomoku, also known as Five in a Row, a popular board game that is played on the same board as Go. For the iOS version (less powerful), see [Gomoku Grandmaster](https://github.com/JiachenRen/gomoku-grandmaster)
 
 ## Algorithms & Data Structures Overview
 - Heuristic Evaluation
