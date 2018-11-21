@@ -205,10 +205,6 @@ The following .gif shows a looped play of two heuristic AIs happening in real ti
 
 One of the cool features proprietary to Zero+ is the visualization of the AI. The visualization offers a peek into the inner-workings of the algorithm (i.e. what it is doing, either updating the active map or performing simulations) in real time. The following is a snap-shot of visualization of ZeroMax playing against MCTS. Note that visualization would be different for different algorithms since they would be doing different things!
 
-![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Screenshots/max-vs-mcts.gif)
-
 To enable visualization, make sure the check box is checked in the console. (Alternatively, use the short cut `⌃⌥A` (Control-Option-A)).
 
-
-## Features Snapshot
-![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Screenshots/all-features.png "Features Snapshot") 
+![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Screenshots/max-vs-mcts.gif)
