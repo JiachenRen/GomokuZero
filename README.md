@@ -1,8 +1,5 @@
 #  ![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Assets.xcassets/AppIcon.appiconset/icon_128x128.png "Zero + App Icon") Zero +
-My fifth attemp at building an unbeatable gomoku AI!
-
-## Story of Creation
-Zero+ is an OSX application built with Swift 4 that is optimized all the way to the end. Based on a depth and time limited minimax algorithm that performs threat space search, Zero+ linearizes the 2D matrix of the board and extrapolates the best defensive and offensive moves that feed into minimax by using an original algorithm that evaluates and hashes linear patterns to achieve significant speedup. First, a 2D map of active coordinates is updated with each increment of depth and changes made to the history stack, and each active coordinate is evaluated for threat potential and sorted into an array to serve as candidates. Then, a slightly modified Zobrist transposition table coupled with heuristics evaluation is used at every leaf node to achieve further speedup. All modern computers are equipped with multiple cores, and Zero+ uses iterative deepening to bring out its full potential by calculating each depth concurrently on a separate thread with each thread having synchronized access to the shared hash maps.
+Zero+ is an OSX application built with Swift 4. Based multiple conventional algorithms that performs threat space search, Zero+ linearizes the 2D matrix of the board and extrapolates the best defensive and offensive moves that feed into minimax by using an original algorithm that evaluates and hashes linear patterns to achieve significant speedup. First, a 2D map of active coordinates is updated with each increment of depth and changes made to the history stack, and each active coordinate is evaluated for threat potential and sorted into an array to serve as candidates. Then, a slightly modified Zobrist transposition table coupled with heuristics evaluation is used at every leaf node to achieve further speedup. 
 
 ## Algorithms & Data Structures Overview
 - Heuristic Evaluation
@@ -131,9 +128,13 @@ Diagonally (bottom left to top right), we have
 o * - o o
 ```
 The linearization of 2D patterns into 1D sequences offers a huge advantage - rather than having to develop an algorithm that evaluates linear patterns for threats that could be very complex, a simpler general algorithm could be used to categorize each sequence, let it be horizontal, vertical, or diagonal (since it does not matter in the end), into `Threat` types. There are several threat types, and each is assigned a specific score. In Zero +, the values are assigned intuitively; nevertheless, these arbitrary values should be assigned by the program itself. In order to do so, the algorithm has to play against itself many times to figure out the optimal scores to be assigned to the threat types. To find out more about self-play capabilities, refer to **Self-Play** section. Once the categorizing of a sequence is done, the result is stored into a map such that when the same linear sequence is encountered later, the threat type is directly extracted from the map rather than resolved by running it through the identification algorithm all over again. This might not seem like much, but in practice it offers a **30% speed-up**, which is way more than what I expected!
-## Concurrency
-### Iterative Deepening
 
+### Iterative Deepening
+For algorithms like minimax that resemble [brute-force search](https://en.wikipedia.org/wiki/Brute-force_search) when not optimized, increasing the branching factor or search depth exponentially increases the the amount of calculation. In practice, minimax can only reach a very shallow depth given limited time, even with alpha-beta pruning and various other hashing algorithms.
+
+To address this issue, we need to take advantage of multiple cores and utilize all computational power at hand. To give an overview, Zero+ uses iterative deepening to concurrently calculate each depth on a separate thread. The threads are progressively deeper, i.e. the first thread searches up to depth = 2, the 2nd searches up to depth = 4, and so on. Note that only even depth are searched, this is because searching odd depths would cause heuristic evaluation to bias toward the current player. We will discuss this in later sections.
+
+With iterative deepening, the time growth with each increment of depth is no longer exponential - since all threads have synchronized access to shared hash maps (heuristic, ordered moves, sequence types, etc.), the results of the computations done by shallower threads are re-used by threads that carry out deeper, more complex calculations.
 
 
 
