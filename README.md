@@ -94,23 +94,7 @@ sortedMoves.append(move)
 
 ### Sequence & Threat Types
 The `ThreatEvaluator` works by linearizing a certain position on the 2D board into 1D arrays called `Sequence`. For example, this is what the linearization of the coordinate `(6, 7)` looks like:
-```
-- - - - - - - - - - - - - - - 
-- - - - - - - - - - - - - - - 
-- - - - - - - - - - - - - - - 
-- - - - - * o - - - - - - - - 
-- - - o * * o - - - - - - - - 
-- - - * * o * - o - - - - - - 
-- - o o * * * o o - - - - - - 
-- * o o o o E * * * - - - - - 
-- - - - - * o - * - - - - - - 
-- - - - o * o - - - - - - - - 
-- - - - - - o - - - - - - - - 
-- - - - - - * - - - - - - - - 
-- - - - - - - - - - - - - - - 
-- - - - - - - - - - - - - - - 
-- - - - - - - - - - - - - - - 
-```
+![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Screenshots/linearization.png "Board 15 x 15")
 Horizontally, we have `* o o o o - * * *`, vertically, we have `o o * * - o o o *`, diagonally (top left to bottom right), we have `o * *`, and diagonally from bottom left to top right, we have `o * - o o`.
 
 The linearization of 2D patterns into 1D sequences offers a huge advantage - rather than having to develop an algorithm that evaluates linear patterns for threats that could be very complex, a simpler general algorithm could be used to categorize each sequence, let it be horizontal, vertical, or diagonal (since it does not matter in the end), into `Threat` types. There are several threat types, and each is assigned a specific score. In Zero +, the values are assigned intuitively:
