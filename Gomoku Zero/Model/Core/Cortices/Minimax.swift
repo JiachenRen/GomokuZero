@@ -35,13 +35,19 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
     var cumCutDepth = 0
     var verbose = false
     
+    typealias Result = (move: Move, depth: Int)
+    typealias TransposMap = Dictionary<Zobrist, Result>
+    var transposMap = TransposMap()
+    
     init(_ delegate: CortexDelegate, depth: Int, breadth: Int) {
         self.depth = depth
         self.breadth = breadth
         super.init(delegate)
     }
     
+    
     override func getMove() -> Move {
+        transposMap = TransposMap()
         let move = minimax(depth, identity, Int.min, Int.max)
         if verbose {
             let avgCutDepth = Double(cumCutDepth) / Double(alphaCut + betaCut)
@@ -87,6 +93,12 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
      - Returns: the best move for the current player in the given delegate.
      */
     func minimax(_ depth: Int, _ player: Piece,  _ alpha: Int, _ beta: Int) -> Move? {
+        if let (mv, d) = transposMap[zobrist] {
+            if d >= depth {
+                return mv
+            }
+        }
+        
         var alpha = alpha, beta = beta, depth = depth // Make alpha beta mutable
         var score = getHeuristicValue()
         if delegate.strategy.randomizedSelection {
@@ -118,7 +130,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
                         bestMove = move
                         bestMove.score = s
                         if s >= Evaluator.win {
-                            return bestMove
+                            break
                         }
                         
                         alpha = max(alpha, s)
@@ -126,7 +138,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
                             bestMove.score = alpha
                             cumCutDepth += depth
                             alphaCut += 1
-                            return bestMove
+                            break
                         }
                     }
                 }
@@ -134,17 +146,17 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
                 // If time's up, return the current best move.
                 if delegate.timeout {
                     searchCancelledInProgress = true
-                    return bestMove
+                    break
                 }
             }
             
             // No defense measurements can dodge enemy's attack. Losing is inevitable. Select a random defensive move.
             if bestMove.score < -Evaluator.win {
-                var mv = getSortedMoves().sorted{$0.score > $1.score}[0]
-                mv.score = bestMove.score
-                return mv
+                let mv = getSortedMoves().sorted{$0.score > $1.score}[0]
+                bestMove.co = mv.co
             }
             
+            transposMap[Zobrist(zobrist: zobrist)] = (move: bestMove, depth: depth)
             return bestMove
         } else {
             let candidates = getCandidates()
@@ -162,7 +174,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
                         bestMove = move
                         bestMove.score = s
                         if s <= -Evaluator.win {
-                            return bestMove
+                            break
                         }
                         
                         beta = min(beta, s)
@@ -170,15 +182,17 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
                             bestMove.score = beta
                             cumCutDepth += depth
                             betaCut += 1
-                            return bestMove
+                            break
                         }
                     }
                 }
                 if delegate.timeout {
                     searchCancelledInProgress = true
-                    return bestMove
+                    break
                 }
             }
+            
+            transposMap[Zobrist(zobrist: zobrist)] = (move: bestMove, depth: depth)
             return bestMove
         }
     }

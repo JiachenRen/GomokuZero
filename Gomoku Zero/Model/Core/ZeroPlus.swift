@@ -35,7 +35,7 @@ class ZeroPlus: CortexDelegate, EvaluatorDataSource {
     var startTime: TimeInterval = 0
     
     var cortex: CortexProtocol
-    var personality: Personality = .zeroMax(depth: 2, breadth: 8, rolloutPr: 100, simDepth: 6)
+    var personality: Personality = .zeroMax(depth: 2, breadth: 10, rolloutPr: 100, simDepth: 6)
     var strategy: Strategy
     
     var verbose = true
@@ -259,8 +259,8 @@ struct Strategy {
     /// Whether to use small random numbers to break the tie between even moves
     var randomizedSelection = true
     var iterativeDeepening = true
-    var timeLimit: TimeInterval = 3
-    var layers: IterativeDeepeningCortex.Layers = .evens
+    var timeLimit: TimeInterval = 10
+    var layers: IterativeDeepeningCortex.Layers = .all
     var weights: Dictionary<Threat, Int>?
 }
 

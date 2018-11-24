@@ -131,10 +131,10 @@ class ZeroMax: MinimaxCortex {
         // We are only concerned about threes and fours
         let threshold = val(.straightPokedThree)
         bCands = bCands.filter{$0.score > threshold}
-            .filter{$0.threats.count > 1 || $0.score >= val(.straightFour)}
+            .filter{$0.threats.count > 1 || $0.score >= val(.blockedFour)}
             .sorted{$0.score > $1.score}
         wCands = wCands.filter{$0.score > threshold}
-            .filter{$0.threats.count > 1 || $0.score >= val(.straightFour)}
+            .filter{$0.threats.count > 1 || $0.score >= val(.blockedFour)}
             .sorted{$0.score > $1.score}
         
         if bCands.isEmpty {
