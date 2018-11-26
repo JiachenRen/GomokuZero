@@ -132,11 +132,6 @@ import CoreGraphics
         super.draw(dirtyRect)
         self.wantsLayer = true
         
-        // Fill board background
-        let outerRect = CGRect(origin: dirtyRect.origin, size: dirtyRect.size)
-        NSColor(red: 0.839, green: 0.706, blue: 0.412, alpha: 0.5).setFill()
-        outerRect.fill()
-        
         // Draw board gird lines
         NSColor.black.withAlphaComponent(0.5).setStroke()
         pathForGrid().stroke()

@@ -45,6 +45,9 @@
 		1F60C3A121690EFD00580C99 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3A021690EFD00580C99 /* Notification.swift */; };
 		1F60C3A921692B0900580C99 /* BoardTextureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3A821692B0900580C99 /* BoardTextureView.swift */; };
 		1F64DC4C216BF38000467F78 /* Zobrist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F64DC4B216BF38000467F78 /* Zobrist.swift */; };
+		1F743CC221AB8C0B00FEE2A5 /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F743CC121AB8C0B00FEE2A5 /* CGPoint.swift */; };
+		1F743CC421AB8C4200FEE2A5 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F743CC321AB8C4200FEE2A5 /* CGRect.swift */; };
+		1F743CC621AB8C6000FEE2A5 /* CGContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F743CC521AB8C6000FEE2A5 /* CGContext.swift */; };
 		1F7E4CC121AB2D2F002AE461 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7E4CC021AB2D2F002AE461 /* AppDelegate.swift */; };
 		1F7E4CC321AB2D30002AE461 /* BoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7E4CC221AB2D30002AE461 /* BoardViewController.swift */; };
 		1F7E4CC621AB2D30002AE461 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F7E4CC421AB2D30002AE461 /* Main.storyboard */; };
@@ -139,6 +142,9 @@
 		1F60C3A821692B0900580C99 /* BoardTextureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTextureView.swift; sourceTree = "<group>"; };
 		1F60C3AB21694C7100580C99 /* Gomoku Zero.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Gomoku Zero.entitlements"; sourceTree = "<group>"; };
 		1F64DC4B216BF38000467F78 /* Zobrist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zobrist.swift; sourceTree = "<group>"; };
+		1F743CC121AB8C0B00FEE2A5 /* CGPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
+		1F743CC321AB8C4200FEE2A5 /* CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
+		1F743CC521AB8C6000FEE2A5 /* CGContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGContext.swift; sourceTree = "<group>"; };
 		1F7E4CBE21AB2D2F002AE461 /* Gomoku Zero iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Gomoku Zero iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F7E4CC021AB2D2F002AE461 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F7E4CC221AB2D30002AE461 /* BoardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardViewController.swift; sourceTree = "<group>"; };
@@ -236,10 +242,10 @@
 		1F60C3602168232C00580C99 /* Gomoku Zero */ = {
 			isa = PBXGroup;
 			children = (
+				1F60C3612168232C00580C99 /* AppDelegate.swift */,
 				1F8A8B6F218159C600355EB3 /* Resources */,
 				1F8A8B7221815A1D00355EB3 /* Interface */,
 				1F8A8B6E2181599500355EB3 /* Model */,
-				1F60C3612168232C00580C99 /* AppDelegate.swift */,
 			);
 			path = "Gomoku Zero";
 			sourceTree = "<group>";
@@ -262,17 +268,44 @@
 			path = "Gomoku ZeroUITests";
 			sourceTree = "<group>";
 		};
+		1F743CBE21AB874A00FEE2A5 /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				1F743CC021AB8BFD00FEE2A5 /* Extensions */,
+				1F7E4CC221AB2D30002AE461 /* BoardViewController.swift */,
+				1F7E4CD321AB5501002AE461 /* BoardView.swift */,
+				1F7E4CC421AB2D30002AE461 /* Main.storyboard */,
+				1F7E4CCC21AB2D32002AE461 /* LaunchScreen.storyboard */,
+			);
+			path = Interface;
+			sourceTree = "<group>";
+		};
+		1F743CBF21AB87D900FEE2A5 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1F7E4CCA21AB2D32002AE461 /* Assets.xcassets */,
+				1F7E4CCF21AB2D32002AE461 /* Info.plist */,
+				1F7E4CC721AB2D30002AE461 /* Gomoku_Zero_iOS.xcdatamodeld */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		1F743CC021AB8BFD00FEE2A5 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				1F743CC121AB8C0B00FEE2A5 /* CGPoint.swift */,
+				1F743CC321AB8C4200FEE2A5 /* CGRect.swift */,
+				1F743CC521AB8C6000FEE2A5 /* CGContext.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		1F7E4CBF21AB2D2F002AE461 /* Gomoku Zero iOS */ = {
 			isa = PBXGroup;
 			children = (
 				1F7E4CC021AB2D2F002AE461 /* AppDelegate.swift */,
-				1F7E4CC221AB2D30002AE461 /* BoardViewController.swift */,
-				1F7E4CC421AB2D30002AE461 /* Main.storyboard */,
-				1F7E4CCA21AB2D32002AE461 /* Assets.xcassets */,
-				1F7E4CCC21AB2D32002AE461 /* LaunchScreen.storyboard */,
-				1F7E4CCF21AB2D32002AE461 /* Info.plist */,
-				1F7E4CC721AB2D30002AE461 /* Gomoku_Zero_iOS.xcdatamodeld */,
-				1F7E4CD321AB5501002AE461 /* BoardView.swift */,
+				1F743CBE21AB874A00FEE2A5 /* Interface */,
+				1F743CBF21AB87D900FEE2A5 /* Resources */,
 			);
 			path = "Gomoku Zero iOS";
 			sourceTree = "<group>";
@@ -657,15 +690,18 @@
 				1F7E4CDB21AB5582002AE461 /* Threat.swift in Sources */,
 				1F7E4CDC21AB5582002AE461 /* Evaluator.swift in Sources */,
 				1F7E4CDD21AB5582002AE461 /* Zobrist.swift in Sources */,
+				1F743CC221AB8C0B00FEE2A5 /* CGPoint.swift in Sources */,
 				1F7E4CDE21AB5582002AE461 /* Cortex.swift in Sources */,
 				1F7E4CDF21AB5582002AE461 /* Minimax.swift in Sources */,
 				1F7E4CE021AB5582002AE461 /* ZeroMax.swift in Sources */,
 				1F7E4CE121AB5582002AE461 /* IterativeDeepening.swift in Sources */,
+				1F743CC421AB8C4200FEE2A5 /* CGRect.swift in Sources */,
 				1F7E4CE221AB5582002AE461 /* NegaScout.swift in Sources */,
 				1F7E4CE321AB5582002AE461 /* MonteCarlo.swift in Sources */,
 				1F7E4CE421AB5582002AE461 /* ZeroSum.swift in Sources */,
 				1F7E4CC921AB2D30002AE461 /* Gomoku_Zero_iOS.xcdatamodeld in Sources */,
 				1F7E4CD421AB5501002AE461 /* BoardView.swift in Sources */,
+				1F743CC621AB8C6000FEE2A5 /* CGContext.swift in Sources */,
 				1F7E4CC321AB2D30002AE461 /* BoardViewController.swift in Sources */,
 				1F7E4CC121AB2D2F002AE461 /* AppDelegate.swift in Sources */,
 			);
@@ -978,7 +1014,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
-				INFOPLIST_FILE = "Gomoku Zero iOS/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Gomoku Zero iOS/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -999,7 +1035,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
-				INFOPLIST_FILE = "Gomoku Zero iOS/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Gomoku Zero iOS/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

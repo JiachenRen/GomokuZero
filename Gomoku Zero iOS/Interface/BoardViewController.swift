@@ -11,6 +11,7 @@ import UIKit
 class BoardViewController: UIViewController, BoardViewDelegate {
     
     
+    @IBOutlet weak var boardImgView: UIImageView!
     @IBOutlet weak var boardView: BoardView!
     
     @IBOutlet var tapRecognizer: UITapGestureRecognizer!
@@ -22,7 +23,7 @@ class BoardViewController: UIViewController, BoardViewDelegate {
     
     var delegate: ViewControllerDelegate?
     
-    var board: Board = Board(dimension: 19)
+    var board: Board = Board(dimension: 15)
     var zeroPlus: ZeroPlus {
         return board.zeroPlus
     }
@@ -34,6 +35,7 @@ class BoardViewController: UIViewController, BoardViewDelegate {
         board.delegate = self
         zeroPlus.visDelegate = self // Set this to nil to disable visualization
         board.zeroIdentity = .black
+        board.requestZeroBrainStorm()
         
         // Establish delegation with board view (View)
         boardView.delegate = self
@@ -59,12 +61,17 @@ class BoardViewController: UIViewController, BoardViewDelegate {
     @IBAction func didTap(_ sender: UITapGestureRecognizer) {
         let co = boardView.onBoard(sender.location(in: boardView))
         board.put(at: co)
+        
+        // Prevent the player from making a move when the computer is thinking.
+        boardView.isUserInteractionEnabled = false
     }
     
     @IBAction func didPan(_ sender: UIPanGestureRecognizer) {
         let trans = sender.translation(in: nil)
         boardView.frame.origin.translate(by: trans)
         sender.setTranslation(.zero, in: nil)
+        
+        boardImgView.frame = boardView.frame
     }
     
     @IBAction func didPinch(_ sender: UIPinchGestureRecognizer) {
@@ -85,7 +92,10 @@ class BoardViewController: UIViewController, BoardViewDelegate {
         // Redraw the view to prevent pixelation when resizing ends
         if sender.state == .ended {
             boardView.setNeedsDisplay()
+            boardImgView.setNeedsDisplay()
         }
+        
+        boardImgView.frame = boardView.frame
         
         // Reset scaling factor
         sender.scale = 1
@@ -113,6 +123,11 @@ extension BoardViewController: BoardDelegate {
     func boardDidUpdate(pieces: [[Piece]]) {
         // Transfer the current arrangement of pieces to board view for display
         boardView.pieces = pieces
+        
+        // Make it so that the user can make their move
+        DispatchQueue.main.async {[unowned self] in
+            self.boardView.isUserInteractionEnabled = true
+        }
     }
     
 }
@@ -128,43 +143,6 @@ extension BoardViewController: VisualizationDelegate {
         DispatchQueue.main.async {
             self.boardView.zeroPlusHistory = history
         }
-    }
-}
-
-// MARK: Extensions
-
-extension CGPoint {
-    
-    static prefix func - (point: CGPoint) -> CGPoint {
-        return CGPoint(x: -point.x, y: -point.y)
-    }
-    
-    func translate(_ x: CGFloat, _ y: CGFloat) -> CGPoint {
-        return translating(by: .init(x: x, y: y))
-    }
-    
-    mutating func translate(by point: CGPoint) {
-        x += point.x
-        y += point.y
-    }
-    
-    func translating(by point: CGPoint) -> CGPoint {
-        return .init(x: point.x + x, y: point.y + y)
-    }
-    
-    static func midpoint(from p1: CGPoint, to p2: CGPoint) -> CGPoint{
-        return CGPoint(x: (p2.x+p1.x)/2, y: (p2.y+p1.y)/2)
-    }
-    
-    static func *(point: CGPoint, scalar: CGFloat) -> CGPoint {
-        return CGPoint(x: point.x * scalar, y: point.y * scalar)
-    }
-    
-    static func +(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
-        return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
-    }
-    static func -(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
-        return lhs + -rhs
     }
 }
 

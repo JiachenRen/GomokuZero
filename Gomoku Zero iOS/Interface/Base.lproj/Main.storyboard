@@ -18,9 +18,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="board_a" translatesAutoresizingMaskIntoConstraints="NO" id="I2D-VW-Gey">
+                                <rect key="frame" x="19" y="175" width="337.5" height="337.5"/>
+                            </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2NL-PJ-Jjb" customClass="BoardView" customModule="Gomoku_Zero_iOS" customModuleProvider="target">
                                 <rect key="frame" x="19" y="175" width="337.5" height="337.5"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="2NL-PJ-Jjb" secondAttribute="height" multiplier="1:1" id="KUb-8m-mc2"/>
                                 </constraints>
@@ -29,8 +32,12 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="I2D-VW-Gey" firstAttribute="centerY" secondItem="2NL-PJ-Jjb" secondAttribute="centerY" id="9qV-BZ-Mt2"/>
                             <constraint firstItem="2NL-PJ-Jjb" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="MgM-Iw-yX2"/>
+                            <constraint firstItem="I2D-VW-Gey" firstAttribute="width" secondItem="2NL-PJ-Jjb" secondAttribute="width" id="Pdm-mO-N45"/>
+                            <constraint firstItem="I2D-VW-Gey" firstAttribute="height" secondItem="2NL-PJ-Jjb" secondAttribute="height" id="WNn-dB-bXW"/>
                             <constraint firstItem="2NL-PJ-Jjb" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="Yh1-37-vAS"/>
+                            <constraint firstItem="I2D-VW-Gey" firstAttribute="centerX" secondItem="2NL-PJ-Jjb" secondAttribute="centerX" id="n6d-c5-57g"/>
                             <constraint firstItem="2NL-PJ-Jjb" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.9" id="sft-Tl-Hc6"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -43,6 +50,7 @@
                         </connections>
                     </view>
                     <connections>
+                        <outlet property="boardImgView" destination="I2D-VW-Gey" id="GBD-TU-dHK"/>
                         <outlet property="boardView" destination="2NL-PJ-Jjb" id="mVj-3Q-iSB"/>
                         <outlet property="doubleTouchRecognizer" destination="bM6-Mm-Trz" id="4BC-fd-Hph"/>
                         <outlet property="panRecognizer" destination="cTj-FF-4Xo" id="uwA-p2-pN2"/>
@@ -80,4 +88,7 @@
             </objects>
         </scene>
     </scenes>
+    <resources>
+        <image name="board_a" width="2000" height="2000"/>
+    </resources>
 </document>

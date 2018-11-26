@@ -94,7 +94,7 @@ import UIKit
         }
     }
     
-    var activeMapVisible = true
+    var activeMapVisible = false
     var visualizationEnabled = true
     var historyVisible = true
     var showCalcDuration = false
@@ -127,14 +127,10 @@ import UIKit
     override func draw(_ dirtyRect: CGRect) {
         super.draw(dirtyRect)
         
-        // Fill board background
-        let outerRect = CGRect(origin: dirtyRect.origin, size: dirtyRect.size)
-        UIColor(red: 0.839, green: 0.706, blue: 0.412, alpha: 0.5).setFill()
-        UIBezierPath(rect: outerRect).fill()
-        
         // Draw board gird lines
         UIColor.black.withAlphaComponent(0.5).setStroke()
         pathForGrid().stroke()
+        
         
         if board.dimension == 19 || board.dimension == 15 {
             drawVertices()
@@ -375,31 +371,4 @@ import UIKit
 
 protocol BoardViewDelegate {
     var board: Board {get}
-}
-
-extension CGRect {
-    init(center: CGPoint, size: CGSize){
-        self.init(
-            origin: CGPoint(
-                x: center.x - size.width / 2,
-                y: center.y - size.height / 2
-            ),
-            size: size
-        )
-    }
-    static func fillCircle(center: CGPoint, radius: CGFloat) {
-        let circle = UIBezierPath(ovalIn: CGRect(center: center, size: CGSize(width: radius * 2, height: radius * 2)))
-        circle.fill()
-    }
-}
-
-extension CGContext {
-    static func point(at point: CGPoint, strokeWeight: CGFloat){
-        let circle = UIBezierPath(ovalIn: CGRect(center: point, size: CGSize(width: strokeWeight, height: strokeWeight)))
-        circle.fill()
-    }
-    static func fillCircle(center: CGPoint, radius: CGFloat) {
-        let circle = UIBezierPath(ovalIn: CGRect(center: center, size: CGSize(width: radius * 2, height: radius * 2)))
-        circle.fill()
-    }
 }
