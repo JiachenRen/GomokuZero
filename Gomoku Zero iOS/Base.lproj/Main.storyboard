@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Board View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="BoardViewController" customModule="Gomoku_Zero_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2NL-PJ-Jjb" customClass="BoardView" customModule="Gomoku_Zero_iOS" customModuleProvider="target">
+                                <rect key="frame" x="19" y="175" width="337.5" height="337.5"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="2NL-PJ-Jjb" secondAttribute="height" multiplier="1:1" id="KUb-8m-mc2"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="2NL-PJ-Jjb" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="MgM-Iw-yX2"/>
+                            <constraint firstItem="2NL-PJ-Jjb" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="Yh1-37-vAS"/>
+                            <constraint firstItem="2NL-PJ-Jjb" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.9" id="sft-Tl-Hc6"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="8mn-f6-V3M" appends="YES" id="zsi-Ef-MbF"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="boardView" destination="2NL-PJ-Jjb" id="mVj-3Q-iSB"/>
+                        <outlet property="tapGestureRecognizer" destination="8mn-f6-V3M" id="Ok2-Rv-EfR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="8mn-f6-V3M">
+                    <connections>
+                        <action selector="didTap:" destination="BYZ-38-t0r" id="3OT-jb-KTI"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+        </scene>
+    </scenes>
+</document>
