@@ -12,7 +12,11 @@ class BoardViewController: UIViewController, BoardViewDelegate {
     
     
     @IBOutlet weak var boardView: BoardView!
+    
     @IBOutlet var tapRecognizer: UITapGestureRecognizer!
+    @IBOutlet var doubleTouchRecognizer: UITapGestureRecognizer!
+    @IBOutlet var tripleTouchRecognizer: UITapGestureRecognizer!
+    
     @IBOutlet var panRecognizer: UIPanGestureRecognizer!
     @IBOutlet var pinchRecognizer: UIPinchGestureRecognizer!
     
@@ -36,6 +40,8 @@ class BoardViewController: UIViewController, BoardViewDelegate {
         
         // Configure gesture recognizer
         tapRecognizer.numberOfTapsRequired = 1
+        doubleTouchRecognizer.numberOfTouchesRequired = 2
+        tripleTouchRecognizer.numberOfTouchesRequired = 3
     }
     
     func updateVisPref(_ name: String) {
@@ -84,7 +90,15 @@ class BoardViewController: UIViewController, BoardViewDelegate {
         // Reset scaling factor
         sender.scale = 1
     }
-
+    
+    @IBAction func didDoubleTouch(_ sender: UITapGestureRecognizer) {
+        board.undo()
+    }
+    
+    @IBAction func didTripleTouch(_ sender: UITapGestureRecognizer) {
+        board.redo()
+    }
+    
 }
 
 protocol ViewControllerDelegate {
