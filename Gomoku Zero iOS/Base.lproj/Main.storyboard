@@ -36,11 +36,15 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="8mn-f6-V3M" appends="YES" id="zsi-Ef-MbF"/>
+                            <outletCollection property="gestureRecognizers" destination="cTj-FF-4Xo" appends="YES" id="UKo-BH-oIa"/>
+                            <outletCollection property="gestureRecognizers" destination="OvN-Qh-j52" appends="YES" id="ieh-kK-vSI"/>
                         </connections>
                     </view>
                     <connections>
                         <outlet property="boardView" destination="2NL-PJ-Jjb" id="mVj-3Q-iSB"/>
-                        <outlet property="tapGestureRecognizer" destination="8mn-f6-V3M" id="Ok2-Rv-EfR"/>
+                        <outlet property="panRecognizer" destination="cTj-FF-4Xo" id="uwA-p2-pN2"/>
+                        <outlet property="pinchRecognizer" destination="OvN-Qh-j52" id="a7m-gj-jn6"/>
+                        <outlet property="tapRecognizer" destination="8mn-f6-V3M" id="Ok2-Rv-EfR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -49,6 +53,16 @@
                         <action selector="didTap:" destination="BYZ-38-t0r" id="3OT-jb-KTI"/>
                     </connections>
                 </tapGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="cTj-FF-4Xo">
+                    <connections>
+                        <action selector="didPan:" destination="BYZ-38-t0r" id="9YU-Wt-3NG"/>
+                    </connections>
+                </panGestureRecognizer>
+                <pinchGestureRecognizer id="OvN-Qh-j52">
+                    <connections>
+                        <action selector="didPinch:" destination="BYZ-38-t0r" id="U7g-4W-uA7"/>
+                    </connections>
+                </pinchGestureRecognizer>
             </objects>
         </scene>
     </scenes>

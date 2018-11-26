@@ -12,7 +12,9 @@ class BoardViewController: UIViewController, BoardViewDelegate {
     
     
     @IBOutlet weak var boardView: BoardView!
-    @IBOutlet var tapGestureRecognizer: UITapGestureRecognizer!
+    @IBOutlet var tapRecognizer: UITapGestureRecognizer!
+    @IBOutlet var panRecognizer: UIPanGestureRecognizer!
+    @IBOutlet var pinchRecognizer: UIPinchGestureRecognizer!
     
     var delegate: ViewControllerDelegate?
     
@@ -33,7 +35,7 @@ class BoardViewController: UIViewController, BoardViewDelegate {
         boardView.delegate = self
         
         // Configure gesture recognizer
-        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapRecognizer.numberOfTapsRequired = 1
     }
     
     func updateVisPref(_ name: String) {
@@ -52,6 +54,37 @@ class BoardViewController: UIViewController, BoardViewDelegate {
         let co = boardView.onBoard(sender.location(in: boardView))
         board.put(at: co)
     }
+    
+    @IBAction func didPan(_ sender: UIPanGestureRecognizer) {
+        let trans = sender.translation(in: nil)
+        boardView.frame.origin.translate(by: trans)
+        sender.setTranslation(.zero, in: nil)
+    }
+    
+    @IBAction func didPinch(_ sender: UIPinchGestureRecognizer) {
+        let origin = boardView.frame.origin
+        let anchor = sender.location(in: nil)
+        let scale = sender.scale
+        
+        // Re-scale the board
+        var size = boardView.frame.size
+        size.width *= scale
+        size.height = size.width
+        boardView.frame.size = size
+        
+        // Translate the board so the zooming appears spot-on
+        let escapeDir = (origin - anchor) * scale
+        boardView.frame.origin = escapeDir + anchor
+        
+        // Redraw the view to prevent pixelation when resizing ends
+        if sender.state == .ended {
+            boardView.setNeedsDisplay()
+        }
+        
+        // Reset scaling factor
+        sender.scale = 1
+    }
+
 }
 
 protocol ViewControllerDelegate {
@@ -83,3 +116,42 @@ extension BoardViewController: VisualizationDelegate {
         }
     }
 }
+
+// MARK: Extensions
+
+extension CGPoint {
+    
+    static prefix func - (point: CGPoint) -> CGPoint {
+        return CGPoint(x: -point.x, y: -point.y)
+    }
+    
+    func translate(_ x: CGFloat, _ y: CGFloat) -> CGPoint {
+        return translating(by: .init(x: x, y: y))
+    }
+    
+    mutating func translate(by point: CGPoint) {
+        x += point.x
+        y += point.y
+    }
+    
+    func translating(by point: CGPoint) -> CGPoint {
+        return .init(x: point.x + x, y: point.y + y)
+    }
+    
+    static func midpoint(from p1: CGPoint, to p2: CGPoint) -> CGPoint{
+        return CGPoint(x: (p2.x+p1.x)/2, y: (p2.y+p1.y)/2)
+    }
+    
+    static func *(point: CGPoint, scalar: CGFloat) -> CGPoint {
+        return CGPoint(x: point.x * scalar, y: point.y * scalar)
+    }
+    
+    static func +(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
+        return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
+    }
+    static func -(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
+        return lhs + -rhs
+    }
+}
+
+
