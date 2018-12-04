@@ -98,7 +98,7 @@ import CoreGraphics
         }
     }
     
-    var activeMapVisible = true
+    var activeMapVisible = false
     var visualizationEnabled = true
     var historyVisible = true
     var showCalcDuration = false

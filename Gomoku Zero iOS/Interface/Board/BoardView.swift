@@ -94,8 +94,8 @@ import UIKit
         }
     }
     
-    var activeMapVisible = false
-    var visualizationEnabled = true
+    var activeMapVisible = true
+    var visualizationEnabled = false
     var historyVisible = true
     var showCalcDuration = false
     var highlightLastStep = true {

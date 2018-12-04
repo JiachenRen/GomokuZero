@@ -77,6 +77,16 @@
 		1F83A557217BF95800285999 /* MonteCarlo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A556217BF95800285999 /* MonteCarlo.swift */; };
 		1FB0F3E92182431A00E28001 /* all-features.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB0F3E82182431A00E28001 /* all-features.png */; };
 		1FB0F3EB2186085A00E28001 /* ZeroSum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB0F3EA2186085A00E28001 /* ZeroSum.swift */; };
+		1FE1ADD221B611E7008E46AE /* ConfigTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1ADD121B611E7008E46AE /* ConfigTVC.swift */; };
+		1FE1ADD421B6120B008E46AE /* SwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1ADD321B6120B008E46AE /* SwitchCell.swift */; };
+		1FE1ADD621B6B89D008E46AE /* SegueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1ADD521B6B89D008E46AE /* SegueCell.swift */; };
+		1FE1ADD821B6C836008E46AE /* StepperCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1ADD721B6C836008E46AE /* StepperCell.swift */; };
+		1FE1ADDA21B6D15F008E46AE /* ToggleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1ADD921B6D15F008E46AE /* ToggleCell.swift */; };
+		1FE1ADDC21B6D229008E46AE /* SegmentedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1ADDB21B6D229008E46AE /* SegmentedCell.swift */; };
+		1FE1ADE121B6D76B008E46AE /* CellConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1ADE021B6D76B008E46AE /* CellConfig.swift */; };
+		1FE1ADE321B71A8F008E46AE /* CellProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1ADE221B71A8F008E46AE /* CellProtocol.swift */; };
+		1FE1ADE721B72EA4008E46AE /* AlgorithmVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1ADE621B72EA4008E46AE /* AlgorithmVC.swift */; };
+		1FE1ADE921B73DFB008E46AE /* NSObject+Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1ADE821B73DFB008E46AE /* NSObject+Notification.swift */; };
 		1FE928DC217D1C62000B55CF /* ConsoleWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */; };
 		1FE928DE217D1EDA000B55CF /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */; };
 		1FE928E3217D6B43000B55CF /* ZeroMax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928E2217D6B43000B55CF /* ZeroMax.swift */; };
@@ -161,6 +171,16 @@
 		1F83A556217BF95800285999 /* MonteCarlo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonteCarlo.swift; sourceTree = "<group>"; };
 		1FB0F3E82182431A00E28001 /* all-features.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "all-features.png"; sourceTree = "<group>"; };
 		1FB0F3EA2186085A00E28001 /* ZeroSum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroSum.swift; sourceTree = "<group>"; };
+		1FE1ADD121B611E7008E46AE /* ConfigTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigTVC.swift; sourceTree = "<group>"; };
+		1FE1ADD321B6120B008E46AE /* SwitchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchCell.swift; sourceTree = "<group>"; };
+		1FE1ADD521B6B89D008E46AE /* SegueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegueCell.swift; sourceTree = "<group>"; };
+		1FE1ADD721B6C836008E46AE /* StepperCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperCell.swift; sourceTree = "<group>"; };
+		1FE1ADD921B6D15F008E46AE /* ToggleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleCell.swift; sourceTree = "<group>"; };
+		1FE1ADDB21B6D229008E46AE /* SegmentedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedCell.swift; sourceTree = "<group>"; };
+		1FE1ADE021B6D76B008E46AE /* CellConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellConfig.swift; sourceTree = "<group>"; };
+		1FE1ADE221B71A8F008E46AE /* CellProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellProtocol.swift; sourceTree = "<group>"; };
+		1FE1ADE621B72EA4008E46AE /* AlgorithmVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlgorithmVC.swift; sourceTree = "<group>"; };
+		1FE1ADE821B73DFB008E46AE /* NSObject+Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Notification.swift"; sourceTree = "<group>"; };
 		1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleWindowController.swift; sourceTree = "<group>"; };
 		1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		1FE928E2217D6B43000B55CF /* ZeroMax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMax.swift; sourceTree = "<group>"; };
@@ -272,8 +292,8 @@
 			isa = PBXGroup;
 			children = (
 				1F743CC021AB8BFD00FEE2A5 /* Extensions */,
-				1F7E4CC221AB2D30002AE461 /* BoardViewController.swift */,
-				1F7E4CD321AB5501002AE461 /* BoardView.swift */,
+				1FE1ADCD21B60E53008E46AE /* Board */,
+				1FE1ADCE21B60E62008E46AE /* Configuration */,
 				1F7E4CC421AB2D30002AE461 /* Main.storyboard */,
 				1F7E4CCC21AB2D32002AE461 /* LaunchScreen.storyboard */,
 			);
@@ -296,6 +316,7 @@
 				1F743CC121AB8C0B00FEE2A5 /* CGPoint.swift */,
 				1F743CC321AB8C4200FEE2A5 /* CGRect.swift */,
 				1F743CC521AB8C6000FEE2A5 /* CGContext.swift */,
+				1FE1ADE821B73DFB008E46AE /* NSObject+Notification.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -413,6 +434,39 @@
 				1FB0F3E82182431A00E28001 /* all-features.png */,
 			);
 			path = Screenshots;
+			sourceTree = "<group>";
+		};
+		1FE1ADCD21B60E53008E46AE /* Board */ = {
+			isa = PBXGroup;
+			children = (
+				1F7E4CC221AB2D30002AE461 /* BoardViewController.swift */,
+				1F7E4CD321AB5501002AE461 /* BoardView.swift */,
+			);
+			path = Board;
+			sourceTree = "<group>";
+		};
+		1FE1ADCE21B60E62008E46AE /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				1FE1ADE621B72EA4008E46AE /* AlgorithmVC.swift */,
+				1FE1ADD121B611E7008E46AE /* ConfigTVC.swift */,
+				1FE1ADDD21B6D235008E46AE /* Cells */,
+			);
+			path = Configuration;
+			sourceTree = "<group>";
+		};
+		1FE1ADDD21B6D235008E46AE /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				1FE1ADD321B6120B008E46AE /* SwitchCell.swift */,
+				1FE1ADD521B6B89D008E46AE /* SegueCell.swift */,
+				1FE1ADD721B6C836008E46AE /* StepperCell.swift */,
+				1FE1ADD921B6D15F008E46AE /* ToggleCell.swift */,
+				1FE1ADDB21B6D229008E46AE /* SegmentedCell.swift */,
+				1FE1ADE021B6D76B008E46AE /* CellConfig.swift */,
+				1FE1ADE221B71A8F008E46AE /* CellProtocol.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -683,14 +737,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F7E4CD521AB5582002AE461 /* Piece.swift in Sources */,
+				1FE1ADE921B73DFB008E46AE /* NSObject+Notification.swift in Sources */,
 				1F7E4CD621AB5582002AE461 /* Board.swift in Sources */,
 				1F7E4CD721AB5582002AE461 /* History.swift in Sources */,
 				1F7E4CD821AB5582002AE461 /* Notification.swift in Sources */,
 				1F7E4CDA21AB5582002AE461 /* ZeroPlus.swift in Sources */,
+				1FE1ADD421B6120B008E46AE /* SwitchCell.swift in Sources */,
 				1F7E4CDB21AB5582002AE461 /* Threat.swift in Sources */,
+				1FE1ADE121B6D76B008E46AE /* CellConfig.swift in Sources */,
 				1F7E4CDC21AB5582002AE461 /* Evaluator.swift in Sources */,
 				1F7E4CDD21AB5582002AE461 /* Zobrist.swift in Sources */,
 				1F743CC221AB8C0B00FEE2A5 /* CGPoint.swift in Sources */,
+				1FE1ADDA21B6D15F008E46AE /* ToggleCell.swift in Sources */,
+				1FE1ADE721B72EA4008E46AE /* AlgorithmVC.swift in Sources */,
 				1F7E4CDE21AB5582002AE461 /* Cortex.swift in Sources */,
 				1F7E4CDF21AB5582002AE461 /* Minimax.swift in Sources */,
 				1F7E4CE021AB5582002AE461 /* ZeroMax.swift in Sources */,
@@ -698,11 +757,16 @@
 				1F743CC421AB8C4200FEE2A5 /* CGRect.swift in Sources */,
 				1F7E4CE221AB5582002AE461 /* NegaScout.swift in Sources */,
 				1F7E4CE321AB5582002AE461 /* MonteCarlo.swift in Sources */,
+				1FE1ADE321B71A8F008E46AE /* CellProtocol.swift in Sources */,
+				1FE1ADDC21B6D229008E46AE /* SegmentedCell.swift in Sources */,
 				1F7E4CE421AB5582002AE461 /* ZeroSum.swift in Sources */,
 				1F7E4CC921AB2D30002AE461 /* Gomoku_Zero_iOS.xcdatamodeld in Sources */,
 				1F7E4CD421AB5501002AE461 /* BoardView.swift in Sources */,
+				1FE1ADD221B611E7008E46AE /* ConfigTVC.swift in Sources */,
 				1F743CC621AB8C6000FEE2A5 /* CGContext.swift in Sources */,
 				1F7E4CC321AB2D30002AE461 /* BoardViewController.swift in Sources */,
+				1FE1ADD821B6C836008E46AE /* StepperCell.swift in Sources */,
+				1FE1ADD621B6B89D008E46AE /* SegueCell.swift in Sources */,
 				1F7E4CC121AB2D2F002AE461 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
