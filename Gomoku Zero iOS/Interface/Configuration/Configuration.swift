@@ -119,7 +119,7 @@ let configs: [Algorithm: [CellConfig]] = [
         StepperConfig(title: "Depth", min: 0, max: 10, val: 4),
         StepperConfig(title: "Breadth", min: 1, max: 20, val: 6),
         ToggleConfig(title: "Iterative Deepening", isOn: true),
-        SegmentedConfig(title: "Layers", selectedIdx: 1, subtitles: ["All", "Even", "Odd"]),
+        SegmentedConfig(title: "Layers", selectedIdx: 1, subtitles: ["All", "Evens", "Odds"]),
     ],
     .negaScout: [
         ToggleConfig(title: "Randomized Selection", isOn: true),
@@ -127,7 +127,7 @@ let configs: [Algorithm: [CellConfig]] = [
         StepperConfig(title: "Depth", min: 0, max: 10, val: 4),
         StepperConfig(title: "Breadth", min: 1, max: 20, val: 6),
         ToggleConfig(title: "Iterative Deepening", isOn: true),
-        SegmentedConfig(title: "Layers", selectedIdx: 1, subtitles: ["All", "Even", "Odd"]),
+        SegmentedConfig(title: "Layers", selectedIdx: 1, subtitles: ["All", "Evens", "Odds"]),
     ],
     .monteCarlo: [
         ToggleConfig(title: "Randomized Expansion", isOn: true),
@@ -143,6 +143,6 @@ let configs: [Algorithm: [CellConfig]] = [
         StepperConfig(title: "Breadth", min: 1, max: 20, val: 10),
         StepperConfig(title: "Ext. Pr.", min: 1, max: 100, val: 100),
         ToggleConfig(title: "Iterative Deepening", isOn: true),
-        SegmentedConfig(title: "Layers", selectedIdx: 0, subtitles: ["All", "Even", "Odd"]),
+        SegmentedConfig(title: "Layers", selectedIdx: 0, subtitles: ["All", "Evens", "Odds"]),
     ]
 ]

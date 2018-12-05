@@ -162,6 +162,16 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
             let candidates = getCandidates()
             if candidates.count == 0 {
                 return nil
+            } else if candidates.count == 1 {
+                var mv = candidates.first!
+                delegate.put(at: mv.co)
+                if let score = minimax(depth - 1, player.next(), alpha, beta)?.score {
+                    delegate.revert()
+                    mv.score = score
+                    return mv
+                }
+                delegate.revert()
+                return nil
             }
             var bestMove = candidates.randomElement()!
             bestMove.score = Int.max

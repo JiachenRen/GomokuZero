@@ -13,7 +13,10 @@ class MenuTVC: UITableViewController {
     enum MenuItem {
         static let all: [MenuItem] = [
             .action(title: "Restart"),
-            .submenu(title: "AI Configuration", segueId: "config-segue")
+            .submenu(title: "AI Configuration", segueId: "config-segue"),
+            .action(title: "Undo"),
+            .action(title: "Redo"),
+            .submenu(title: "View", segueId: "view-segue"),
         ]
         case action(title: String)
         case submenu(title: String, segueId: String)
@@ -22,7 +25,6 @@ class MenuTVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBar.prefersLargeTitles = true
         tableView.separatorStyle = .none
     }
 
@@ -53,50 +55,56 @@ class MenuTVC: UITableViewController {
         return cell as! UITableViewCell
     }
     
+    private func performAction(_ command: String) {
+        switch command {
+        case "Restart":
+            sharedBoard.zeroXzero = false
+            
+            let zero1 = ZeroPlus()
+            zero1.identity = .black
+            zero1.visDelegate = sharedBoard.zeroPlus.visDelegate
+            
+            let zero2 = ZeroPlus()
+            zero2.identity = .white
+            zero2.visDelegate = sharedBoard.zeroPlus.visDelegate
+            
+            if blackConfig.enabled {
+                zero1.personality = blackConfig.resolvePersonality()
+                zero1.strategy = blackConfig.resolveStrategy()
+                sharedBoard.zeroPlus = zero1
+            }
+            
+            if whiteConfig.enabled {
+                zero2.personality = whiteConfig.resolvePersonality()
+                zero2.strategy = whiteConfig.resolveStrategy()
+                sharedBoard.zeroPlus2 = zero2
+            }
+            
+            if !blackConfig.enabled && whiteConfig.enabled {
+                // Special case, disable default board AI
+                sharedBoard.zeroPlus = zero2
+                sharedBoard.zeroPlus2 = nil
+                sharedBoard.zeroIdentity = .white
+            } else {
+                sharedBoard.zeroIdentity = .black
+            }
+            
+            if sharedBoard.zeroPlus2 != nil {
+                sharedBoard.zeroXzero = true
+            }
+            
+            sharedBoard.restart()
+            (navigationController!.parent as! ContainerVC).closeLeft()
+        case "Undo": sharedBoard.undo()
+        case "Redo": sharedBoard.redo()
+        default: break
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch MenuItem.all[indexPath.row] {
-        case .action(title: let t):
-            switch t {
-            case "Restart":
-                sharedBoard.zeroXzero = false
-                
-                let zero1 = ZeroPlus()
-                zero1.identity = .black
-                zero1.visDelegate = sharedBoard.zeroPlus.visDelegate
-                
-                let zero2 = ZeroPlus()
-                zero2.identity = .white
-                zero2.visDelegate = sharedBoard.zeroPlus.visDelegate
-                
-                if blackConfig.enabled {
-                    zero1.personality = blackConfig.resolvePersonality()
-                    zero1.strategy = blackConfig.resolveStrategy()
-                    sharedBoard.zeroPlus = zero1
-                }
-                
-                if whiteConfig.enabled {
-                    zero2.personality = whiteConfig.resolvePersonality()
-                    zero2.strategy = whiteConfig.resolveStrategy()
-                    sharedBoard.zeroPlus2 = zero2
-                }
-                
-                if !blackConfig.enabled && whiteConfig.enabled {
-                    // Special case, disable default board AI
-                    sharedBoard.zeroPlus = zero2
-                    sharedBoard.zeroPlus2 = nil
-                    sharedBoard.zeroIdentity = .white
-                } else {
-                    sharedBoard.zeroIdentity = .black
-                }
-                
-                if sharedBoard.zeroPlus2 != nil {
-                    sharedBoard.zeroXzero = true
-                }
-                
-                sharedBoard.restart()
-                (navigationController!.parent as! ContainerVC).closeLeft()
-            default: break
-            }
+        case .action(title: let command):
+            performAction(command)
         case .submenu(_, segueId: let id):
             performSegue(withIdentifier: id, sender: nil)
         }

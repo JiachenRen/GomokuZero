@@ -26,9 +26,11 @@ class SwitchConfig: CellConfig {
     }
     
     var isOn: Bool
+    var handler: ((Bool) -> Void)?
     
-    init(title: String, isOn: Bool) {
+    init(title: String, isOn: Bool, handler: ((Bool) -> Void)? = nil) {
         self.isOn = isOn
+        self.handler = handler
         super.init(title: title)
     }
 }

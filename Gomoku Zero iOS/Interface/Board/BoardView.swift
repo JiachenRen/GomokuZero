@@ -212,7 +212,7 @@ import UIKit
             ]
         var ctr = onScreen(co)
         //        ctr.x += pieceRadius / 4
-        ctr.y += pieceRadius / 8
+        ctr.y -= pieceRadius / 8
         let textRect = CGRect(center: ctr, size: CGSize(width: pieceRadius * 2, height: pieceRadius))
         let attrString = NSAttributedString(string: "\(num)", attributes: attributes)
         attrString.draw(in: textRect)

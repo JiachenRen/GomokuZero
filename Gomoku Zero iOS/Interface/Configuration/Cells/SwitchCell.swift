@@ -10,7 +10,7 @@ import UIKit
 
 class SwitchCell: UITableViewCell, ConfigCellProtocol {
     
-    @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var title: UILabel!
     @IBOutlet weak var `switch`: UISwitch!
     var switchConfig: SwitchConfig!
     
@@ -24,8 +24,10 @@ class SwitchCell: UITableViewCell, ConfigCellProtocol {
 
         // Configure the view for the selected state
     }
+    
     @IBAction func switchValueChanged(_ sender: UISwitch) {
         switchConfig.isOn = sender.isOn
+        switchConfig.handler?(sender.isOn)
     }
     
     func configure(_ cellConfig: CellConfig) {

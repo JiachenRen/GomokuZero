@@ -7,7 +7,8 @@
 //
 
 import Foundation
-
+import UIKit
 protocol ConfigCellProtocol {
+    var title: UILabel! {get}
     func configure(_ cellConfig: CellConfig)
 }
