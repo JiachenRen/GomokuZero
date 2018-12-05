@@ -1,18 +1,16 @@
 //
-//  SwitchCell.swift
+//  ActionCell.swift
 //  Gomoku Zero iOS
 //
-//  Created by Jiachen Ren on 12/3/18.
+//  Created by Jiachen Ren on 12/4/18.
 //  Copyright © 2018 Jiachen Ren. All rights reserved.
 //
 
 import UIKit
 
-class SwitchCell: UITableViewCell, CellProtocol {
-    
-    @IBOutlet weak var label: UILabel!
-    @IBOutlet weak var `switch`: UISwitch!
-    var switchConfig: SwitchConfig?
+class ActionCell: UITableViewCell, MenuCellProtocol {
+
+    @IBOutlet weak var title: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -23,10 +21,6 @@ class SwitchCell: UITableViewCell, CellProtocol {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
-    }
-    
-    func configure(_ cellConfig: CellConfig) {
-        self.switchConfig = (cellConfig as! SwitchConfig)
     }
 
 }

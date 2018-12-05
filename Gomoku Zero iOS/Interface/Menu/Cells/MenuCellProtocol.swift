@@ -1,5 +1,5 @@
 //
-//  CellProtocol.swift
+//  MenuCellProtocol.swift
 //  Gomoku Zero iOS
 //
 //  Created by Jiachen Ren on 12/4/18.
@@ -7,7 +7,8 @@
 //
 
 import Foundation
+import UIKit
 
-protocol CellProtocol {
-    func configure(_ cellConfig: CellConfig)
+protocol MenuCellProtocol {
+    var title: UILabel! {get}
 }

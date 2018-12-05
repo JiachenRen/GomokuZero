@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StepperCell: UITableViewCell, CellProtocol {
+class StepperCell: UITableViewCell, ConfigCellProtocol {
 
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var stepper: UIStepper!

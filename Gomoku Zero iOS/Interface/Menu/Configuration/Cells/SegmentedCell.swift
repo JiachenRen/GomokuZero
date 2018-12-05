@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SegmentedCell: UITableViewCell, CellProtocol {
+class SegmentedCell: UITableViewCell, ConfigCellProtocol {
 
     
     @IBOutlet weak var segmentedControl: UISegmentedControl!

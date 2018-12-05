@@ -1,5 +1,5 @@
 //
-//  ToggleCell.swift
+//  SegueCell.swift
 //  Gomoku Zero iOS
 //
 //  Created by Jiachen Ren on 12/4/18.
@@ -8,30 +8,29 @@
 
 import UIKit
 
-class ToggleCell: UITableViewCell, CellProtocol {
+class SegueCell: UITableViewCell, ConfigCellProtocol {
 
-    @IBOutlet weak var stateLabel: UILabel!
     @IBOutlet weak var title: UILabel!
-    var toggleConfig: ToggleConfig!
+    @IBOutlet weak var subtitle: UILabel!
+    var segueConfig: SegueConfig!
+    var segue: UIStoryboardSegue?
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         if selected {
-            stateLabel.isHidden = !stateLabel.isHidden
-            toggleConfig.isOn = !stateLabel.isHidden
+            segue?.perform()
         }
         // Configure the view for the selected state
     }
     
     func configure(_ cellConfig: CellConfig) {
-        toggleConfig = (cellConfig as! ToggleConfig)
-        stateLabel.isHidden = !toggleConfig.isOn
-        title.text = toggleConfig.title
+        segueConfig = (cellConfig as! SegueConfig)
+        title.text = segueConfig.title
+        subtitle.text = segueConfig.subtitle
     }
 
 }

@@ -8,6 +8,8 @@
 
 import UIKit
 
+let sharedBoard = Board(dimension: 15)
+
 class BoardViewController: UIViewController, BoardViewDelegate {
     
     
@@ -23,7 +25,7 @@ class BoardViewController: UIViewController, BoardViewDelegate {
     
     var delegate: ViewControllerDelegate?
     
-    var board: Board = Board(dimension: 15)
+    var board: Board = sharedBoard
     var zeroPlus: ZeroPlus {
         return board.zeroPlus
     }
