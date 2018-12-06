@@ -56,7 +56,7 @@ class ConfigTVC: UITableViewController {
     var lastSelected: Piece?
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         lastSelected = indexPath.section == 0 ? .black : .white
-        tableView.deselectRow(at: indexPath, animated: false)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     // MARK: - Navigation

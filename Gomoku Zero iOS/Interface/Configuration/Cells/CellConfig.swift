@@ -61,11 +61,13 @@ class StepperConfig: CellConfig {
     var min: Double
     var max: Double
     var val: Double
+    var handler: ((Int) -> Void)?
     
-    init(title: String, min: Double, max: Double, val: Double) {
+    init(title: String, min: Double, max: Double, val: Double, handler: ((Int) -> Void)? = nil) {
         self.min = min
         self.max = max
         self.val = val
+        self.handler = handler
         super.init(title: title)
     }
 }

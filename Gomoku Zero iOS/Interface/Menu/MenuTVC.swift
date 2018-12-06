@@ -16,7 +16,7 @@ class MenuTVC: UITableViewController {
             .submenu(title: "AI Configuration", segueId: "config-segue"),
             .action(title: "Undo"),
             .action(title: "Redo"),
-            .submenu(title: "View", segueId: "view-segue"),
+            .submenu(title: "Board", segueId: "board-segue"),
         ]
         case action(title: String)
         case submenu(title: String, segueId: String)

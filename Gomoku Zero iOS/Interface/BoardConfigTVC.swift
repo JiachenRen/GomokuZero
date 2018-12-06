@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewTVC: UITableViewController {
+class BoardConfigTVC: UITableViewController {
     
     var boardVC: BoardViewController {
         return (navigationController!.parent! as! ContainerVC).mainViewController! as! BoardViewController
@@ -40,6 +40,13 @@ class ViewTVC: UITableViewController {
                 [unowned self] enabled in
                 let boardView = self.boardVC.boardView
                 boardView?.showCalcDuration = enabled
+                if enabled {
+                    sharedBoard.zeroPlus.visDelegate = self.boardVC
+                    sharedBoard.zeroPlus2?.visDelegate = self.boardVC
+                }
+            },
+            StepperConfig(title: "Dimension", min: 5, max: 19, val: Double(sharedBoard.dimension)) {
+                sharedBoard.dimension = Int($0)
             }
         ]
     }

@@ -10,7 +10,7 @@ import Cocoa
 
 @IBDesignable class BoardTextureView: NSView {
 
-    @IBInspectable var image = NSImage(named: "board_b") {
+    @IBInspectable var image = NSImage(named: "board_d") {
         didSet {
             setNeedsDisplay(bounds)
         }

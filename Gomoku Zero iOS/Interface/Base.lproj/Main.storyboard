@@ -360,10 +360,10 @@
             </objects>
             <point key="canvasLocation" x="3343" y="-123"/>
         </scene>
-        <!--View-->
+        <!--Board-->
         <scene sceneID="rgK-Un-foK">
             <objects>
-                <tableViewController title="View" id="wtv-gl-6Pe" customClass="ViewTVC" customModule="Gomoku_Zero_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Board" id="wtv-gl-6Pe" customClass="BoardConfigTVC" customModule="Gomoku_Zero_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="I1r-pf-HQj">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -401,6 +401,52 @@
                                 <connections>
                                     <outlet property="switch" destination="elm-Sx-9BJ" id="NBu-IN-6L2"/>
                                     <outlet property="title" destination="hWP-v3-FsJ" id="L71-Mp-3p1"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="stepper-cell" id="AvV-zw-Ore" customClass="StepperCell" customModule="Gomoku_Zero_iOS" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="72" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AvV-zw-Ore" id="qug-2E-wC8">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="AOa-jX-BgT">
+                                            <rect key="frame" x="265" y="7.5" width="94" height="29"/>
+                                            <color key="tintColor" red="0.32592672109999998" green="0.51629668470000001" blue="0.92553132770000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <connections>
+                                                <action selector="stepperValueChanged:" destination="AvV-zw-Ore" eventType="valueChanged" id="0Cb-D3-4f5"/>
+                                            </connections>
+                                        </stepper>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Depth" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wl7-Dh-Tak">
+                                            <rect key="frame" x="36" y="11.5" width="47" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="10" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oN6-9g-ADv">
+                                            <rect key="frame" x="220.5" y="7" width="36.5" height="30"/>
+                                            <nil key="textColor"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="done"/>
+                                            <connections>
+                                                <action selector="textFieldEditingDidEnd:" destination="AvV-zw-Ore" eventType="primaryActionTriggered" id="z3X-CB-sL5"/>
+                                            </connections>
+                                        </textField>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="AOa-jX-BgT" secondAttribute="trailing" constant="16" id="0fR-eS-7hP"/>
+                                        <constraint firstItem="AOa-jX-BgT" firstAttribute="centerY" secondItem="qug-2E-wC8" secondAttribute="centerY" id="8gL-BV-YpU"/>
+                                        <constraint firstItem="oN6-9g-ADv" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="wl7-Dh-Tak" secondAttribute="trailing" constant="8" id="Ljs-AJ-Ug7"/>
+                                        <constraint firstItem="wl7-Dh-Tak" firstAttribute="centerY" secondItem="qug-2E-wC8" secondAttribute="centerY" id="fDC-bc-Mla"/>
+                                        <constraint firstItem="wl7-Dh-Tak" firstAttribute="leading" secondItem="qug-2E-wC8" secondAttribute="leadingMargin" constant="20" id="mtC-bH-Cvv"/>
+                                        <constraint firstItem="AOa-jX-BgT" firstAttribute="leading" secondItem="oN6-9g-ADv" secondAttribute="trailing" constant="8" id="sim-Yf-YgO"/>
+                                        <constraint firstItem="oN6-9g-ADv" firstAttribute="centerY" secondItem="qug-2E-wC8" secondAttribute="centerY" id="uJI-2e-TBd"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="stepper" destination="AOa-jX-BgT" id="aYx-ge-lSv"/>
+                                    <outlet property="textField" destination="oN6-9g-ADv" id="Hvo-W4-LzE"/>
+                                    <outlet property="title" destination="wl7-Dh-Tak" id="sC8-Fm-Pfh"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -488,7 +534,7 @@
                     <navigationItem key="navigationItem" title="Menu" id="1Ds-d0-8KO"/>
                     <connections>
                         <segue destination="wyh-wM-NpZ" kind="show" identifier="config-segue" id="lkb-P2-glg"/>
-                        <segue destination="wtv-gl-6Pe" kind="show" identifier="view-segue" id="g1S-2I-ZMl"/>
+                        <segue destination="wtv-gl-6Pe" kind="show" identifier="board-segue" id="g1S-2I-ZMl"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M1B-xO-ekw" userLabel="First Responder" sceneMemberID="firstResponder"/>

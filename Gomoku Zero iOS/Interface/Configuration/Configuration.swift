@@ -139,7 +139,7 @@ let configs: [Algorithm: [CellConfig]] = [
         ToggleConfig(title: "Randomized Selection", isOn: true),
         StepperConfig(title: "Timeout (s)", min: 1, max: 60, val: 15),
         StepperConfig(title: "Depth", min: 0, max: 10, val: 2),
-        StepperConfig(title: "Ext. Depth", min: 0, max: 20, val: 8),
+        StepperConfig(title: "Ext. Depth", min: 0, max: 20, val: 6),
         StepperConfig(title: "Breadth", min: 1, max: 20, val: 10),
         StepperConfig(title: "Ext. Pr.", min: 1, max: 100, val: 100),
         ToggleConfig(title: "Iterative Deepening", isOn: true),

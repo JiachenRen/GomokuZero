@@ -95,7 +95,7 @@
 		1FE1ADFA21B76749008E46AE /* SubmenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1ADF921B76749008E46AE /* SubmenuCell.swift */; };
 		1FE1ADFD21B76EE0008E46AE /* MenuCellProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1ADFC21B76EE0008E46AE /* MenuCellProtocol.swift */; };
 		1FE1ADFF21B822F4008E46AE /* LeftNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1ADFE21B822F4008E46AE /* LeftNavController.swift */; };
-		1FE1AE0621B8493C008E46AE /* ViewTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1AE0521B8493B008E46AE /* ViewTVC.swift */; };
+		1FE1AE0621B8493C008E46AE /* BoardConfigTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1AE0521B8493B008E46AE /* BoardConfigTVC.swift */; };
 		1FE928DC217D1C62000B55CF /* ConsoleWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */; };
 		1FE928DE217D1EDA000B55CF /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */; };
 		1FE928E3217D6B43000B55CF /* ZeroMax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928E2217D6B43000B55CF /* ZeroMax.swift */; };
@@ -198,7 +198,7 @@
 		1FE1ADF921B76749008E46AE /* SubmenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmenuCell.swift; sourceTree = "<group>"; };
 		1FE1ADFC21B76EE0008E46AE /* MenuCellProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCellProtocol.swift; sourceTree = "<group>"; };
 		1FE1ADFE21B822F4008E46AE /* LeftNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftNavController.swift; sourceTree = "<group>"; };
-		1FE1AE0521B8493B008E46AE /* ViewTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewTVC.swift; sourceTree = "<group>"; };
+		1FE1AE0521B8493B008E46AE /* BoardConfigTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardConfigTVC.swift; sourceTree = "<group>"; };
 		1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleWindowController.swift; sourceTree = "<group>"; };
 		1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		1FE928E2217D6B43000B55CF /* ZeroMax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMax.swift; sourceTree = "<group>"; };
@@ -314,7 +314,7 @@
 				1FE1ADCE21B60E62008E46AE /* Configuration */,
 				1FE1ADF621B7666D008E46AE /* Menu */,
 				1FE1ADFE21B822F4008E46AE /* LeftNavController.swift */,
-				1FE1AE0521B8493B008E46AE /* ViewTVC.swift */,
+				1FE1AE0521B8493B008E46AE /* BoardConfigTVC.swift */,
 				1FE1ADEE21B74B73008E46AE /* ContainerVC.swift */,
 				1FE1ADEA21B74789008E46AE /* SlideMenuController.swift */,
 				1F7E4CC421AB2D30002AE461 /* Main.storyboard */,
@@ -805,7 +805,7 @@
 				1F743CC421AB8C4200FEE2A5 /* CGRect.swift in Sources */,
 				1F7E4CE221AB5582002AE461 /* NegaScout.swift in Sources */,
 				1F7E4CE321AB5582002AE461 /* MonteCarlo.swift in Sources */,
-				1FE1AE0621B8493C008E46AE /* ViewTVC.swift in Sources */,
+				1FE1AE0621B8493C008E46AE /* BoardConfigTVC.swift in Sources */,
 				1FE1ADE321B71A8F008E46AE /* ConfigCellProtocol.swift in Sources */,
 				1FE1ADDC21B6D229008E46AE /* SegmentedCell.swift in Sources */,
 				1F7E4CE421AB5582002AE461 /* ZeroSum.swift in Sources */,

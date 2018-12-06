@@ -31,6 +31,7 @@ class StepperCell: UITableViewCell, ConfigCellProtocol {
         let val = Int(stepper.value)
         textField.text = "\(val)"
         stepperConfig.val = Double(val)
+        stepperConfig.handler?(val)
     }
     
     @IBAction func textFieldEditingDidEnd(_ sender: Any) {
