@@ -209,15 +209,16 @@ import CoreGraphics
     private func drawDigitOverlay(num: Int, for piece: Piece, at co: Coordinate, colorful: Bool) {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
+        let radius = pieceRadius / 4 * 3
         let attributes = [
             NSAttributedString.Key.paragraphStyle  : paragraphStyle,
-            .font            : NSFont.systemFont(ofSize: pieceRadius),
+            .font            : NSFont.systemFont(ofSize: radius),
             .foregroundColor : piece == .black ? colorful ? NSColor.green : NSColor.white : colorful ? .red : .black,
         ]
         var ctr = onScreen(co)
 //        ctr.x += pieceRadius / 4
-        ctr.y += pieceRadius / 8
-        let textRect = CGRect(center: ctr, size: CGSize(width: pieceRadius * 2, height: pieceRadius))
+        ctr.y += radius / 8
+        let textRect = CGRect(center: ctr, size: CGSize(width: pieceRadius * 2, height: radius))
         let attrString = NSAttributedString(string: "\(num)", attributes: attributes)
         attrString.draw(in: textRect)
     }

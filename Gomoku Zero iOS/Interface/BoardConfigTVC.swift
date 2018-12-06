@@ -47,6 +47,16 @@ class BoardConfigTVC: UITableViewController {
             },
             StepperConfig(title: "Dimension", min: 5, max: 19, val: Double(sharedBoard.dimension)) {
                 sharedBoard.dimension = Int($0)
+            },
+            SwitchConfig(title: "Solid Background", isOn: BoardViewConfig.solidBgd) {
+                [unowned self] in
+                BoardViewConfig.solidBgd = $0
+                self.boardVC.boardView.setNeedsDisplay()
+            },
+            StepperConfig(title: "Alpha", min: 0, max: 10, val: Double(BoardViewConfig.bgdAlpha * 10)) {
+                [unowned self] in
+                BoardViewConfig.bgdAlpha = CGFloat($0) / 10
+                self.boardVC.boardView.setNeedsDisplay()
             }
         ]
     }
@@ -71,6 +81,11 @@ class BoardConfigTVC: UITableViewController {
         cell.configure(cellConfig)
         cell.title.text = cellConfig.title
         return cell as! UITableViewCell
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
 

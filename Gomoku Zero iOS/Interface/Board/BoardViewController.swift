@@ -120,6 +120,15 @@ protocol ViewControllerDelegate {
 extension BoardViewController: BoardDelegate {
     func gameHasEnded(winner: Piece, coordinates: [Coordinate], popDialogue: Bool) {
         self.boardView.winningCoordinates = coordinates
+        let w = winner == .black ? "Black Wins!" : "White Wins!"
+        let alert = UIAlertController(title: w, message: nil, preferredStyle: .alert)
+        present(alert, animated: true)
+        DispatchQueue.global(qos: .background).async {
+            Thread.sleep(forTimeInterval: 2)
+            DispatchQueue.main.async {
+                alert.dismiss(animated: true)
+            }
+        }
     }
     
     func boardDidUpdate(pieces: [[Piece]]) {

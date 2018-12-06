@@ -16,7 +16,7 @@ import UIKit
     @IBInspectable var zeroPlusThemeColor: UIColor = .yellow
     
     var gridLineWidth: CGFloat {
-        return gap / 20
+        return gap / 30
     }
     
     var pieceRadius: CGFloat {
@@ -24,7 +24,7 @@ import UIKit
     }
     
     var vertexRadius: CGFloat {
-        return gridLineWidth * 2
+        return gap / 10
     }
     
     /**
@@ -127,8 +127,13 @@ import UIKit
     override func draw(_ dirtyRect: CGRect) {
         super.draw(dirtyRect)
         
+        if BoardViewConfig.solidBgd {
+            UIColor(red: 1, green: 0.807, blue: 0.35, alpha: 0.5).withAlphaComponent(BoardViewConfig.bgdAlpha).setFill()
+            UIBezierPath(rect: bounds).fill()
+        }
+        
         // Draw board gird lines
-        UIColor.black.withAlphaComponent(0.5).setStroke()
+        UIColor.black.setStroke()
         pathForGrid().stroke()
         
         
@@ -205,15 +210,16 @@ import UIKit
     private func drawDigitOverlay(num: Int, for piece: Piece, at co: Coordinate, colorful: Bool) {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
+        let radius = pieceRadius / 4 * 3
         let attributes = [
             NSAttributedString.Key.paragraphStyle  : paragraphStyle,
-            .font            : UIFont.systemFont(ofSize: pieceRadius),
+            .font            : UIFont.systemFont(ofSize: radius),
             .foregroundColor : piece == .black ? colorful ? UIColor.green : UIColor.white : colorful ? .red : .black,
             ]
         var ctr = onScreen(co)
         //        ctr.x += pieceRadius / 4
-        ctr.y -= pieceRadius / 8
-        let textRect = CGRect(center: ctr, size: CGSize(width: pieceRadius * 2, height: pieceRadius))
+        ctr.y -= radius / 8
+        let textRect = CGRect(center: ctr, size: CGSize(width: pieceRadius * 2, height: radius))
         let attrString = NSAttributedString(string: "\(num)", attributes: attributes)
         attrString.draw(in: textRect)
     }
@@ -371,4 +377,9 @@ import UIKit
 
 protocol BoardViewDelegate {
     var board: Board {get}
+}
+
+class BoardViewConfig {
+    public static var solidBgd: Bool = true
+    public static var bgdAlpha: CGFloat = 1
 }
