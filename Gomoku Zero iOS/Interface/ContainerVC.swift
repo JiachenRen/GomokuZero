@@ -10,10 +10,12 @@ import UIKit
 
 class ContainerVC: SlideMenuController {
 
+    static var sharedInstance: ContainerVC? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        ContainerVC.sharedInstance = self
     }
     
 

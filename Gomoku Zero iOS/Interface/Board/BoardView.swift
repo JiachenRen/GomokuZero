@@ -382,4 +382,5 @@ protocol BoardViewDelegate {
 class BoardViewConfig {
     public static var solidBgd: Bool = true
     public static var bgdAlpha: CGFloat = 1
+    public static var themeImage: UIImage = UIImage(named: "board_d")!
 }

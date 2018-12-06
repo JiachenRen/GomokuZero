@@ -96,6 +96,9 @@
 		1FE1ADFD21B76EE0008E46AE /* MenuCellProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1ADFC21B76EE0008E46AE /* MenuCellProtocol.swift */; };
 		1FE1ADFF21B822F4008E46AE /* LeftNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1ADFE21B822F4008E46AE /* LeftNavController.swift */; };
 		1FE1AE0621B8493C008E46AE /* BoardConfigTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1AE0521B8493B008E46AE /* BoardConfigTVC.swift */; };
+		1FE1AE0821B9A6EE008E46AE /* ThemeCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1AE0721B9A6EE008E46AE /* ThemeCVC.swift */; };
+		1FE1AE0A21B9BD7C008E46AE /* ThemeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1AE0921B9BD7C008E46AE /* ThemeCell.swift */; };
+		1FE1AE0D21B9D0BA008E46AE /* UIViewController+alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1AE0C21B9D0BA008E46AE /* UIViewController+alert.swift */; };
 		1FE928DC217D1C62000B55CF /* ConsoleWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */; };
 		1FE928DE217D1EDA000B55CF /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */; };
 		1FE928E3217D6B43000B55CF /* ZeroMax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928E2217D6B43000B55CF /* ZeroMax.swift */; };
@@ -199,6 +202,9 @@
 		1FE1ADFC21B76EE0008E46AE /* MenuCellProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCellProtocol.swift; sourceTree = "<group>"; };
 		1FE1ADFE21B822F4008E46AE /* LeftNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftNavController.swift; sourceTree = "<group>"; };
 		1FE1AE0521B8493B008E46AE /* BoardConfigTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardConfigTVC.swift; sourceTree = "<group>"; };
+		1FE1AE0721B9A6EE008E46AE /* ThemeCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeCVC.swift; sourceTree = "<group>"; };
+		1FE1AE0921B9BD7C008E46AE /* ThemeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeCell.swift; sourceTree = "<group>"; };
+		1FE1AE0C21B9D0BA008E46AE /* UIViewController+alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+alert.swift"; sourceTree = "<group>"; };
 		1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleWindowController.swift; sourceTree = "<group>"; };
 		1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		1FE928E2217D6B43000B55CF /* ZeroMax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMax.swift; sourceTree = "<group>"; };
@@ -313,6 +319,7 @@
 				1FE1ADCD21B60E53008E46AE /* Board */,
 				1FE1ADCE21B60E62008E46AE /* Configuration */,
 				1FE1ADF621B7666D008E46AE /* Menu */,
+				1FE1AE0B21B9BD81008E46AE /* Theme */,
 				1FE1ADFE21B822F4008E46AE /* LeftNavController.swift */,
 				1FE1AE0521B8493B008E46AE /* BoardConfigTVC.swift */,
 				1FE1ADEE21B74B73008E46AE /* ContainerVC.swift */,
@@ -340,6 +347,7 @@
 				1F743CC321AB8C4200FEE2A5 /* CGRect.swift */,
 				1F743CC521AB8C6000FEE2A5 /* CGContext.swift */,
 				1FE1ADE821B73DFB008E46AE /* NSObject+Notification.swift */,
+				1FE1AE0C21B9D0BA008E46AE /* UIViewController+alert.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -510,6 +518,15 @@
 				1FE1ADFC21B76EE0008E46AE /* MenuCellProtocol.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		1FE1AE0B21B9BD81008E46AE /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				1FE1AE0721B9A6EE008E46AE /* ThemeCVC.swift */,
+				1FE1AE0921B9BD7C008E46AE /* ThemeCell.swift */,
+			);
+			path = Theme;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -810,9 +827,12 @@
 				1FE1ADDC21B6D229008E46AE /* SegmentedCell.swift in Sources */,
 				1F7E4CE421AB5582002AE461 /* ZeroSum.swift in Sources */,
 				1F7E4CC921AB2D30002AE461 /* Gomoku_Zero_iOS.xcdatamodeld in Sources */,
+				1FE1AE0A21B9BD7C008E46AE /* ThemeCell.swift in Sources */,
 				1F7E4CD421AB5501002AE461 /* BoardView.swift in Sources */,
+				1FE1AE0821B9A6EE008E46AE /* ThemeCVC.swift in Sources */,
 				1FE1ADD221B611E7008E46AE /* ConfigTVC.swift in Sources */,
 				1F743CC621AB8C6000FEE2A5 /* CGContext.swift in Sources */,
+				1FE1AE0D21B9D0BA008E46AE /* UIViewController+alert.swift in Sources */,
 				1FE1ADEB21B74789008E46AE /* SlideMenuController.swift in Sources */,
 				1F7E4CC321AB2D30002AE461 /* BoardViewController.swift in Sources */,
 				1FE1ADF521B7664D008E46AE /* MenuTVC.swift in Sources */,

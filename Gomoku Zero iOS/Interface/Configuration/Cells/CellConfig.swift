@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class CellConfig {
     var id: String {
@@ -45,10 +46,12 @@ class SegueConfig: CellConfig {
     var subtitle: String {
         return subtitles[selectedIdx]
     }
+    var handler: (() -> Void)?
     
-    init(title: String, selectedIdx: Int, subtitles: [String]) {
+    init(title: String, selectedIdx: Int, subtitles: [String], handler: (() -> Void)? = nil) {
         self.selectedIdx = selectedIdx
         self.subtitles = subtitles
+        self.handler = handler
         super.init(title: title)
     }
 }

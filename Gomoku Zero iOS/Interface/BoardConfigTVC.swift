@@ -57,6 +57,9 @@ class BoardConfigTVC: UITableViewController {
                 [unowned self] in
                 BoardViewConfig.bgdAlpha = CGFloat($0) / 10
                 self.boardVC.boardView.setNeedsDisplay()
+            },
+            SegueConfig(title: "Themes", selectedIdx: 0, subtitles: [""]) { [unowned self] in
+                self.performSegue(withIdentifier: "theme-segue", sender: nil)
             }
         ]
     }

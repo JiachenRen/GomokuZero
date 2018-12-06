@@ -94,7 +94,7 @@ class MenuTVC: UITableViewController {
             }
             
             sharedBoard.restart()
-            (navigationController!.parent as! ContainerVC).closeLeft()
+            ContainerVC.sharedInstance?.closeLeft()
         case "Undo": sharedBoard.undo()
         case "Redo": sharedBoard.redo()
         default: break

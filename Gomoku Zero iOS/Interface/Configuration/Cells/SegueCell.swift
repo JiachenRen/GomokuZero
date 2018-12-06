@@ -13,7 +13,6 @@ class SegueCell: UITableViewCell, ConfigCellProtocol {
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var subtitle: UILabel!
     var segueConfig: SegueConfig!
-    var segue: UIStoryboardSegue?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -22,7 +21,7 @@ class SegueCell: UITableViewCell, ConfigCellProtocol {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         if selected {
-            segue?.perform()
+            segueConfig.handler?()
         }
         // Configure the view for the selected state
     }
