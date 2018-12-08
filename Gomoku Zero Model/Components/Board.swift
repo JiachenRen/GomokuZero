@@ -336,6 +336,19 @@ class Board: ZeroPlusDelegate {
     }
 }
 
+extension Board: CustomStringConvertible {
+    var description: String {
+        let raw = Zobrist(matrix: board.pieces).description
+        let colMarks = (1...dimension).reduce(""){"\($0)\t\($1)"}
+        let processed = raw.replacingOccurrences(of: " ", with: "\t")
+            .split(separator: "\n")
+            .enumerated()
+            .map{"\($0 + 1)\t\($1)"}
+            .reduce(colMarks){"\($0)\n\n\($1)"}
+        return processed
+    }
+}
+
 protocol BoardDelegate {
     func boardDidUpdate(pieces: [[Piece]])
     func gameHasEnded(winner: Piece, coordinates: [Coordinate], popDialogue: Bool)

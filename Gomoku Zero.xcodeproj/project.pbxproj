@@ -7,25 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1F2E82E32197B443005C3353 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82E22197B443005C3353 /* main.swift */; };
-		1F2E82E72197B48A005C3353 /* Piece.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39421682F6C00580C99 /* Piece.swift */; };
-		1F2E82E82197B48A005C3353 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39621682FE800580C99 /* Board.swift */; };
-		1F2E82E92197B48A005C3353 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39C216863F000580C99 /* History.swift */; };
-		1F2E82EA2197B48A005C3353 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3A021690EFD00580C99 /* Notification.swift */; };
-		1F2E82EB2197B48A005C3353 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39821685A8B00580C99 /* Utilities.swift */; };
-		1F2E82EC2197B48A005C3353 /* ZeroPlus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270DC2169A1480081DBFC /* ZeroPlus.swift */; };
-		1F2E82ED2197B48A005C3353 /* Threat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270E02169BCEA0081DBFC /* Threat.swift */; };
-		1F2E82EE2197B48A005C3353 /* Evaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CF1A22192287E00CA4372 /* Evaluator.swift */; };
-		1F2E82EF2197B48A005C3353 /* Zobrist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F64DC4B216BF38000467F78 /* Zobrist.swift */; };
-		1F2E82F02197B48A005C3353 /* Cortex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A549217B91F700285999 /* Cortex.swift */; };
-		1F2E82F12197B48A005C3353 /* Minimax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A54B217B9E1B00285999 /* Minimax.swift */; };
-		1F2E82F22197B48A005C3353 /* ZeroMax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928E2217D6B43000B55CF /* ZeroMax.swift */; };
-		1F2E82F32197B48A005C3353 /* IterativeDeepening.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A54D217B9E5800285999 /* IterativeDeepening.swift */; };
-		1F2E82F42197B48A005C3353 /* NegaScout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A554217BB27000285999 /* NegaScout.swift */; };
-		1F2E82F52197B48A005C3353 /* MonteCarlo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A556217BF95800285999 /* MonteCarlo.swift */; };
-		1F2E82F62197B48A005C3353 /* ZeroSum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB0F3EA2186085A00E28001 /* ZeroSum.swift */; };
-		1F2E82F82197BDC4005C3353 /* Weights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82F72197BDC4005C3353 /* Weights.swift */; };
-		1F2E82FA2197BDE8005C3353 /* Stat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E82F92197BDE8005C3353 /* Stat.swift */; };
 		1F4270DD2169A1480081DBFC /* ZeroPlus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270DC2169A1480081DBFC /* ZeroPlus.swift */; };
 		1F4270E12169BCEA0081DBFC /* Threat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270E02169BCEA0081DBFC /* Threat.swift */; };
 		1F5CF1A32192287E00CA4372 /* Evaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CF1A22192287E00CA4372 /* Evaluator.swift */; };
@@ -55,21 +36,7 @@
 		1F7E4CCB21AB2D32002AE461 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F7E4CCA21AB2D32002AE461 /* Assets.xcassets */; };
 		1F7E4CCE21AB2D32002AE461 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F7E4CCC21AB2D32002AE461 /* LaunchScreen.storyboard */; };
 		1F7E4CD421AB5501002AE461 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7E4CD321AB5501002AE461 /* BoardView.swift */; };
-		1F7E4CD521AB5582002AE461 /* Piece.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39421682F6C00580C99 /* Piece.swift */; };
-		1F7E4CD621AB5582002AE461 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39621682FE800580C99 /* Board.swift */; };
-		1F7E4CD721AB5582002AE461 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39C216863F000580C99 /* History.swift */; };
 		1F7E4CD821AB5582002AE461 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3A021690EFD00580C99 /* Notification.swift */; };
-		1F7E4CDA21AB5582002AE461 /* ZeroPlus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270DC2169A1480081DBFC /* ZeroPlus.swift */; };
-		1F7E4CDB21AB5582002AE461 /* Threat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270E02169BCEA0081DBFC /* Threat.swift */; };
-		1F7E4CDC21AB5582002AE461 /* Evaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CF1A22192287E00CA4372 /* Evaluator.swift */; };
-		1F7E4CDD21AB5582002AE461 /* Zobrist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F64DC4B216BF38000467F78 /* Zobrist.swift */; };
-		1F7E4CDE21AB5582002AE461 /* Cortex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A549217B91F700285999 /* Cortex.swift */; };
-		1F7E4CDF21AB5582002AE461 /* Minimax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A54B217B9E1B00285999 /* Minimax.swift */; };
-		1F7E4CE021AB5582002AE461 /* ZeroMax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928E2217D6B43000B55CF /* ZeroMax.swift */; };
-		1F7E4CE121AB5582002AE461 /* IterativeDeepening.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A54D217B9E5800285999 /* IterativeDeepening.swift */; };
-		1F7E4CE221AB5582002AE461 /* NegaScout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A554217BB27000285999 /* NegaScout.swift */; };
-		1F7E4CE321AB5582002AE461 /* MonteCarlo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A556217BF95800285999 /* MonteCarlo.swift */; };
-		1F7E4CE421AB5582002AE461 /* ZeroSum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB0F3EA2186085A00E28001 /* ZeroSum.swift */; };
 		1F83A54A217B91F700285999 /* Cortex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A549217B91F700285999 /* Cortex.swift */; };
 		1F83A54C217B9E1B00285999 /* Minimax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A54B217B9E1B00285999 /* Minimax.swift */; };
 		1F83A54E217B9E5900285999 /* IterativeDeepening.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A54D217B9E5800285999 /* IterativeDeepening.swift */; };
@@ -100,6 +67,37 @@
 		1FE1AE0A21B9BD7C008E46AE /* ThemeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1AE0921B9BD7C008E46AE /* ThemeCell.swift */; };
 		1FE1AE0D21B9D0BA008E46AE /* UIViewController+alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1AE0C21B9D0BA008E46AE /* UIViewController+alert.swift */; };
 		1FE1AE0F21BADBCF008E46AE /* Game+save.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1AE0E21BADBCF008E46AE /* Game+save.swift */; };
+		1FE1AE1221BC1AC2008E46AE /* Piece.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39421682F6C00580C99 /* Piece.swift */; };
+		1FE1AE1321BC1AC2008E46AE /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39621682FE800580C99 /* Board.swift */; };
+		1FE1AE1421BC1AC2008E46AE /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39C216863F000580C99 /* History.swift */; };
+		1FE1AE1621BC1AC2008E46AE /* ZeroPlus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270DC2169A1480081DBFC /* ZeroPlus.swift */; };
+		1FE1AE1721BC1AC2008E46AE /* Threat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270E02169BCEA0081DBFC /* Threat.swift */; };
+		1FE1AE1821BC1AC2008E46AE /* Evaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CF1A22192287E00CA4372 /* Evaluator.swift */; };
+		1FE1AE1921BC1AC2008E46AE /* Zobrist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F64DC4B216BF38000467F78 /* Zobrist.swift */; };
+		1FE1AE1A21BC1AC2008E46AE /* Cortex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A549217B91F700285999 /* Cortex.swift */; };
+		1FE1AE1B21BC1AC2008E46AE /* Minimax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A54B217B9E1B00285999 /* Minimax.swift */; };
+		1FE1AE1C21BC1AC2008E46AE /* ZeroMax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928E2217D6B43000B55CF /* ZeroMax.swift */; };
+		1FE1AE1D21BC1AC2008E46AE /* IterativeDeepening.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A54D217B9E5800285999 /* IterativeDeepening.swift */; };
+		1FE1AE1E21BC1AC2008E46AE /* NegaScout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A554217BB27000285999 /* NegaScout.swift */; };
+		1FE1AE1F21BC1AC2008E46AE /* MonteCarlo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A556217BF95800285999 /* MonteCarlo.swift */; };
+		1FE1AE2021BC1AC2008E46AE /* ZeroSum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB0F3EA2186085A00E28001 /* ZeroSum.swift */; };
+		1FE1AE2821BC2958008E46AE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1AE2721BC2958008E46AE /* main.swift */; };
+		1FE1AE2C21BC2E01008E46AE /* Piece.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39421682F6C00580C99 /* Piece.swift */; };
+		1FE1AE2D21BC2E01008E46AE /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39621682FE800580C99 /* Board.swift */; };
+		1FE1AE2E21BC2E01008E46AE /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39C216863F000580C99 /* History.swift */; };
+		1FE1AE2F21BC2E01008E46AE /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3A021690EFD00580C99 /* Notification.swift */; };
+		1FE1AE3021BC2E01008E46AE /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39821685A8B00580C99 /* Utilities.swift */; };
+		1FE1AE3121BC2E01008E46AE /* ZeroPlus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270DC2169A1480081DBFC /* ZeroPlus.swift */; };
+		1FE1AE3221BC2E01008E46AE /* Threat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4270E02169BCEA0081DBFC /* Threat.swift */; };
+		1FE1AE3321BC2E01008E46AE /* Evaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CF1A22192287E00CA4372 /* Evaluator.swift */; };
+		1FE1AE3421BC2E01008E46AE /* Zobrist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F64DC4B216BF38000467F78 /* Zobrist.swift */; };
+		1FE1AE3521BC2E01008E46AE /* Cortex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A549217B91F700285999 /* Cortex.swift */; };
+		1FE1AE3621BC2E01008E46AE /* Minimax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A54B217B9E1B00285999 /* Minimax.swift */; };
+		1FE1AE3721BC2E02008E46AE /* ZeroMax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928E2217D6B43000B55CF /* ZeroMax.swift */; };
+		1FE1AE3821BC2E02008E46AE /* IterativeDeepening.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A54D217B9E5800285999 /* IterativeDeepening.swift */; };
+		1FE1AE3921BC2E02008E46AE /* NegaScout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A554217BB27000285999 /* NegaScout.swift */; };
+		1FE1AE3A21BC2E02008E46AE /* MonteCarlo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F83A556217BF95800285999 /* MonteCarlo.swift */; };
+		1FE1AE3B21BC2E02008E46AE /* ZeroSum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB0F3EA2186085A00E28001 /* ZeroSum.swift */; };
 		1FE928DC217D1C62000B55CF /* ConsoleWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */; };
 		1FE928DE217D1EDA000B55CF /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */; };
 		1FE928E3217D6B43000B55CF /* ZeroMax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928E2217D6B43000B55CF /* ZeroMax.swift */; };
@@ -120,10 +118,17 @@
 			remoteGlobalIDString = 1F60C35D2168232C00580C99;
 			remoteInfo = "Gomoku Zero";
 		};
+		1FE1AE1021BC1A3C008E46AE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1F60C3562168232C00580C99 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1F60C35D2168232C00580C99;
+			remoteInfo = "Gomoku Zero";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		1F2E82DE2197B443005C3353 /* CopyFiles */ = {
+		1FE1AE2321BC2958008E46AE /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -135,7 +140,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1F2E82E02197B443005C3353 /* GZeroCommandLine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GZeroCommandLine; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F2E82E22197B443005C3353 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		1F2E82F72197BDC4005C3353 /* Weights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weights.swift; sourceTree = "<group>"; };
 		1F2E82F92197BDE8005C3353 /* Stat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stat.swift; sourceTree = "<group>"; };
@@ -163,7 +167,7 @@
 		1F60C39E21690DE700580C99 /* BoardWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardWindowController.swift; sourceTree = "<group>"; };
 		1F60C3A021690EFD00580C99 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		1F60C3A821692B0900580C99 /* BoardTextureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTextureView.swift; sourceTree = "<group>"; };
-		1F60C3AB21694C7100580C99 /* Gomoku Zero.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Gomoku Zero.entitlements"; sourceTree = "<group>"; };
+		1F60C3AB21694C7100580C99 /* Gomoku Zero macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Gomoku Zero macOS.entitlements"; sourceTree = "<group>"; };
 		1F64DC4B216BF38000467F78 /* Zobrist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zobrist.swift; sourceTree = "<group>"; };
 		1F743CC121AB8C0B00FEE2A5 /* CGPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
 		1F743CC321AB8C4200FEE2A5 /* CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
@@ -207,19 +211,14 @@
 		1FE1AE0921B9BD7C008E46AE /* ThemeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeCell.swift; sourceTree = "<group>"; };
 		1FE1AE0C21B9D0BA008E46AE /* UIViewController+alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+alert.swift"; sourceTree = "<group>"; };
 		1FE1AE0E21BADBCF008E46AE /* Game+save.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Game+save.swift"; sourceTree = "<group>"; };
+		1FE1AE2521BC2958008E46AE /* Gomoku Zero Model */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Gomoku Zero Model"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FE1AE2721BC2958008E46AE /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleWindowController.swift; sourceTree = "<group>"; };
 		1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		1FE928E2217D6B43000B55CF /* ZeroMax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMax.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		1F2E82DD2197B443005C3353 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		1F60C35B2168232C00580C99 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -248,27 +247,35 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1FE1AE2221BC2958008E46AE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1F2E82E12197B443005C3353 /* GZeroCommandLine */ = {
+		1F2E82E12197B443005C3353 /* Gomoku Zero Trainer */ = {
 			isa = PBXGroup;
 			children = (
 				1F2E82E22197B443005C3353 /* main.swift */,
 				1F2E82F72197BDC4005C3353 /* Weights.swift */,
 				1F2E82F92197BDE8005C3353 /* Stat.swift */,
 			);
-			path = GZeroCommandLine;
+			path = "Gomoku Zero Trainer";
 			sourceTree = "<group>";
 		};
 		1F60C3552168232C00580C99 = {
 			isa = PBXGroup;
 			children = (
-				1F60C3602168232C00580C99 /* Gomoku Zero */,
+				1FE1AE2621BC2958008E46AE /* Gomoku Zero Model */,
+				1F2E82E12197B443005C3353 /* Gomoku Zero Trainer */,
+				1F60C3602168232C00580C99 /* Gomoku Zero macOS */,
+				1F7E4CBF21AB2D2F002AE461 /* Gomoku Zero iOS */,
 				1F60C3762168232E00580C99 /* Gomoku ZeroTests */,
 				1F60C3812168232E00580C99 /* Gomoku ZeroUITests */,
-				1F2E82E12197B443005C3353 /* GZeroCommandLine */,
-				1F7E4CBF21AB2D2F002AE461 /* Gomoku Zero iOS */,
 				1F60C35F2168232C00580C99 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -279,21 +286,20 @@
 				1F60C35E2168232C00580C99 /* Gomoku Zero.app */,
 				1F60C3732168232E00580C99 /* Gomoku ZeroTests.xctest */,
 				1F60C37E2168232E00580C99 /* Gomoku ZeroUITests.xctest */,
-				1F2E82E02197B443005C3353 /* GZeroCommandLine */,
 				1F7E4CBE21AB2D2F002AE461 /* Gomoku Zero iOS.app */,
+				1FE1AE2521BC2958008E46AE /* Gomoku Zero Model */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1F60C3602168232C00580C99 /* Gomoku Zero */ = {
+		1F60C3602168232C00580C99 /* Gomoku Zero macOS */ = {
 			isa = PBXGroup;
 			children = (
 				1F60C3612168232C00580C99 /* AppDelegate.swift */,
-				1F8A8B6F218159C600355EB3 /* Resources */,
 				1F8A8B7221815A1D00355EB3 /* Interface */,
-				1F8A8B6E2181599500355EB3 /* Model */,
+				1F8A8B6F218159C600355EB3 /* Resources */,
 			);
-			path = "Gomoku Zero";
+			path = "Gomoku Zero macOS";
 			sourceTree = "<group>";
 		};
 		1F60C3762168232E00580C99 /* Gomoku ZeroTests */ = {
@@ -396,22 +402,12 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		1F8A8B6E2181599500355EB3 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				1F8A8B6D2181597700355EB3 /* Components */,
-				1F8A8B6C2181595B00355EB3 /* Utilities */,
-				1F8A8B6B2181592500355EB3 /* Core */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		1F8A8B6F218159C600355EB3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				1FB0F3E7218242D000E28001 /* Screenshots */,
 				1F60C36D2168232E00580C99 /* Info.plist */,
-				1F60C3AB21694C7100580C99 /* Gomoku Zero.entitlements */,
+				1F60C3AB21694C7100580C99 /* Gomoku Zero macOS.entitlements */,
 				1F60C3652168232C00580C99 /* Gomoku_Zero.xcdatamodeld */,
 				1F60C3682168232D00580C99 /* Assets.xcassets */,
 			);
@@ -532,26 +528,20 @@
 			path = Theme;
 			sourceTree = "<group>";
 		};
+		1FE1AE2621BC2958008E46AE /* Gomoku Zero Model */ = {
+			isa = PBXGroup;
+			children = (
+				1F8A8B6D2181597700355EB3 /* Components */,
+				1F8A8B6C2181595B00355EB3 /* Utilities */,
+				1F8A8B6B2181592500355EB3 /* Core */,
+				1FE1AE2721BC2958008E46AE /* main.swift */,
+			);
+			path = "Gomoku Zero Model";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1F2E82DF2197B443005C3353 /* GZeroCommandLine */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 1F2E82E62197B443005C3353 /* Build configuration list for PBXNativeTarget "GZeroCommandLine" */;
-			buildPhases = (
-				1F2E82DC2197B443005C3353 /* Sources */,
-				1F2E82DD2197B443005C3353 /* Frameworks */,
-				1F2E82DE2197B443005C3353 /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = GZeroCommandLine;
-			productName = GZeroCommandLine;
-			productReference = 1F2E82E02197B443005C3353 /* GZeroCommandLine */;
-			productType = "com.apple.product-type.tool";
-		};
 		1F60C35D2168232C00580C99 /* Gomoku Zero */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1F60C3872168232E00580C99 /* Build configuration list for PBXNativeTarget "Gomoku Zero" */;
@@ -616,11 +606,29 @@
 			buildRules = (
 			);
 			dependencies = (
+				1FE1AE1121BC1A3C008E46AE /* PBXTargetDependency */,
 			);
 			name = "Gomoku Zero iOS";
 			productName = "Gomoku Zero iOS";
 			productReference = 1F7E4CBE21AB2D2F002AE461 /* Gomoku Zero iOS.app */;
 			productType = "com.apple.product-type.application";
+		};
+		1FE1AE2421BC2958008E46AE /* Gomoku Zero Model */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1FE1AE2921BC2958008E46AE /* Build configuration list for PBXNativeTarget "Gomoku Zero Model" */;
+			buildPhases = (
+				1FE1AE2121BC2958008E46AE /* Sources */,
+				1FE1AE2221BC2958008E46AE /* Frameworks */,
+				1FE1AE2321BC2958008E46AE /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Gomoku Zero Model";
+			productName = "Gomoku Zero Model";
+			productReference = 1FE1AE2521BC2958008E46AE /* Gomoku Zero Model */;
+			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
 
@@ -632,9 +640,6 @@
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Jiachen Ren";
 				TargetAttributes = {
-					1F2E82DF2197B443005C3353 = {
-						CreatedOnToolsVersion = 10.1;
-					};
 					1F60C35D2168232C00580C99 = {
 						CreatedOnToolsVersion = 10.0;
 						SystemCapabilities = {
@@ -660,6 +665,9 @@
 					1F7E4CBD21AB2D2F002AE461 = {
 						CreatedOnToolsVersion = 10.1;
 					};
+					1FE1AE2421BC2958008E46AE = {
+						CreatedOnToolsVersion = 10.1;
+					};
 				};
 			};
 			buildConfigurationList = 1F60C3592168232C00580C99 /* Build configuration list for PBXProject "Gomoku Zero" */;
@@ -678,8 +686,8 @@
 				1F60C35D2168232C00580C99 /* Gomoku Zero */,
 				1F60C3722168232E00580C99 /* Gomoku ZeroTests */,
 				1F60C37D2168232E00580C99 /* Gomoku ZeroUITests */,
-				1F2E82DF2197B443005C3353 /* GZeroCommandLine */,
 				1F7E4CBD21AB2D2F002AE461 /* Gomoku Zero iOS */,
+				1FE1AE2421BC2958008E46AE /* Gomoku Zero Model */,
 			);
 		};
 /* End PBXProject section */
@@ -722,32 +730,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		1F2E82DC2197B443005C3353 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1F2E82E72197B48A005C3353 /* Piece.swift in Sources */,
-				1F2E82E82197B48A005C3353 /* Board.swift in Sources */,
-				1F2E82E92197B48A005C3353 /* History.swift in Sources */,
-				1F2E82EA2197B48A005C3353 /* Notification.swift in Sources */,
-				1F2E82EB2197B48A005C3353 /* Utilities.swift in Sources */,
-				1F2E82FA2197BDE8005C3353 /* Stat.swift in Sources */,
-				1F2E82EC2197B48A005C3353 /* ZeroPlus.swift in Sources */,
-				1F2E82ED2197B48A005C3353 /* Threat.swift in Sources */,
-				1F2E82EE2197B48A005C3353 /* Evaluator.swift in Sources */,
-				1F2E82EF2197B48A005C3353 /* Zobrist.swift in Sources */,
-				1F2E82F02197B48A005C3353 /* Cortex.swift in Sources */,
-				1F2E82F12197B48A005C3353 /* Minimax.swift in Sources */,
-				1F2E82F22197B48A005C3353 /* ZeroMax.swift in Sources */,
-				1F2E82F32197B48A005C3353 /* IterativeDeepening.swift in Sources */,
-				1F2E82F42197B48A005C3353 /* NegaScout.swift in Sources */,
-				1F2E82F52197B48A005C3353 /* MonteCarlo.swift in Sources */,
-				1F2E82F62197B48A005C3353 /* ZeroSum.swift in Sources */,
-				1F2E82E32197B443005C3353 /* main.swift in Sources */,
-				1F2E82F82197BDC4005C3353 /* Weights.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		1F60C35A2168232C00580C99 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -799,36 +781,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1F7E4CD521AB5582002AE461 /* Piece.swift in Sources */,
+				1FE1AE1221BC1AC2008E46AE /* Piece.swift in Sources */,
+				1FE1AE1321BC1AC2008E46AE /* Board.swift in Sources */,
+				1FE1AE1421BC1AC2008E46AE /* History.swift in Sources */,
+				1FE1AE1621BC1AC2008E46AE /* ZeroPlus.swift in Sources */,
+				1FE1AE1721BC1AC2008E46AE /* Threat.swift in Sources */,
+				1FE1AE1821BC1AC2008E46AE /* Evaluator.swift in Sources */,
+				1FE1AE1921BC1AC2008E46AE /* Zobrist.swift in Sources */,
+				1FE1AE1A21BC1AC2008E46AE /* Cortex.swift in Sources */,
+				1FE1AE1B21BC1AC2008E46AE /* Minimax.swift in Sources */,
+				1FE1AE1C21BC1AC2008E46AE /* ZeroMax.swift in Sources */,
+				1FE1AE1D21BC1AC2008E46AE /* IterativeDeepening.swift in Sources */,
+				1FE1AE1E21BC1AC2008E46AE /* NegaScout.swift in Sources */,
+				1FE1AE1F21BC1AC2008E46AE /* MonteCarlo.swift in Sources */,
+				1FE1AE2021BC1AC2008E46AE /* ZeroSum.swift in Sources */,
 				1FE1ADE921B73DFB008E46AE /* NSObject+Notification.swift in Sources */,
-				1F7E4CD621AB5582002AE461 /* Board.swift in Sources */,
-				1F7E4CD721AB5582002AE461 /* History.swift in Sources */,
 				1FE1ADEF21B74B73008E46AE /* ContainerVC.swift in Sources */,
 				1F7E4CD821AB5582002AE461 /* Notification.swift in Sources */,
-				1F7E4CDA21AB5582002AE461 /* ZeroPlus.swift in Sources */,
-				1F7E4CDB21AB5582002AE461 /* Threat.swift in Sources */,
 				1FE1ADE121B6D76B008E46AE /* CellConfig.swift in Sources */,
-				1F7E4CDC21AB5582002AE461 /* Evaluator.swift in Sources */,
-				1F7E4CDD21AB5582002AE461 /* Zobrist.swift in Sources */,
 				1F743CC221AB8C0B00FEE2A5 /* CGPoint.swift in Sources */,
 				1FE1ADDA21B6D15F008E46AE /* ToggleCell.swift in Sources */,
 				1FE1ADE721B72EA4008E46AE /* AlgorithmVC.swift in Sources */,
-				1F7E4CDE21AB5582002AE461 /* Cortex.swift in Sources */,
 				1FE1ADF821B766B6008E46AE /* ActionCell.swift in Sources */,
 				1FE1ADF121B75BE3008E46AE /* SwitchCell.swift in Sources */,
 				1FE1ADF321B7619E008E46AE /* Configuration.swift in Sources */,
-				1F7E4CDF21AB5582002AE461 /* Minimax.swift in Sources */,
 				1FE1ADFA21B76749008E46AE /* SubmenuCell.swift in Sources */,
-				1F7E4CE021AB5582002AE461 /* ZeroMax.swift in Sources */,
-				1F7E4CE121AB5582002AE461 /* IterativeDeepening.swift in Sources */,
 				1FE1ADFF21B822F4008E46AE /* LeftNavController.swift in Sources */,
 				1F743CC421AB8C4200FEE2A5 /* CGRect.swift in Sources */,
-				1F7E4CE221AB5582002AE461 /* NegaScout.swift in Sources */,
-				1F7E4CE321AB5582002AE461 /* MonteCarlo.swift in Sources */,
 				1FE1AE0621B8493C008E46AE /* BoardConfigTVC.swift in Sources */,
 				1FE1ADE321B71A8F008E46AE /* ConfigCellProtocol.swift in Sources */,
 				1FE1ADDC21B6D229008E46AE /* SegmentedCell.swift in Sources */,
-				1F7E4CE421AB5582002AE461 /* ZeroSum.swift in Sources */,
 				1FE1AE0F21BADBCF008E46AE /* Game+save.swift in Sources */,
 				1F7E4CC921AB2D30002AE461 /* Gomoku_Zero_iOS.xcdatamodeld in Sources */,
 				1FE1AE0A21B9BD7C008E46AE /* ThemeCell.swift in Sources */,
@@ -847,6 +829,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1FE1AE2121BC2958008E46AE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1FE1AE2C21BC2E01008E46AE /* Piece.swift in Sources */,
+				1FE1AE2D21BC2E01008E46AE /* Board.swift in Sources */,
+				1FE1AE2E21BC2E01008E46AE /* History.swift in Sources */,
+				1FE1AE2F21BC2E01008E46AE /* Notification.swift in Sources */,
+				1FE1AE3021BC2E01008E46AE /* Utilities.swift in Sources */,
+				1FE1AE3121BC2E01008E46AE /* ZeroPlus.swift in Sources */,
+				1FE1AE3221BC2E01008E46AE /* Threat.swift in Sources */,
+				1FE1AE3321BC2E01008E46AE /* Evaluator.swift in Sources */,
+				1FE1AE3421BC2E01008E46AE /* Zobrist.swift in Sources */,
+				1FE1AE3521BC2E01008E46AE /* Cortex.swift in Sources */,
+				1FE1AE3621BC2E01008E46AE /* Minimax.swift in Sources */,
+				1FE1AE3721BC2E02008E46AE /* ZeroMax.swift in Sources */,
+				1FE1AE3821BC2E02008E46AE /* IterativeDeepening.swift in Sources */,
+				1FE1AE3921BC2E02008E46AE /* NegaScout.swift in Sources */,
+				1FE1AE3A21BC2E02008E46AE /* MonteCarlo.swift in Sources */,
+				1FE1AE3B21BC2E02008E46AE /* ZeroSum.swift in Sources */,
+				1FE1AE2821BC2958008E46AE /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -859,6 +865,11 @@
 			isa = PBXTargetDependency;
 			target = 1F60C35D2168232C00580C99 /* Gomoku Zero */;
 			targetProxy = 1F60C37F2168232E00580C99 /* PBXContainerItemProxy */;
+		};
+		1FE1AE1121BC1A3C008E46AE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1F60C35D2168232C00580C99 /* Gomoku Zero */;
+			targetProxy = 1FE1AE1021BC1A3C008E46AE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -890,26 +901,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		1F2E82E42197B443005C3353 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = AM89ND2ZY7;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-			};
-			name = Debug;
-		};
-		1F2E82E52197B443005C3353 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = AM89ND2ZY7;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-			};
-			name = Release;
-		};
 		1F60C3852168232E00580C99 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1029,12 +1020,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "Gomoku Zero/Resources/Gomoku Zero.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Gomoku Zero macOS/Resources/Gomoku Zero macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
 				ENABLE_HARDENED_RUNTIME = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Gomoku Zero/Resources/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Gomoku Zero macOS/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1049,12 +1040,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "Gomoku Zero/Resources/Gomoku Zero.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Gomoku Zero macOS/Resources/Gomoku Zero macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = AM89ND2ZY7;
 				ENABLE_HARDENED_RUNTIME = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Gomoku Zero/Resources/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Gomoku Zero macOS/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1190,18 +1181,29 @@
 			};
 			name = Release;
 		};
+		1FE1AE2A21BC2958008E46AE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Debug;
+		};
+		1FE1AE2B21BC2958008E46AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = AM89ND2ZY7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1F2E82E62197B443005C3353 /* Build configuration list for PBXNativeTarget "GZeroCommandLine" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1F2E82E42197B443005C3353 /* Debug */,
-				1F2E82E52197B443005C3353 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		1F60C3592168232C00580C99 /* Build configuration list for PBXProject "Gomoku Zero" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1243,6 +1245,15 @@
 			buildConfigurations = (
 				1F7E4CD021AB2D32002AE461 /* Debug */,
 				1F7E4CD121AB2D32002AE461 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1FE1AE2921BC2958008E46AE /* Build configuration list for PBXNativeTarget "Gomoku Zero Model" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1FE1AE2A21BC2958008E46AE /* Debug */,
+				1FE1AE2B21BC2958008E46AE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

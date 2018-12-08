@@ -48,18 +48,6 @@ class BoardViewController: UIViewController, BoardViewDelegate {
         tripleTouchRecognizer.numberOfTouchesRequired = 3
     }
     
-    func updateVisPref(_ name: String) {
-        switch name {
-        case "Toggle Animation":
-            let state = boardView.visualizationEnabled
-            boardView.visualizationEnabled = !state
-            zeroPlus.visDelegate = state ? nil : self
-        case "Toggle Active Map": boardView.activeMapVisible = !boardView.activeMapVisible
-        case "Toggle History Stack": boardView.historyVisible  = !boardView.historyVisible
-        default: break
-        }
-    }
-    
     @IBAction func didTap(_ sender: UITapGestureRecognizer) {
         let co = boardView.onBoard(sender.location(in: boardView))
         board.put(at: co)
