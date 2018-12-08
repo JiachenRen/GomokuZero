@@ -10,6 +10,16 @@ import UIKit
 
 class ConfigTVC: UITableViewController {
     
+    var blackConfig: Configuration {
+        get {return Configuration.black}
+        set {Configuration.black = newValue}
+    }
+    
+    var whiteConfig: Configuration {
+        get {return Configuration.white}
+        set {Configuration.white = newValue}
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -67,10 +77,10 @@ class ConfigTVC: UITableViewController {
                 vc.segueConfig = segueCell.segueConfig
                 vc.completion = {[unowned self] in
                     let name = segueCell.segueConfig.subtitle
-                    let enabled = self.lastSelected == .black ? blackConfig.enabled : whiteConfig.enabled
+                    let enabled = self.lastSelected == .black ? self.blackConfig.enabled : self.whiteConfig.enabled
                     let config = Configuration(Algorithm(rawValue: name)!, enabled: enabled)
-                    if self.lastSelected == .black {blackConfig = config}
-                    else {whiteConfig = config}
+                    if self.lastSelected == .black {self.blackConfig = config}
+                    else {self.whiteConfig = config}
                     self.tableView.reloadData()
                 }
             }

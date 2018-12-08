@@ -99,6 +99,7 @@
 		1FE1AE0821B9A6EE008E46AE /* ThemeCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1AE0721B9A6EE008E46AE /* ThemeCVC.swift */; };
 		1FE1AE0A21B9BD7C008E46AE /* ThemeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1AE0921B9BD7C008E46AE /* ThemeCell.swift */; };
 		1FE1AE0D21B9D0BA008E46AE /* UIViewController+alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1AE0C21B9D0BA008E46AE /* UIViewController+alert.swift */; };
+		1FE1AE0F21BADBCF008E46AE /* Game+save.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE1AE0E21BADBCF008E46AE /* Game+save.swift */; };
 		1FE928DC217D1C62000B55CF /* ConsoleWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */; };
 		1FE928DE217D1EDA000B55CF /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */; };
 		1FE928E3217D6B43000B55CF /* ZeroMax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE928E2217D6B43000B55CF /* ZeroMax.swift */; };
@@ -205,6 +206,7 @@
 		1FE1AE0721B9A6EE008E46AE /* ThemeCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeCVC.swift; sourceTree = "<group>"; };
 		1FE1AE0921B9BD7C008E46AE /* ThemeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeCell.swift; sourceTree = "<group>"; };
 		1FE1AE0C21B9D0BA008E46AE /* UIViewController+alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+alert.swift"; sourceTree = "<group>"; };
+		1FE1AE0E21BADBCF008E46AE /* Game+save.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Game+save.swift"; sourceTree = "<group>"; };
 		1FE928DB217D1C62000B55CF /* ConsoleWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleWindowController.swift; sourceTree = "<group>"; };
 		1FE928DD217D1EDA000B55CF /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		1FE928E2217D6B43000B55CF /* ZeroMax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMax.swift; sourceTree = "<group>"; };
@@ -348,6 +350,7 @@
 				1F743CC521AB8C6000FEE2A5 /* CGContext.swift */,
 				1FE1ADE821B73DFB008E46AE /* NSObject+Notification.swift */,
 				1FE1AE0C21B9D0BA008E46AE /* UIViewController+alert.swift */,
+				1FE1AE0E21BADBCF008E46AE /* Game+save.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -826,6 +829,7 @@
 				1FE1ADE321B71A8F008E46AE /* ConfigCellProtocol.swift in Sources */,
 				1FE1ADDC21B6D229008E46AE /* SegmentedCell.swift in Sources */,
 				1F7E4CE421AB5582002AE461 /* ZeroSum.swift in Sources */,
+				1FE1AE0F21BADBCF008E46AE /* Game+save.swift in Sources */,
 				1F7E4CC921AB2D30002AE461 /* Gomoku_Zero_iOS.xcdatamodeld in Sources */,
 				1FE1AE0A21B9BD7C008E46AE /* ThemeCell.swift in Sources */,
 				1F7E4CD421AB5501002AE461 /* BoardView.swift in Sources */,

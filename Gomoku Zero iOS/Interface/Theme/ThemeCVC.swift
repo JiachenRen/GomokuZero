@@ -12,12 +12,8 @@ private let reuseIdentifier = "theme-cell"
 
 class ThemeCVC: UICollectionViewController {
     
-    let themes: [UIImage] = [
-        UIImage(named: "board_a")!,
-        UIImage(named: "board_b")!,
-        UIImage(named: "board_c")!,
-        UIImage(named: "board_d")!,
-    ]
+    let themes: [UIImage] = "abcdef".map{"board_\($0)"}
+        .map{UIImage(named: $0)!}
 
     override func viewDidLoad() {
         super.viewDidLoad()
