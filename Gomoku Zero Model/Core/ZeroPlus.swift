@@ -128,9 +128,6 @@ class ZeroPlus: CortexDelegate, EvaluatorDataSource {
         if verbose {
             let avgDuration = calcDurations.reduce(0){$0 + $1} / Double(calcDurations.count)
             print("cortex: \(String(describing: cortex))\nduration: \(duration)\navg. duration: \(avgDuration)\n")
-            
-            let cached = Zobrist.heuristicHash.count
-            print("retrieved: \(retrievedCount)\tcached: \(cached)\tratio: \(Double(retrievedCount) / Double(cached))\tcollisions: \(hashCollisions)\tcollision ratio: \(Double(hashCollisions) / Double(retrievedCount))")
         }
         visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map
     }

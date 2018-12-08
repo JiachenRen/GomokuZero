@@ -30,7 +30,7 @@ protocol CortexProtocol: CustomStringConvertible {
     func getMove() -> Move
 }
 
-var retrievedCount = 0
+
 extension CortexProtocol {
     var pieces: [[Piece]] {return delegate.pieces}
     var identity: Piece {return delegate.identity}
@@ -175,7 +175,6 @@ extension CortexProtocol {
         var score = 0
         
         if let retrieved = Zobrist.heuristicHash[zobrist] {
-            retrievedCount += 1
             score = retrieved
         } else {
             score = threatCoupledHeuristic()

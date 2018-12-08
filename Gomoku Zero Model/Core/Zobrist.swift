@@ -10,7 +10,6 @@ import Foundation
 
 typealias ZobristTable = [[[Int]]]
 
-var hashCollisions: Int = 0
 class Zobrist: Hashable {
     
     // This is for accomodating different board dimensions
@@ -94,7 +93,6 @@ class Zobrist: Hashable {
     }
     
     static func == (lhs: Zobrist, rhs: Zobrist) -> Bool {
-        hashCollisions += 1
         if strictEqualityCheck {
             let dim = lhs.dim
             for i in 0..<dim {

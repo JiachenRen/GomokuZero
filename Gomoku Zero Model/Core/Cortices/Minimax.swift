@@ -33,6 +33,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
     var alphaCut = 0
     var betaCut = 0
     var cumCutDepth = 0
+    var nodes = 0
     var verbose = false
     
     typealias Result = (move: Move, depth: Int)
@@ -51,9 +52,10 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
         let move = minimax(depth, identity, Int.min, Int.max)
         if verbose {
             let avgCutDepth = Double(cumCutDepth) / Double(alphaCut + betaCut)
-            print("alpha cut: \(alphaCut)\t beta cut: \(betaCut)\t avg. cut depth: \(avgCutDepth))")
+            print("alpha cut: \(alphaCut)\t beta cut: \(betaCut)\t avg. cut depth: \(avgCutDepth)")
             print("recognized sequences: \(evaluator.seqHashMap.count)")
             print("calc. duration (s): \(delegate.duration)")
+            print("nodes explored: \(nodes)")
         }
         
         if let mv = move {
@@ -93,6 +95,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
      - Returns: the best move for the current player in the given delegate.
      */
     func minimax(_ depth: Int, _ player: Piece,  _ alpha: Int, _ beta: Int) -> Move? {
+        nodes += 1
         if let (mv, d) = transposMap[zobrist] {
             if d >= depth {
                 return mv
@@ -114,28 +117,27 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
             return move
         }
         
+        let candidates = getCandidates()
         if player == identity {
-            let candidates = getCandidates()
             if candidates.count == 0 {
                 return nil
             }
-            var bestMove = candidates.randomElement()!
-            bestMove.score = Int.min
+            var bestMove: Move? = nil
             for move in candidates {
                 delegate.put(at: move.co)
                 let score = minimax(depth - 1, player.next(),alpha, beta)?.score
                 delegate.revert()
                 if let s = score {
-                    if s > bestMove.score {
+                    if bestMove == nil || s > bestMove!.score {
                         bestMove = move
-                        bestMove.score = s
+                        bestMove!.score = s
                         if s >= Evaluator.win {
                             break
                         }
                         
                         alpha = max(alpha, s)
                         if beta <= alpha {
-                            bestMove.score = alpha
+                            bestMove!.score = alpha
                             cumCutDepth += depth
                             alphaCut += 1
                             break
@@ -150,16 +152,19 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
                 }
             }
             
-            // No defense measurements can dodge enemy's attack. Losing is inevitable. Select a random defensive move.
-            if bestMove.score < -Evaluator.win {
-                let mv = getSortedMoves().sorted{$0.score > $1.score}[0]
-                bestMove.co = mv.co
+            if var move = bestMove {
+                // No defense measurements can dodge enemy's attack. Losing is inevitable. Select a random defensive move.
+                if move.score < -Evaluator.win {
+                    let mv = getSortedMoves().sorted{$0.score > $1.score}[0]
+                    move.co = mv.co
+                }
+                
+                transposMap[Zobrist(zobrist: zobrist)] = (move: move, depth: depth)
+                return move
+            } else {
+                return Move(co: (0,0), score: score)
             }
-            
-            transposMap[Zobrist(zobrist: zobrist)] = (move: bestMove, depth: depth)
-            return bestMove
         } else {
-            let candidates = getCandidates()
             if candidates.count == 0 {
                 return nil
             } else if candidates.count == 1 {
@@ -173,23 +178,22 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
                 delegate.revert()
                 return nil
             }
-            var bestMove = candidates.randomElement()!
-            bestMove.score = Int.max
+            var bestMove: Move? = nil
             for move in candidates {
                 delegate.put(at: move.co)
                 let score = minimax(depth - 1, player.next(), alpha, beta)?.score
                 delegate.revert()
                 if let s = score {
-                    if s < bestMove.score {
+                    if bestMove == nil || s < bestMove!.score {
                         bestMove = move
-                        bestMove.score = s
+                        bestMove!.score = s
                         if s <= -Evaluator.win {
                             break
                         }
                         
                         beta = min(beta, s)
                         if beta <= alpha {
-                            bestMove.score = beta
+                            bestMove!.score = beta
                             cumCutDepth += depth
                             betaCut += 1
                             break
@@ -201,9 +205,12 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
                     break
                 }
             }
-            
-            transposMap[Zobrist(zobrist: zobrist)] = (move: bestMove, depth: depth)
-            return bestMove
+            if let move = bestMove {
+                transposMap[Zobrist(zobrist: zobrist)] = (move: move, depth: depth)
+                return move
+            } else {
+                return Move(co: (0,0), score: score)
+            }
         }
     }
     
