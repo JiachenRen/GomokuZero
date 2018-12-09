@@ -1,4 +1,4 @@
-#  ![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Assets.xcassets/AppIcon.appiconset/icon_128x128.png "Zero + App Icon") Zero +
+#  ![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero%20macOS/Resources/Assets.xcassets/AppIcon.appiconset/icon_128x128.png "Zero + App Icon") Zero +
 Zero+ is an AI for Gomoku, also known as Five in a Row, a popular board game that is played on the same board as Go. For the iOS version (less powerful), see [Gomoku Grandmaster](https://github.com/JiachenRen/gomoku-grandmaster)
 
 ## Algorithms & Data Structures Overview
@@ -156,7 +156,7 @@ func genSortedMoves() -> [Move] {
 
 ### Sequence & Threat Types
 The `ThreatEvaluator` works by linearizing a certain position on the 2D board into 1D arrays called `Sequence`. For example, this is what the linearization of the coordinate `(6, 7)` looks like:
-![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Screenshots/linearization.png "Board 15 x 15")
+![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero%20macOS/Resources/Screenshots/linearization.png "Board 15 x 15")
 Horizontally, we have `* o o o o - * * *`, vertically, we have `o o * * - o o o *`, diagonally (top left to bottom right), we have `o * *`, and diagonally from bottom left to top right, we have `o * - o o`.
 
 The linearization of 2D patterns into 1D sequences offers a huge advantage - rather than having to develop an algorithm that evaluates linear patterns for threats that could be very complex, a simpler general algorithm could be used to categorize each sequence, let it be horizontal, vertical, or diagonal (since it does not matter in the end), into `Threat` types. There are several threat types, and each is assigned a specific score. In Zero +, the values are assigned intuitively:
@@ -197,14 +197,14 @@ Refer to [here](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/GZero
 
 To spawn a customized looped skirmish, use the **Zero+ Console**. The short-cut for opening the console is `⌃⇧C` (Control-Shift-C). Make sure that `Looped` is checked. You can optionally save the skirmishes to a designated location. To generate stats from saved skirmishes, click `Generate Stats`. 
 
-![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Screenshots/console.png "Console Screenshot")
+![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero%20macOS/Resources/Screenshots/console.png "Console Screenshot")
 
 The following .gif shows a looped play of two heuristic AIs happening in real time:
 
-![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Screenshots/self-play.gif "self-play.gif")
+![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero%20macOS/Resources/Screenshots/self-play.gif "self-play.gif")
 
 One of the cool features proprietary to Zero+ is the visualization of the AI. The visualization offers a peek into the inner-workings of the algorithm (i.e. what it is doing, either updating the active map or performing simulations) in real time. The following is a snap-shot of visualization of ZeroMax playing against MCTS. Note that visualization would be different for different algorithms since they would be doing different things!
 
 To enable visualization, make sure the check box is checked in the console. (Alternatively, use the short cut `⌃⌥A` (Control-Option-A)).
 
-![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero/Resources/Screenshots/max-vs-mcts.gif)
+![alt text](https://github.com/JiachenRen/gomoku-zero-plus/blob/master/Gomoku%20Zero%20macOS/Resources/Screenshots/max-vs-mcts.gif)
