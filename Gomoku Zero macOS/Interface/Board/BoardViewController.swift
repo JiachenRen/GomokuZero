@@ -8,13 +8,13 @@
 
 import Cocoa
 
-class BoardViewController: NSViewController, BoardViewDelegate {
+class BoardViewController: NSViewController, BoardViewDataSource {
     
     @IBOutlet weak var boardView: BoardView!
     @IBOutlet weak var boardTextureView: BoardTextureView!
     
     weak var delegate: ViewControllerDelegate?
-    var board: Board = Board(dimension: 19)
+    var board: Board = Board(dimension: 15)
     var zeroPlus: ZeroPlus {
         return board.zeroPlus
     }
@@ -28,7 +28,7 @@ class BoardViewController: NSViewController, BoardViewDelegate {
         
         // Establish delegation with board view (View)
         boardView.delegate = self
-        
+        boardView.dataSource = self
     }
     
     func updateVisPref(_ name: String) {
@@ -45,17 +45,6 @@ class BoardViewController: NSViewController, BoardViewDelegate {
     
     override func mouseUp(with event: NSEvent) {
         print(event)
-    }
-    
-    func didMouseUpOn(co: Coordinate) {
-        // Transfer the interpreted UI action to model
-        board.put(at: co)
-    }
-
-    override var representedObject: Any? {
-        didSet {
-        // Update the view, if already loaded.
-        }
     }
 
 }
@@ -77,24 +66,24 @@ extension BoardViewController: BoardDelegate {
     
     func boardDidUpdate(pieces: [[Piece]]) {
         // Transfer the current arrangement of pieces to board view for display
-        boardView.pieces = pieces
-//        DispatchQueue.main.async {[unowned self] in
-//            self.boardView.setNeedsDisplay(self.boardView.bounds)
-//        }
+        boardView.updateDisplay()
     }
     
 }
 
+extension BoardViewController: BoardViewDelegate {
+    func didMouseUpOn(co: Coordinate) {
+        // Transfer the interpreted UI action to model
+        board.put(at: co)
+    }
+}
+
 extension BoardViewController: VisualizationDelegate {
     func activeMapUpdated(activeMap: [[Bool]]?) {
-        DispatchQueue.main.async {
-            self.boardView.activeMap = activeMap
-        }
+        boardView.activeMap = activeMap
     }
     
     func historyDidUpdate(history: History?) {
-        DispatchQueue.main.async {
-            self.boardView.zeroPlusHistory = history
-        }
+        boardView.zpHistory = history
     }
 }
