@@ -12,7 +12,6 @@ let sharedBoard = Board(dimension: 15)
 
 class BoardViewController: UIViewController, BoardViewDelegate {
     
-    
     @IBOutlet weak var boardImgView: UIImageView!
     @IBOutlet weak var boardView: BoardView!
     
@@ -23,7 +22,7 @@ class BoardViewController: UIViewController, BoardViewDelegate {
     @IBOutlet var panRecognizer: UIPanGestureRecognizer!
     @IBOutlet var pinchRecognizer: UIPinchGestureRecognizer!
     
-    var delegate: ViewControllerDelegate?
+    weak var delegate: ViewControllerDelegate?
     
     var board: Board = sharedBoard
     var zeroPlus: ZeroPlus {
@@ -101,7 +100,7 @@ class BoardViewController: UIViewController, BoardViewDelegate {
     
 }
 
-protocol ViewControllerDelegate {
+protocol ViewControllerDelegate: AnyObject {
     var board: Board {get}
 }
 
@@ -137,5 +136,3 @@ extension BoardViewController: VisualizationDelegate {
         }
     }
 }
-
-

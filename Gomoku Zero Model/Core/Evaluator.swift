@@ -13,11 +13,11 @@ import Foundation
  threat types. Assign score for a specific point or game state based on threat potential
  */
 class Evaluator {
-    var seqHashMap: Dictionary<[Piece], [Threat]> = Dictionary()
+    var seqHashMap = [[Piece]: [Threat]]()
     let seqHashQueue = DispatchQueue(label: "seqHashQueue")
     
     static let win: Int = Int(1E14)
-    var weights: Dictionary<Threat, Int> = [
+    var weights: [Threat: Int] = [
         .five: Int(1E15), // 5
         .straightFour: Int(1E5),      // s4
         .straightPokedFour: Int(1E4),   // sp4
@@ -54,7 +54,7 @@ class Evaluator {
         func explore(x: Int, y: Int) -> [Piece] {
             var seq = [Piece]()
             var empty = 0
-            loop: for i in 1...5  {
+            loop: for i in 1...5 {
                 let curRow = row + y * i, curCol = col + x * i
                 if !isValid(col: curCol, row: curRow) {
                     seq.append(opponent) // It doesn't matter which color the player is, hitting the wall == an opposite piece
@@ -78,8 +78,6 @@ class Evaluator {
             return seq
         }
         
-        
-        
         func genSequence(x1: Int, y1: Int, x2: Int, y2: Int) -> [Piece] {
             var seqA: [Piece] = explore(x: x1, y: y1).reversed()
             seqA.append(player)
@@ -100,8 +98,8 @@ class Evaluator {
      */
     func analyze(_ pieces: [[Piece]], for player: Piece, at co: Coordinate) -> [Threat] {
         return sequentialize(pieces, for: player, at: co)
-            .map{cacheOrGet(seq: $0, for: player)} // Convert sequences to threat types
-            .flatMap{$0}
+            .map {cacheOrGet(seq: $0, for: player)} // Convert sequences to threat types
+            .flatMap {$0}
     }
     
     /**
@@ -109,8 +107,8 @@ class Evaluator {
      */
     func evaluate(_ pieces: [[Piece]], for player: Piece, at co: Coordinate) -> Int {
         return analyze(pieces, for: player, at: co)
-            .map{val($0)}  // Convert threat types to score
-            .reduce(0){$0 + $1} // Sum it up
+            .map {val($0)}  // Convert threat types to score
+            .reduce(0) {$0 + $1} // Sum it up
     }
     
     /**
@@ -128,13 +126,20 @@ class Evaluator {
         }
     }
     
-    // The results could be hashed!!!
+    typealias Pattern = (same: Int, gap: Int, startIdx: Int, endIdx: Int, gapIdx: Int)
+    
+    /**
+     Analyze sequence of pieces for threats.
+     - Parameters:
+        - seq: The sequence of pieces to be analyzed
+        - for: The player to analyze threats for.
+     - Returns: Identified threats as in [.straightThree, .blockedTwo], etc.
+     */
     private func analyzeThreats(_ seq: [Piece], for player: Piece) -> [Threat] {
         let opponent = player.next()
         let leftBlocked = seq.first! == opponent
         let rightBlocked = seq.last! == opponent
         
-        typealias Pattern = (same: Int, gap: Int, startIdx: Int, endIdx: Int, gapIdx: Int)
         func findPatterns(from a: Int, to b: Int) -> [Pattern] {
             var gap = 0
             var same = 0
@@ -203,7 +208,7 @@ class Evaluator {
             let pattern = (same, gap, startIdx, endIdx, gapIdx)
             identifiedPatterns.append(pattern)
             
-            return identifiedPatterns.filter{$0.same > 1}
+            return identifiedPatterns.filter {$0.same > 1}
         }
         
         // If one or both ends terminate with an opponent piece
@@ -213,23 +218,23 @@ class Evaluator {
             } else {
                 let startIdx = 1, endIdx = seq.count - 2
                 let patterns = findPatterns(from: startIdx, to: endIdx)
-                let resolved = patterns.map{Sequence.resolve(same: $0.same, gap: $0.gap, gapIdx: $0.gapIdx)}
+                let resolved = patterns.map {Sequence.resolve(same: $0.same, gap: $0.gap, gapIdx: $0.gapIdx)}
                 return zip(patterns, resolved).map {(pattern, sequence) -> Threat in
                     let blocked = pattern.startIdx == startIdx || pattern.endIdx == endIdx
                     let type: Head = (blocked ? .blocked : .straight)
                     return sequence.toThreatType(head: type)
                 }
             }
-        } else if leftBlocked  {
+        } else if leftBlocked {
             let patterns = findPatterns(from: 1, to: seq.count - 1)
-            let resolved = patterns.map{Sequence.resolve(same: $0.same, gap: $0.gap, gapIdx: $0.gapIdx)}
+            let resolved = patterns.map {Sequence.resolve(same: $0.same, gap: $0.gap, gapIdx: $0.gapIdx)}
             return zip(patterns, resolved).map {(pattern, sequence) in
                 let type: Head = (pattern.startIdx == 1 ? .blocked : .straight)
                 return sequence.toThreatType(head: type)
             }
         } else if rightBlocked {
             let patterns = findPatterns(from: 0, to: seq.count - 2)
-            let resolved = patterns.map{Sequence.resolve(same: $0.same, gap: $0.gap, gapIdx: $0.gapIdx)}
+            let resolved = patterns.map {Sequence.resolve(same: $0.same, gap: $0.gap, gapIdx: $0.gapIdx)}
             return zip(patterns, resolved).map {(pattern, sequence) in
                 let type: Head = (pattern.endIdx == seq.count - 2 ? .blocked : .straight)
                 return sequence.toThreatType(head: type)
@@ -238,7 +243,7 @@ class Evaluator {
         
         // Free ends
         return findPatterns(from: 0, to: seq.count - 1)
-            .map{Sequence.resolve(same: $0.same, gap: $0.gap, gapIdx: $0.gapIdx)}
-            .map{$0.toThreatType(head: .straight)}
+            .map {Sequence.resolve(same: $0.same, gap: $0.gap, gapIdx: $0.gapIdx)}
+            .map {$0.toThreatType(head: .straight)}
     }
 }

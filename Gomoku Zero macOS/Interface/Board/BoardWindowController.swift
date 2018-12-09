@@ -37,8 +37,6 @@ class BoardWindowController: NSWindowController, NSOpenSavePanelDelegate, ViewCo
     override func windowDidLoad() {
         super.windowDidLoad()
         
-        
-        
         // Establish communication with ViewController
         viewController.delegate = self
     }
@@ -46,7 +44,7 @@ class BoardWindowController: NSWindowController, NSOpenSavePanelDelegate, ViewCo
     static func open(_ completion: (([BoardWindowController]) -> Void)? = nil) {
         var controllers = [BoardWindowController]()
         
-        openPanel.begin() { response in
+        openPanel.begin { response in
             switch response {
             case .OK:
                 var curFrame = NSApplication.shared.mainWindow?.frame ?? CGRect.zero
@@ -79,7 +77,7 @@ class BoardWindowController: NSWindowController, NSOpenSavePanelDelegate, ViewCo
     
     func save() {
         if board.history.stack.isEmpty {
-            let _ = dialogue(msg: "Cannot save empty game.", infoTxt: "Give me some juice!")
+            dialogue(msg: "Cannot save empty game.", infoTxt: "Give me some juice!")
             return
         }
         print("Saving...")

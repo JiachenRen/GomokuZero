@@ -39,8 +39,8 @@ class GameState: BoardDelegate {
                 case "redo": board.redo()
                 case "exit": exit(0)
                 default:
-                    let co = line.split(separator: ",").map{Int($0)}
-                    if co.count == 2 && !co.contains{$0 == nil} {
+                    let co = line.split(separator: ",").map {Int($0)}
+                    if co.count == 2 && !co.contains {$0 == nil} {
                         let coordinate = (co.last!! - 1, co.first!! - 1)
                         if isValid(coordinate, board.dimension) {
                             board.put(at: coordinate)
@@ -79,7 +79,3 @@ if c == "b" {
 
 // Begin!
 gameState.beginGameLoop()
-
-
-
-

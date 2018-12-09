@@ -2,7 +2,7 @@
 //  SlideMenuController.swift
 //
 //  Created by Yuji Hato on 12/3/14.
-//
+//  swiftlint:disable all
 
 import Foundation
 import UIKit
@@ -58,7 +58,6 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         case rightFlickOpen
         case rightFlickClose
     }
-    
     
     struct PanInfo {
         var action: SlideAction
@@ -124,8 +123,8 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         
         var opacityframe: CGRect = view.bounds
         let opacityOffset: CGFloat = 0
-        opacityframe.origin.y = opacityframe.origin.y + opacityOffset
-        opacityframe.size.height = opacityframe.size.height - opacityOffset
+        opacityframe.origin.y += opacityOffset
+        opacityframe.size.height -= opacityOffset
         opacityView = UIView(frame: opacityframe)
         opacityView.backgroundColor = SlideMenuOptions.opacityViewBackgroundColor
         opacityView.autoresizingMask = [UIView.AutoresizingMask.flexibleHeight, UIView.AutoresizingMask.flexibleWidth]
@@ -137,8 +136,8 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
             leftFrame.size.width = SlideMenuOptions.leftViewWidth
             leftFrame.origin.x = leftMinOrigin()
             let leftOffset: CGFloat = 0
-            leftFrame.origin.y = leftFrame.origin.y + leftOffset
-            leftFrame.size.height = leftFrame.size.height - leftOffset
+            leftFrame.origin.y += leftOffset
+            leftFrame.size.height -= leftOffset
             leftContainerView = UIView(frame: leftFrame)
             leftContainerView.backgroundColor = UIColor.clear
             leftContainerView.autoresizingMask = UIView.AutoresizingMask.flexibleHeight
@@ -151,8 +150,8 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
             rightFrame.size.width = SlideMenuOptions.rightViewWidth
             rightFrame.origin.x = rightMinOrigin()
             let rightOffset: CGFloat = 0
-            rightFrame.origin.y = rightFrame.origin.y + rightOffset
-            rightFrame.size.height = rightFrame.size.height - rightOffset
+            rightFrame.origin.y += rightOffset
+            rightFrame.size.height -= rightOffset
             rightContainerView = UIView(frame: rightFrame)
             rightContainerView.backgroundColor = UIColor.clear
             rightContainerView.autoresizingMask = UIView.AutoresizingMask.flexibleHeight
@@ -167,7 +166,7 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         leftContainerView.isHidden = true
         rightContainerView.isHidden = true
         
-        coordinator.animate(alongsideTransition: nil, completion: { (context: UIViewControllerTransitionCoordinatorContext!) -> Void in
+        coordinator.animate(alongsideTransition: nil, completion: { (_: UIViewControllerTransitionCoordinatorContext!) -> Void in
             self.closeLeftNonAnimation()
             self.closeRightNonAnimation()
             self.leftContainerView.isHidden = false

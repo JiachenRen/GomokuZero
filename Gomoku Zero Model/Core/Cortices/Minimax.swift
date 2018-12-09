@@ -37,7 +37,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
     var verbose = false
     
     typealias Result = (move: Move, depth: Int)
-    typealias TransposMap = Dictionary<Zobrist, Result>
+    typealias TransposMap = [Zobrist: Result]
     var transposMap = TransposMap()
     
     init(_ delegate: CortexDelegate, depth: Int, breadth: Int) {
@@ -45,7 +45,6 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
         self.breadth = breadth
         super.init(delegate)
     }
-    
     
     override func getMove() -> Move {
         transposMap = TransposMap()
@@ -94,7 +93,7 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
      
      - Returns: the best move for the current player in the given delegate.
      */
-    func minimax(_ depth: Int, _ player: Piece,  _ alpha: Int, _ beta: Int) -> Move? {
+    func minimax(_ depth: Int, _ player: Piece, _ alpha: Int, _ beta: Int) -> Move? {
         nodes += 1
         if let (mv, d) = transposMap[zobrist] {
             if d >= depth {
@@ -102,7 +101,6 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
             }
         }
         
-        var alpha = alpha, beta = beta, depth = depth // Make alpha beta mutable
         var score = getHeuristicValue()
         if delegate.strategy.randomizedSelection {
             score += Int.random(in: 0..<10)
@@ -110,108 +108,120 @@ class MinimaxCortex: BasicCortex, TimeLimitedSearchProtocol {
         
         if isTerminal(score: score) {
             // Terminal state has reached
-            return Move(co: (0,0), score: score)
+            return Move(co: (0, 0), score: score)
         } else if depth == 0 {
-            var move = Move(co: (0,0), score: score)
+            var move = Move(co: (0, 0), score: score)
             move.score = beyondHorizon(score, alpha, beta, player)
             return move
         }
         
         let candidates = getCandidates()
+        if candidates.count == 0 {
+            return nil
+        }
         if player == identity {
-            if candidates.count == 0 {
-                return nil
-            }
-            var bestMove: Move? = nil
-            for move in candidates {
-                delegate.put(at: move.co)
-                let score = minimax(depth - 1, player.next(),alpha, beta)?.score
-                delegate.revert()
-                if let s = score {
-                    if bestMove == nil || s > bestMove!.score {
-                        bestMove = move
-                        bestMove!.score = s
-                        if s >= Evaluator.win {
-                            break
-                        }
-                        
-                        alpha = max(alpha, s)
-                        if beta <= alpha {
-                            bestMove!.score = alpha
-                            cumCutDepth += depth
-                            alphaCut += 1
-                            break
-                        }
+            return maximize(candidates, depth, player, alpha, beta)
+        } else {
+            return minimize(candidates, depth, player, alpha, beta)
+        }
+    }
+    
+    /// Maximizing player
+    private func maximize(_ candidates: [Move], _ depth: Int, _ player: Piece, _ alpha: Int, _ beta: Int) -> Move? {
+        var alpha = alpha, beta = beta // Make alpha beta mutable
+        var bestMove: Move?
+        for move in candidates {
+            delegate.put(at: move.co)
+            let score = minimax(depth - 1, player.next(), alpha, beta)?.score
+            delegate.revert()
+            if let s = score {
+                if bestMove == nil || s > bestMove!.score {
+                    bestMove = move
+                    bestMove!.score = s
+                    if s >= Evaluator.win {
+                        break
                     }
-                }
                     
-                // If time's up, return the current best move.
-                if delegate.timeout {
-                    searchCancelledInProgress = true
-                    break
+                    alpha = max(alpha, s)
+                    if beta <= alpha {
+                        bestMove!.score = alpha
+                        cumCutDepth += depth
+                        alphaCut += 1
+                        break
+                    }
                 }
             }
             
-            if var move = bestMove {
-                // No defense measurements can dodge enemy's attack. Losing is inevitable. Select a random defensive move.
-                if move.score < -Evaluator.win {
-                    let mv = getSortedMoves().sorted{$0.score > $1.score}[0]
-                    move.co = mv.co
-                }
-                
-                transposMap[Zobrist(zobrist: zobrist)] = (move: move, depth: depth)
-                return move
-            } else {
-                return Move(co: (0,0), score: score)
-            }
-        } else {
-            if candidates.count == 0 {
-                return nil
-            } else if candidates.count == 1 {
-                var mv = candidates.first!
-                delegate.put(at: mv.co)
-                if let score = minimax(depth - 1, player.next(), alpha, beta)?.score {
-                    delegate.revert()
-                    mv.score = score
-                    return mv
-                }
-                delegate.revert()
-                return nil
-            }
-            var bestMove: Move? = nil
-            for move in candidates {
-                delegate.put(at: move.co)
-                let score = minimax(depth - 1, player.next(), alpha, beta)?.score
-                delegate.revert()
-                if let s = score {
-                    if bestMove == nil || s < bestMove!.score {
-                        bestMove = move
-                        bestMove!.score = s
-                        if s <= -Evaluator.win {
-                            break
-                        }
-                        
-                        beta = min(beta, s)
-                        if beta <= alpha {
-                            bestMove!.score = beta
-                            cumCutDepth += depth
-                            betaCut += 1
-                            break
-                        }
-                    }
-                }
-                if delegate.timeout {
-                    searchCancelledInProgress = true
-                    break
-                }
-            }
-            if let move = bestMove {
-                transposMap[Zobrist(zobrist: zobrist)] = (move: move, depth: depth)
-                return move
-            } else {
-                return Move(co: (0,0), score: score)
+            // If time's up, return the current best move.
+            if delegate.timeout {
+                searchCancelledInProgress = true
+                break
             }
         }
+        
+        if var move = bestMove {
+            // No defense measurements can dodge enemy's attack.
+            // Losing is inevitable.
+            // Select a random defensive move.
+            if move.score < -Evaluator.win {
+                let mv = getSortedMoves().sorted {$0.score > $1.score}[0]
+                move.co = mv.co
+            }
+            
+            transposMap[Zobrist(zobrist: zobrist)] = (move: move, depth: depth)
+            return move
+        }
+        
+        return nil
+    }
+    
+    /// Minimizing player
+    private func minimize(_ candidates: [Move], _ depth: Int, _ player: Piece, _ alpha: Int, _ beta: Int) -> Move? {
+        var alpha = alpha, beta = beta // Make alpha beta mutable
+        if candidates.count == 1 {
+            var mv = candidates.first!
+            delegate.put(at: mv.co)
+            if let score = minimax(depth - 1, player.next(), alpha, beta)?.score {
+                delegate.revert()
+                mv.score = score
+                return mv
+            }
+            delegate.revert()
+            return nil
+        }
+        var bestMove: Move?
+        for move in candidates {
+            delegate.put(at: move.co)
+            let score = minimax(depth - 1, player.next(), alpha, beta)?.score
+            delegate.revert()
+            if let s = score {
+                if bestMove == nil || s < bestMove!.score {
+                    bestMove = move
+                    bestMove!.score = s
+                    if s <= -Evaluator.win {
+                        break
+                    }
+                    
+                    beta = min(beta, s)
+                    if beta <= alpha {
+                        bestMove!.score = beta
+                        cumCutDepth += depth
+                        betaCut += 1
+                        break
+                    }
+                }
+            }
+            if delegate.timeout {
+                searchCancelledInProgress = true
+                break
+            }
+        }
+        if let move = bestMove {
+            transposMap[Zobrist(zobrist: zobrist)] = (move: move, depth: depth)
+            return move
+        }
+        
+        return nil
     }
     
     override var description: String {

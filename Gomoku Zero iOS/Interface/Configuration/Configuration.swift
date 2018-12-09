@@ -26,7 +26,7 @@ class Configuration {
             StepperConfig(title: "Depth", min: 0, max: 10, val: 4),
             StepperConfig(title: "Breadth", min: 1, max: 20, val: 6),
             ToggleConfig(title: "Iterative Deepening", isOn: true),
-            SegmentedConfig(title: "Layers", selectedIdx: 1, subtitles: ["All", "Evens", "Odds"]),
+            SegmentedConfig(title: "Layers", selectedIdx: 1, subtitles: ["All", "Evens", "Odds"])
         ],
         .negaScout: [
             ToggleConfig(title: "Randomized Selection", isOn: true),
@@ -34,13 +34,13 @@ class Configuration {
             StepperConfig(title: "Depth", min: 0, max: 10, val: 4),
             StepperConfig(title: "Breadth", min: 1, max: 20, val: 6),
             ToggleConfig(title: "Iterative Deepening", isOn: true),
-            SegmentedConfig(title: "Layers", selectedIdx: 1, subtitles: ["All", "Evens", "Odds"]),
+            SegmentedConfig(title: "Layers", selectedIdx: 1, subtitles: ["All", "Evens", "Odds"])
         ],
         .monteCarlo: [
             ToggleConfig(title: "Randomized Expansion", isOn: true),
             StepperConfig(title: "Timeout (s)", min: 1, max: 60, val: 3),
             StepperConfig(title: "Sim. Depth", min: 1, max: 20, val: 6),
-            StepperConfig(title: "Breadth", min: 1, max: 20, val: 10),
+            StepperConfig(title: "Breadth", min: 1, max: 20, val: 10)
         ],
         .zeroMax: [
             ToggleConfig(title: "Randomized Selection", isOn: true),
@@ -50,11 +50,10 @@ class Configuration {
             StepperConfig(title: "Breadth", min: 1, max: 20, val: 10),
             StepperConfig(title: "Ext. Pr.", min: 1, max: 100, val: 100),
             ToggleConfig(title: "Iterative Deepening", isOn: true),
-            SegmentedConfig(title: "Layers", selectedIdx: 0, subtitles: ["All", "Evens", "Odds"]),
+            SegmentedConfig(title: "Layers", selectedIdx: 0, subtitles: ["All", "Evens", "Odds"])
         ]
     ]
 
-    
     var algorithm: Algorithm {
         let config = cellConfigs[1] as! SegueConfig
         return Algorithm(rawValue: config.subtitle)!
@@ -72,13 +71,13 @@ class Configuration {
             SwitchConfig(title: "Enabled", isOn: enabled),
             SegueConfig(title: "Algorithm",
                         selectedIdx: idx,
-                        subtitles: Algorithm.all.map{$0.rawValue})
+                        subtitles: Algorithm.all.map {$0.rawValue})
         ]
         cellConfigs.append(contentsOf: Configuration.configs[algorithm]!)
     }
     
     private func get(_ name: String) -> CellConfig? {
-        return cellConfigs.filter{$0.title == name}.first
+        return cellConfigs.filter {$0.title == name}.first
     }
     
     private func bool(_ name: String) -> Bool? {

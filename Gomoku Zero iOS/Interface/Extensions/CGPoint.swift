@@ -28,18 +28,18 @@ extension CGPoint {
         return .init(x: point.x + x, y: point.y + y)
     }
     
-    static func midpoint(from p1: CGPoint, to p2: CGPoint) -> CGPoint{
+    static func midpoint(from p1: CGPoint, to p2: CGPoint) -> CGPoint {
         return CGPoint(x: (p2.x+p1.x)/2, y: (p2.y+p1.y)/2)
     }
     
-    static func *(point: CGPoint, scalar: CGFloat) -> CGPoint {
+    static func * (point: CGPoint, scalar: CGFloat) -> CGPoint {
         return CGPoint(x: point.x * scalar, y: point.y * scalar)
     }
     
-    static func +(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
+    static func + (lhs: CGPoint, rhs: CGPoint) -> CGPoint {
         return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
     }
-    static func -(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
+    static func - (lhs: CGPoint, rhs: CGPoint) -> CGPoint {
         return lhs + -rhs
     }
 }

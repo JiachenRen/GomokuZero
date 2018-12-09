@@ -4,7 +4,7 @@
 //
 //  Created by Jiachen Ren on 11/25/18.
 //  Copyright © 2018 Jiachen Ren. All rights reserved.
-//
+//  swiftlint:disable type_body_length
 
 import UIKit
 
@@ -81,7 +81,7 @@ import UIKit
                       size: CGSize(width: pieceRadius * 2, height: pieceRadius * 2))
     }
     
-    var delegate: BoardViewDelegate?
+    weak var delegate: BoardViewDelegate?
     var activeMap: [[Bool]]? {
         didSet {
             setNeedsDisplay(bounds)
@@ -135,7 +135,6 @@ import UIKit
         // Draw board gird lines
         UIColor.black.setStroke()
         pathForGrid().stroke()
-        
         
         if board.dimension == 19 || board.dimension == 15 {
             drawVertices()
@@ -212,9 +211,9 @@ import UIKit
         paragraphStyle.alignment = .center
         let radius = pieceRadius / 4 * 3
         let attributes = [
-            NSAttributedString.Key.paragraphStyle  : paragraphStyle,
-            .font            : UIFont.systemFont(ofSize: radius),
-            .foregroundColor : piece == .black ? colorful ? UIColor.green : UIColor.white : colorful ? .red : .black,
+            NSAttributedString.Key.paragraphStyle: paragraphStyle,
+            .font: UIFont.systemFont(ofSize: radius),
+            .foregroundColor: piece == .black ? colorful ? UIColor.green : UIColor.white : colorful ? .red : .black
             ]
         var ctr = onScreen(co)
         //        ctr.x += pieceRadius / 4
@@ -267,7 +266,7 @@ import UIKit
                 let ctr = onScreen(Coordinate(col: col, row: row))
                 let scale = dampenerMap[row][col]
                 var radius = pieceRadius
-                radius = radius * scale
+                radius *= scale
                 let rect = CGRect(center: ctr, size: CGSize(width: radius, height: radius))
                 if scale > 0 {
                     let color: UIColor = board.curPlayer == .black ? .black : .white
@@ -329,7 +328,7 @@ import UIKit
     private func pathForGrid() -> UIBezierPath {
         let path = UIBezierPath()
         path.move(to: CGPoint(x: cornerOffset, y: cornerOffset))
-        (0..<dimension).map{CGFloat($0)}.forEach{
+        (0..<dimension).map {CGFloat($0)}.forEach {
             //draw the vertical lines
             path.move(to: CGPoint(x: cornerOffset + $0 * gap, y: cornerOffset))
             path.addLine(to: CGPoint(x: cornerOffset + $0 * gap, y: bounds.height - cornerOffset))
@@ -349,7 +348,7 @@ import UIKit
     private func drawVertices() {
         self.vertexColor.setFill()
         let vertices = board.dimension == 15 ? gomokuVertices : goVertices
-        vertices.map{onScreen($0)}.forEach {
+        vertices.map {onScreen($0)}.forEach {
             CGContext.fillCircle(center: $0, radius: vertexRadius)
         }
     }
@@ -375,7 +374,7 @@ import UIKit
     }
 }
 
-protocol BoardViewDelegate {
+protocol BoardViewDelegate: AnyObject {
     var board: Board {get}
 }
 

@@ -12,8 +12,8 @@ private let reuseIdentifier = "theme-cell"
 
 class ThemeCVC: UICollectionViewController {
     
-    let themes: [UIImage] = "abcdef".map{"board_\($0)"}
-        .map{UIImage(named: $0)!}
+    let themes: [UIImage] = "abcdef".map {"board_\($0)"}
+        .map {UIImage(named: $0)!}
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +25,6 @@ class ThemeCVC: UICollectionViewController {
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return themes.count

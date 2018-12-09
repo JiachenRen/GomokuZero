@@ -44,7 +44,7 @@ class IterativeDeepeningCortex: MinimaxCortex {
         let group = DispatchGroup()
         
         for d in getDeepeningLayers() {
-            let workItem = DispatchWorkItem{ [unowned self] in
+            let workItem = DispatchWorkItem { [unowned self] in
                 let zero2 = self.delegate as! ZeroPlus
                 let zero = ZeroPlus(zero2)
                 self.setup(zero, d)
@@ -68,10 +68,9 @@ class IterativeDeepeningCortex: MinimaxCortex {
             self.completed = true
         }
         
-        
         while true {
             if completed || (delegate.timeout && bestMove != nil) {
-                workItems.forEach{$0.cancel()}
+                workItems.forEach {$0.cancel()}
                 break
             }
             Thread.sleep(forTimeInterval: 0.01)

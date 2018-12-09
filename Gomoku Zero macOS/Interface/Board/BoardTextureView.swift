@@ -10,7 +10,7 @@ import Cocoa
 
 @IBDesignable class BoardTextureView: NSView {
 
-    @IBInspectable var image = NSImage(named: "board_d") {
+    var image: NSImage = NSImage(named: "board_d")! {
         didSet {
             setNeedsDisplay(bounds)
         }
@@ -22,12 +22,11 @@ import Cocoa
             return
         }
         self.wantsLayer = true
-        image?.draw(in: dirtyRect)
+        image.draw(in: dirtyRect)
     }
     
     override func viewDidEndLiveResize() {
         setNeedsDisplay(bounds)
     }
-    
     
 }

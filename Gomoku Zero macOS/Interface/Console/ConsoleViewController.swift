@@ -4,13 +4,12 @@
 //
 //  Created by Jiachen Ren on 10/21/18.
 //  Copyright © 2018 Jiachen Ren. All rights reserved.
-//
+//  swiftlint:disable cyclomatic_complexity type_body_length
 
 import Cocoa
 
 class ConsoleViewController: NSViewController {
 
-    
     @IBOutlet weak var blackCheckBox: NSButton! // Done
     @IBOutlet weak var blackAlgorithm: NSPopUpButton! // Done
     @IBOutlet weak var blackMaxThinkingTime: NSTextField! // Done
@@ -90,9 +89,9 @@ class ConsoleViewController: NSViewController {
                 let idx = dim.firstIndex(of: "x")
                 if idx == nil {
                     board.dimension = constraint(dim)
-                } else  {
+                } else {
                     var num = String(dim[..<idx!])
-                    num.removeAll{$0 == " "}
+                    num.removeAll {$0 == " "}
                     board.dimension = constraint(num)
                 }
             }
@@ -180,7 +179,7 @@ class ConsoleViewController: NSViewController {
     
     @IBAction func generateStatitics(_ sender: NSButton) {
         let panel = BoardWindowController.openPanel
-        panel.begin() {response in
+        panel.begin {response in
             switch response {
             case .OK: ConsoleViewController.generateStatistics(for: panel.urls)
             default: break
@@ -194,7 +193,7 @@ class ConsoleViewController: NSViewController {
         panel.canChooseFiles = false
         panel.allowsMultipleSelection = false
         
-        panel.begin() {response in
+        panel.begin {response in
             switch response {
             case .OK:
                 self.filePathLabel.stringValue = panel.urls[0].path
@@ -202,7 +201,6 @@ class ConsoleViewController: NSViewController {
             }
         }
     }
-    
     
     private static func generateStatistics(for urls: [URL]) {
         var blackWin = 0
@@ -242,7 +240,7 @@ class ConsoleViewController: NSViewController {
             }
         }
         
-        total = total - incomplete
+        total -= incomplete
         func perc(_ n: Int) -> Int {
             return Int(Double(n) / Double(total) * 100)
         }
@@ -255,7 +253,7 @@ class ConsoleViewController: NSViewController {
         var repeatedBWin = 0
         var repeatedWWin = 0
         var repeatedDraw = 0
-        let tuple = zip(games.map{Zobrist(matrix: $0.pieces)}, games)
+        let tuple = zip(games.map {Zobrist(matrix: $0.pieces)}, games)
         var val = 0
         for (zobrist, board) in tuple.sorted(by: {$0.0.hashValue > $1.0.hashValue}) {
             if zobrist.hashValue != val {
@@ -292,7 +290,6 @@ class ConsoleViewController: NSViewController {
             + "repeated white wins: \(repeatedWWin)\n"
             + "repeated draw      : \(repeatedDraw)\n"
         
-        
         var dir = urls[0].deletingLastPathComponent()
         dir.appendPathComponent("stats.txt")
         print(stats)
@@ -303,7 +300,6 @@ class ConsoleViewController: NSViewController {
             print(err)
         }
     }
-    
     
     @IBAction func spawnNewGame(_ sender: NSButton) {
         let boardWindowController = NSStoryboard(name: "Main", bundle: nil)

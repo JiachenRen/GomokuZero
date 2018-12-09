@@ -15,7 +15,6 @@ class StepperCell: UITableViewCell, ConfigCellProtocol {
     @IBOutlet weak var textField: UITextField!
     var stepperConfig: StepperConfig!
     
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -50,6 +49,5 @@ class StepperCell: UITableViewCell, ConfigCellProtocol {
         stepper.value = stepperConfig.val
         textField.text = "\(Int(stepperConfig.val))"
     }
-    
     
 }

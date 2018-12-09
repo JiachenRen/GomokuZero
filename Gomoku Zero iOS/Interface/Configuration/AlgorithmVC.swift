@@ -10,8 +10,6 @@ import UIKit
 
 class AlgorithmVC: UIViewController, UIPickerViewDelegate {
     
-    
-
     @IBOutlet weak var pickerView: UIPickerView!
     var segueConfig: SegueConfig!
     var completion: (() -> Void)?

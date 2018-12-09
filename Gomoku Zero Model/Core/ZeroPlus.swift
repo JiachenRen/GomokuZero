@@ -16,8 +16,8 @@ typealias Move = (co: Coordinate, score: Int)
 class ZeroPlus: CortexDelegate, EvaluatorDataSource {
     let asyncedQueue = DispatchQueue(label: "asyncedQueue", qos: .userInteractive, attributes: .concurrent, autoreleaseFrequency: .workItem, target: nil)
     
-    var delegate: ZeroPlusDelegate!
-    var visDelegate: VisualizationDelegate?
+    weak var delegate: ZeroPlusDelegate!
+    weak var visDelegate: VisualizationDelegate?
     
     var activeMapDiffStack = [[Coordinate]]()
     var activeMap = [[Bool]]()
@@ -60,7 +60,6 @@ class ZeroPlus: CortexDelegate, EvaluatorDataSource {
         identity = other.identity
         startTime = other.startTime
         strategy = other.strategy
-        // TODO: add customization for the weighting!
     }
 
     func getMove(for player: Piece) {
@@ -81,55 +80,63 @@ class ZeroPlus: CortexDelegate, EvaluatorDataSource {
             let mv = getSecondMove()
             delegate?.bestMoveExtrapolated(co: mv)
         } else {
-            switch personality {
-            case .heuristic: cortex = BasicCortex(self)
-            case .zeroSum: cortex = ZeroSumCortex(self)
-            case .minimax(depth: let d, breadth: let b):
-                if strategy.iterativeDeepening {
-                    cortex = IterativeDeepeningCortex(self, depth: d, breadth: b, layers: strategy.layers) {
-                        $0.cortex = MinimaxCortex($0, depth: $1, breadth: b)
-                    }
-                } else {
-                    let minimax = MinimaxCortex(self, depth: d, breadth: b)
-                    minimax.verbose = true
-                    cortex = minimax
-                }
-            case .negaScout(depth: let d, breadth: let b):
-                cortex = NegaScoutCortex(self, depth: d, breadth: b)
-            case .monteCarlo(breadth: let b, rollout: let p, random: let r, debug: let d):
-                cortex = MonteCarloCortex(self, breadth: b)
-                let mtCortex = cortex as! MonteCarloCortex
-                mtCortex.simDepth = p
-                mtCortex.randomExpansion = r
-                mtCortex.debug = d
-            case .zeroMax(depth: let d, breadth: let b, rolloutPr: let r, simDepth: let s):
-                if strategy.iterativeDeepening {
-                    cortex = IterativeDeepeningCortex(self, depth: d, breadth: b, layers: strategy.layers) {
-                        $0.cortex = ZeroMax($0, depth: $1, breadth: b, rollout: r, simDepth: s)
-                    }
-                } else {
-                    cortex = ZeroMax(self, depth: d, breadth: b, rollout: r, simDepth: s)
-                }
-            }
-            
-            // Customize weights used to evaluator
-            if let weights = strategy.weights {
-                cortex.evaluator.weights = weights
-            }
-            let move = cortex.getMove()
-            if verbose {
-                print("move: \(move)")
-            }
-            delegate.bestMoveExtrapolated(co: move.co)
+            // Time to brainstorm some complex moves!
+            activateCerebralCortex(player)
         }
         
         calcDurations.append(duration)
         
         if verbose {
-            let avgDuration = calcDurations.reduce(0){$0 + $1} / Double(calcDurations.count)
+            let avgDuration = calcDurations.reduce(0) {$0 + $1} / Double(calcDurations.count)
             print("cortex: \(String(describing: cortex))\nduration: \(duration)\navg. duration: \(avgDuration)\n")
         }
         visDelegate?.activeMapUpdated(activeMap: nil) // Erase drawings of active map
+    }
+    
+    /// Configure and triggers cortex activity for the current player.
+    /// When the algorithm converges on a move, it notifies the delegate.
+    private func activateCerebralCortex(_ player: Piece) {
+        switch personality {
+        case .heuristic: cortex = BasicCortex(self)
+        case .zeroSum: cortex = ZeroSumCortex(self)
+        case .minimax(depth: let d, breadth: let b):
+            if strategy.iterativeDeepening {
+                cortex = IterativeDeepeningCortex(self, depth: d, breadth: b, layers: strategy.layers) {
+                    $0.cortex = MinimaxCortex($0, depth: $1, breadth: b)
+                }
+            } else {
+                let minimax = MinimaxCortex(self, depth: d, breadth: b)
+                minimax.verbose = true
+                cortex = minimax
+            }
+        case .negaScout(depth: let d, breadth: let b):
+            cortex = NegaScoutCortex(self, depth: d, breadth: b)
+        case .monteCarlo(breadth: let b, rollout: let p, random: let r, debug: let d):
+            cortex = MonteCarloCortex(self, breadth: b)
+            let mtCortex = cortex as! MonteCarloCortex
+            mtCortex.simDepth = p
+            mtCortex.randomExpansion = r
+            mtCortex.debug = d
+        case .zeroMax(depth: let d, breadth: let b, rolloutPr: let r, simDepth: let s):
+            if strategy.iterativeDeepening {
+                cortex = IterativeDeepeningCortex(self, depth: d, breadth: b, layers: strategy.layers) {
+                    $0.cortex = ZeroMax($0, depth: $1, breadth: b, rollout: r, simDepth: s)
+                }
+            } else {
+                cortex = ZeroMax(self, depth: d, breadth: b, rollout: r, simDepth: s)
+            }
+        }
+        
+        // Customize weights used to evaluator
+        if let weights = strategy.weights {
+            cortex.evaluator.weights = weights
+        }
+        let move = cortex.getMove()
+        if verbose {
+            print("move: \(move)")
+        }
+        
+        delegate.bestMoveExtrapolated(co: move.co)
     }
     
     /**
@@ -141,7 +148,7 @@ class ZeroPlus: CortexDelegate, EvaluatorDataSource {
         let randOffset1 = Int.random(in: range)
         let randOffset2 = Int.random(in: range)
         let co = Coordinate(col: firstMove.col + randOffset1, row: firstMove.row + randOffset2)
-        if !isValid(co, zobrist.dim) || co == firstMove  {
+        if !isValid(co, zobrist.dim) || co == firstMove {
             return getSecondMove()
         }
         return co
@@ -180,10 +187,9 @@ class ZeroPlus: CortexDelegate, EvaluatorDataSource {
 extension ZeroPlus {
     var activeCoordinates: [Coordinate] {
         return activeMap.enumerated().map {r, row in
-            return row.enumerated().filter{$0.element}.map {c, _ in
-                return Coordinate(col: c, row: r)
-            }
-            }.flatMap{$0}
+                return row.enumerated().filter {$0.element}
+                    .map {c, _ in return Coordinate(col: c, row: r)}
+            }.flatMap {$0}
     }
     
     /// Generate a 2D matrix of active coordinates
@@ -196,7 +202,7 @@ extension ZeroPlus {
         var diffCluster = [Coordinate]()
         for i in -2...2 {
             for j in -2...2 {
-                if abs(i) != abs(j) && i != 0 && j != 0  {
+                if abs(i) != abs(j) && i != 0 && j != 0 {
                     continue // Only activate diagonal coordinates
                 }
                 let newCo = (col: co.col + i, row: co.row + j)
@@ -252,17 +258,17 @@ struct Strategy {
     var iterativeDeepening = true
     var timeLimit: TimeInterval = 10
     var layers: IterativeDeepeningCortex.Layers = .all
-    var weights: Dictionary<Threat, Int>?
+    var weights: [Threat: Int]?
 }
 
-protocol ZeroPlusDelegate {
+protocol ZeroPlusDelegate: AnyObject {
     var history: History {get}
     var dimension: Int {get}
     var pieces: [[Piece]] {get}
     func bestMoveExtrapolated(co: Coordinate)
 }
 
-protocol VisualizationDelegate {
+protocol VisualizationDelegate: AnyObject {
     func activeMapUpdated(activeMap: [[Bool]]?)
     func historyDidUpdate(history: History?)
 }

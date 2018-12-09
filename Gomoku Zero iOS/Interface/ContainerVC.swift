@@ -10,7 +10,7 @@ import UIKit
 
 class ContainerVC: SlideMenuController {
 
-    static var sharedInstance: ContainerVC? = nil
+    static var sharedInstance: ContainerVC?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,7 +18,6 @@ class ContainerVC: SlideMenuController {
         ContainerVC.sharedInstance = self
     }
     
-
     override func awakeFromNib() {
         let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
         let boardVC = storyBoard.instantiateViewController(withIdentifier: "board")
@@ -51,13 +50,4 @@ class ContainerVC: SlideMenuController {
         }
     }
 
-}
-
-enum Interface: String {
-    //Container ViewController - Manages all three VCs
-    case Main = "Main"
-    
-    
-    var instance: UIStoryboard { return UIStoryboard(name: rawValue, bundle: Bundle.main) }
-    var initialViewController: UIViewController? { return instance.instantiateInitialViewController() }
 }

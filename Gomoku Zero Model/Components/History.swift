@@ -51,8 +51,8 @@ class History {
      col,row;col,row;col,row...
      */
     func serialize() -> String {
-        var str =  stack.map{"\($0.col),\($0.row)"}
-            .reduce(""){"\($0);\($1)"}
+        var str =  stack.map {"\($0.col),\($0.row)"}
+            .reduce("") {"\($0);\($1)"}
         str.removeFirst()
         return str
     }
@@ -63,7 +63,7 @@ class History {
     func load(_ history: String) {
         reverted = [Coordinate]()
         self.stack = history.split(separator: ";")
-            .map{$0.split(separator: ",").map{Int($0)!}}
-            .map{(col: $0[0], row: $0[1])}
+            .map {$0.split(separator: ",").map {Int($0)!}}
+            .map {(col: $0[0], row: $0[1])}
     }
 }

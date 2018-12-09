@@ -22,9 +22,9 @@ class ZeroMax: MinimaxCortex {
     var status: Status = .search
     
     /// black & white threat matrices
-    static var bTMatrices = Dictionary<Zobrist, [[[Threat]?]]>()
-    static var wTMatrices = Dictionary<Zobrist, [[[Threat]?]]>()
-    static var exterminationHash = Dictionary<Zobrist, [Move]>()
+    static var bTMatrices = [Zobrist: [[[Threat]?]]]()
+    static var wTMatrices = [Zobrist: [[[Threat]?]]]()
+    static var exterminationHash = [Zobrist: [Move]]()
     static var syncedQueue = DispatchQueue(label: "ZeroMax.syncedQueue")
     
     /**
@@ -118,24 +118,24 @@ class ZeroMax: MinimaxCortex {
             let wts = wTMatrix[co.row][co.col] ?? analyze(for: .white, at: co)
             bTMatrix[co.row][co.col] = bts
             wTMatrix[co.row][co.col] = wts
-            bCands.append((co, bts, bts.reduce(0){$0 + val($1)}))
-            wCands.append((co, wts, wts.reduce(0){$0 + val($1)}))
+            bCands.append((co, bts, bts.reduce(0) {$0 + val($1)}))
+            wCands.append((co, wts, wts.reduce(0) {$0 + val($1)}))
         }
 
         ZeroMax.update(zobrist, bTMatrix, wTMatrix)
         
         func finalize(_ cands: [Candidate]) -> [Move] {
-            return cands.map{(co: $0.co, score: $0.score)}
+            return cands.map {(co: $0.co, score: $0.score)}
         }
         
         // We are only concerned about threes and fours
         let threshold = val(.straightPokedThree)
-        bCands = bCands.filter{$0.score > threshold}
-            .filter{$0.threats.count > 1 || $0.score >= val(.blockedFour)}
-            .sorted{$0.score > $1.score}
-        wCands = wCands.filter{$0.score > threshold}
-            .filter{$0.threats.count > 1 || $0.score >= val(.blockedFour)}
-            .sorted{$0.score > $1.score}
+        bCands = bCands.filter {$0.score > threshold}
+            .filter {$0.threats.count > 1 || $0.score >= val(.blockedFour)}
+            .sorted {$0.score > $1.score}
+        wCands = wCands.filter {$0.score > threshold}
+            .filter {$0.threats.count > 1 || $0.score >= val(.blockedFour)}
+            .sorted {$0.score > $1.score}
         
         if bCands.isEmpty {
             return finalize(wCands)
@@ -172,22 +172,22 @@ class ZeroMax: MinimaxCortex {
         
         // You can form s4 next turn, thus I can only play fours or block your three
         if you.first!.score >= s4 {
-            var fours = me.filter{$0.score >= bp4}
-            let blocks = you.filter{$0.score >= s4}
+            var fours = me.filter {$0.score >= bp4}
+            let blocks = you.filter {$0.score >= s4}
             fours.append(contentsOf: blocks)
             return fours
         }
         
         // You can form b4 + s3 next turn, thus I can only play fours or block you
         if you.first!.score >= bp4 + sp3 {
-            var fours = me.filter{$0.score >= bp4}
-            let blocks = you.filter{$0.score >= bp4 + sp3}
+            var fours = me.filter {$0.score >= bp4}
+            let blocks = you.filter {$0.score >= bp4 + sp3}
             fours.append(contentsOf: blocks)
             return fours
         }
         
         // Only explore moves that bring threats to my opponent. This makes me aggressive!
-        return [me].flatMap{$0}.sorted{$0.score > $1.score}
+        return [me].flatMap {$0}.sorted {$0.score > $1.score}
     }
     
     private static func update(_ key: Zobrist, _ bTMatrix: [[[Threat]?]], _ wTMatrix: [[[Threat]?]]) {

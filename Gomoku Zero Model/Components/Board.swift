@@ -23,7 +23,7 @@ class Board: ZeroPlusDelegate {
     
     // The arrangement of pieces on the board. A 2D array.
     var pieces = [[Piece]]()
-    var delegate: BoardDelegate?
+    weak var delegate: BoardDelegate?
     var history = History()
     
     var curPlayer: Piece = .black
@@ -56,8 +56,8 @@ class Board: ZeroPlusDelegate {
     var saveDir: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
     var gameHasEnded = false {
         didSet {
-            Zobrist.heuristicHash = Dictionary<Zobrist, Int>() // Clear heuristic map
-            Zobrist.orderedMovesHash = Dictionary<Zobrist, [Move]>() // Clear ordered moves map.
+            Zobrist.heuristicHash = [Zobrist: Int]() // Clear heuristic map
+            Zobrist.orderedMovesHash = [Zobrist: [Move]]() // Clear ordered moves map.
         }
         willSet {
             if !newValue {
@@ -86,8 +86,6 @@ class Board: ZeroPlusDelegate {
     func cancel() {
         zeroWorkItem?.cancel()
         zero2WorkItem?.cancel()
-//        zeroWorkItem?.wait()
-//        zero2WorkItem?.wait()
     }
     
     func restart() {
@@ -142,7 +140,7 @@ class Board: ZeroPlusDelegate {
         if zeroIsThinking || gameHasEnded {
             return
         }
-        if !isValid(co, dimension) || pieces[co.row][co.col] != .none  {
+        if !isValid(co, dimension) || pieces[co.row][co.col] != .none {
             return
         }
         set(co, curPlayer)
@@ -319,6 +317,10 @@ class Board: ZeroPlusDelegate {
         put(at: co)
     }
 
+}
+
+/// Serialization
+extension Board {
     func serialize() -> String {
         return "\(dimension)|" + history.serialize()
     }
@@ -338,18 +340,18 @@ class Board: ZeroPlusDelegate {
 
 extension Board: CustomStringConvertible {
     var description: String {
-        let raw = Zobrist(matrix: board.pieces).description
-        let colMarks = (1...dimension).reduce(""){"\($0)\t\($1)"}
+        let raw = Zobrist(matrix: pieces).description
+        let colMarks = (1...dimension).reduce("") {"\($0)\t\($1)"}
         let processed = raw.replacingOccurrences(of: " ", with: "\t")
             .split(separator: "\n")
             .enumerated()
-            .map{"\($0 + 1)\t\($1)"}
-            .reduce(colMarks){"\($0)\n\n\($1)"}
+            .map {"\($0 + 1)\t\($1)"}
+            .reduce(colMarks) {"\($0)\n\n\($1)"}
         return processed
     }
 }
 
-protocol BoardDelegate {
+protocol BoardDelegate: AnyObject {
     func boardDidUpdate(pieces: [[Piece]])
     func gameHasEnded(winner: Piece, coordinates: [Coordinate], popDialogue: Bool)
 }

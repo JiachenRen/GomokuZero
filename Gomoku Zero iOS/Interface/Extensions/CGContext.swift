@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 extension CGContext {
-    static func point(at point: CGPoint, strokeWeight: CGFloat){
+    static func point(at point: CGPoint, strokeWeight: CGFloat) {
         let circle = UIBezierPath(ovalIn: CGRect(center: point, size: CGSize(width: strokeWeight, height: strokeWeight)))
         circle.fill()
     }

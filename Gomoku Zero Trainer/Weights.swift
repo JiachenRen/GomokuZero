@@ -8,7 +8,7 @@
 
 import Foundation
 
-typealias Weights = Dictionary<Threat, Int>
+typealias Weights = [Threat: Int]()
 
 func genRandomWeights(max: Int) -> Weights {
     var weights = Evaluator().weights
@@ -39,14 +39,14 @@ func mutateWeights(_ w1: Weights, variance: Double) -> Weights {
         [.straightThree, .straightPokedThree],
         [.blockedThree, .blockedPokedThree],
         [.straightTwo, .straightPokedTwo],
-        [.blockedTwo, .blockedPokedTwo],
+        [.blockedTwo, .blockedPokedTwo]
         ]
     groups.forEach {threats in
         var mutated = Int(Double(w1[threats[0]]!) * (1 + Double.random(in: -variance...variance)))
         if mutated < 0 {
             mutated = 0
         }
-        threats.forEach{weights[$0] = mutated}
+        threats.forEach {weights[$0] = mutated}
     }
     return weights
 }

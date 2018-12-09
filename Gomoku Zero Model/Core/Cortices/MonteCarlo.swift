@@ -33,10 +33,8 @@ class MonteCarloCortex: BasicCortex {
         print(items)
     }
     
-    
-    
     override func getMove() -> Move {
-        let rootNode = Node(identity: delegate.curPlayer, co: (0,0))
+        let rootNode = Node(identity: delegate.curPlayer, co: (0, 0))
         iterations = 0
         while !delegate.timeout {
             dPrint("begin\t------------------------------------------------")
@@ -75,8 +73,6 @@ class MonteCarloCortex: BasicCortex {
         return move
     }
     
-    
-    
     /**
      Performs quick simulation with target node
      - Returns: null for draw, .black if black emerges as winner.
@@ -101,7 +97,6 @@ class MonteCarloCortex: BasicCortex {
         revert(num: depth + 1)
         return score
     }
-    
     
     /// Monte Carlo Tree Node
     class Node {
@@ -171,7 +166,8 @@ class MonteCarloCortex: BasicCortex {
                 avgScore *= -1
             }
             let exploitation = map(avgScore, Double(-Evaluator.win), Double(Evaluator.win), -1, 1)
-            let exploration = MonteCarloCortex.expFactor * sqrt(log(Double(parent!.numVisits)) / log(M_E) / Double(numVisits))
+            let expl = sqrt(log(Double(parent!.numVisits)) / log(M_E) / Double(numVisits))
+            let exploration = MonteCarloCortex.expFactor * expl
             return exploitation + exploration
         }
         
@@ -179,14 +175,13 @@ class MonteCarloCortex: BasicCortex {
             return (n - lb1) / (ub1 - lb1) * (ub2 - lb2) + lb2
         }
         
-        
         /// Expansion phase
         func expand(_ delegate: MonteCarloCortex, _ breadth: Int) -> Node {
             if candidates == nil {
                 candidates = Array(delegate.getSortedMoves().prefix(breadth))
                 func filter(_ cands: inout [Move], thres: Int) {
                     if cands.contains(where: {$0.score >= thres}) {
-                        cands = cands.filter{$0.score >= thres}
+                        cands = cands.filter {$0.score >= thres}
                     }
                 }
                 
@@ -211,7 +206,6 @@ class MonteCarloCortex: BasicCortex {
             return newNode
         }
         
-        
         /// Backpropagation: update the stats of all nodes that were traversed to get to the current node
         func backpropagate(_ score: Int) {
             cumScore += score
@@ -232,11 +226,13 @@ extension MonteCarloCortex.Node: CustomStringConvertible {
     var description: String {
         let coStr = coordinate == nil ? "nil" : "\(coordinate!)"
         let this = "avg_score: \(avgScore)\tvisits: \(numVisits)\tidentity: \(identity)\tco: \(coStr)\tchildren: \(children.count)"
-        return self.children.map{$0.description}
-            .reduce(this){"\($0)\n\(indentation)\($1)"}
+        return self.children.map {$0.description}
+            .reduce(this) {"\($0)\n\(indentation)\($1)"}
     }
     
     private var indentation: String {
-        return (0...stackTrace().count).map{_ in "\t"}.reduce("", +)
+        return (0...stackTrace().count)
+            .map {_ in "\t"}
+            .reduce("", +)
     }
 }

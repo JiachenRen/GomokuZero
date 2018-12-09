@@ -44,7 +44,6 @@ class MenuTVC: UITableViewController {
         return menuItems.count
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = menuItems[indexPath.row]
         var id = "", title = ""
@@ -70,7 +69,6 @@ class MenuTVC: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: false)
     }
     
-    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
@@ -93,7 +91,6 @@ func save() {
         return
     }
     
-    
     let alert = UIAlertController(title: "Enter File Name", message: nil, preferredStyle: .alert)
     
     alert.addTextField { (textField) in
@@ -109,5 +106,3 @@ func save() {
     ContainerVC.sharedInstance?.closeLeft()
     ContainerVC.sharedInstance?.present(alert, animated: true, completion: nil)
 }
-
-

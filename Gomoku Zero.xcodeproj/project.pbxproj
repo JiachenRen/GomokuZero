@@ -15,8 +15,8 @@
 		1F60C3672168232C00580C99 /* Gomoku_Zero.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3652168232C00580C99 /* Gomoku_Zero.xcdatamodeld */; };
 		1F60C3692168232D00580C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F60C3682168232D00580C99 /* Assets.xcassets */; };
 		1F60C36C2168232D00580C99 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F60C36A2168232D00580C99 /* Main.storyboard */; };
-		1F60C3782168232E00580C99 /* Gomoku_ZeroTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3772168232E00580C99 /* Gomoku_ZeroTests.swift */; };
-		1F60C3832168232E00580C99 /* Gomoku_ZeroUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3822168232E00580C99 /* Gomoku_ZeroUITests.swift */; };
+		1F60C3782168232E00580C99 /* GomokuZeroTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3772168232E00580C99 /* GomokuZeroTests.swift */; };
+		1F60C3832168232E00580C99 /* GomokuZeroUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3822168232E00580C99 /* GomokuZeroUITests.swift */; };
 		1F60C3932168265C00580C99 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3922168265C00580C99 /* BoardView.swift */; };
 		1F60C39521682F6C00580C99 /* Piece.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39421682F6C00580C99 /* Piece.swift */; };
 		1F60C39721682FE800580C99 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C39621682FE800580C99 /* Board.swift */; };
@@ -154,10 +154,10 @@
 		1F60C36B2168232D00580C99 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1F60C36D2168232E00580C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1F60C3732168232E00580C99 /* Gomoku ZeroTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Gomoku ZeroTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1F60C3772168232E00580C99 /* Gomoku_ZeroTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gomoku_ZeroTests.swift; sourceTree = "<group>"; };
+		1F60C3772168232E00580C99 /* GomokuZeroTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GomokuZeroTests.swift; sourceTree = "<group>"; };
 		1F60C3792168232E00580C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1F60C37E2168232E00580C99 /* Gomoku ZeroUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Gomoku ZeroUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1F60C3822168232E00580C99 /* Gomoku_ZeroUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gomoku_ZeroUITests.swift; sourceTree = "<group>"; };
+		1F60C3822168232E00580C99 /* GomokuZeroUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GomokuZeroUITests.swift; sourceTree = "<group>"; };
 		1F60C3842168232E00580C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1F60C3922168265C00580C99 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		1F60C39421682F6C00580C99 /* Piece.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Piece.swift; sourceTree = "<group>"; };
@@ -305,7 +305,7 @@
 		1F60C3762168232E00580C99 /* Gomoku ZeroTests */ = {
 			isa = PBXGroup;
 			children = (
-				1F60C3772168232E00580C99 /* Gomoku_ZeroTests.swift */,
+				1F60C3772168232E00580C99 /* GomokuZeroTests.swift */,
 				1F60C3792168232E00580C99 /* Info.plist */,
 			);
 			path = "Gomoku ZeroTests";
@@ -314,7 +314,7 @@
 		1F60C3812168232E00580C99 /* Gomoku ZeroUITests */ = {
 			isa = PBXGroup;
 			children = (
-				1F60C3822168232E00580C99 /* Gomoku_ZeroUITests.swift */,
+				1F60C3822168232E00580C99 /* GomokuZeroUITests.swift */,
 				1F60C3842168232E00580C99 /* Info.plist */,
 			);
 			path = "Gomoku ZeroUITests";
@@ -620,6 +620,7 @@
 				1FE1AE2121BC2958008E46AE /* Sources */,
 				1FE1AE2221BC2958008E46AE /* Frameworks */,
 				1FE1AE2321BC2958008E46AE /* CopyFiles */,
+				1FE1AE3C21BD88FF008E46AE /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -729,6 +730,26 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		1FE1AE3C21BD88FF008E46AE /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1F60C35A2168232C00580C99 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -765,7 +786,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1F60C3782168232E00580C99 /* Gomoku_ZeroTests.swift in Sources */,
+				1F60C3782168232E00580C99 /* GomokuZeroTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -773,7 +794,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1F60C3832168232E00580C99 /* Gomoku_ZeroUITests.swift in Sources */,
+				1F60C3832168232E00580C99 /* GomokuZeroUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

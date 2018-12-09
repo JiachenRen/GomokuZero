@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 extension CGRect {
-    init(center: CGPoint, size: CGSize){
+    init(center: CGPoint, size: CGSize) {
         self.init(
             origin: CGPoint(
                 x: center.x - size.width / 2,

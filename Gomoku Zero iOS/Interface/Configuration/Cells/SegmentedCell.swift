@@ -10,7 +10,6 @@ import UIKit
 
 class SegmentedCell: UITableViewCell, ConfigCellProtocol {
 
-    
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var title: UILabel!
     var segmentedConfig: SegmentedConfig!
@@ -29,7 +28,6 @@ class SegmentedCell: UITableViewCell, ConfigCellProtocol {
     @IBAction func segmentedControlValueChanged(_ sender: UISegmentedControl) {
         segmentedConfig.selectedIdx = sender.selectedSegmentIndex
     }
-    
     
     func configure(_ cellConfig: CellConfig) {
         segmentedConfig = (cellConfig as! SegmentedConfig)

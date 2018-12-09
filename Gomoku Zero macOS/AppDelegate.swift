@@ -4,7 +4,7 @@
 //
 //  Created by Jiachen Ren on 10/5/18.
 //  Copyright © 2018 Jiachen Ren. All rights reserved.
-//
+//  swiftlint:disable cyclomatic_complexity type_body_length file_length
 
 import Cocoa
 
@@ -50,13 +50,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     var windowControllers: [BoardWindowController] {
-        return NSApplication.shared.windows.map{$0.windowController as? BoardWindowController}
-            .filter{$0 != nil}
-            .map{$0!}
+        return NSApplication.shared.windows.map {$0.windowController as? BoardWindowController}
+            .filter {$0 != nil}
+            .map {$0!}
     }
     
     var viewControllers: [BoardViewController] {
-        return windowControllers.map{$0.viewController}
+        return windowControllers.map {$0.viewController}
     }
     
     @IBAction func zeroPlus(_ sender: NSMenuItem) {
@@ -143,13 +143,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         msg.informativeText = "Enter the max thinking time of Zero+ in the field below; the unit is in seconds and decimal values are allowed."
         
         let box = NSComboBox(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
-        box.addItems(withObjectValues: ["0","1","3","5", "10","15","30","60"])
+        box.addItems(withObjectValues: ["0", "1", "3", "5", "10", "15", "30", "60"])
         box.placeholderString = "10"
         
         msg.accessoryView = box
-        let response = msg.runModal()
         
-        if (response == .alertFirstButtonReturn) {
+        if msg.runModal() == .alertFirstButtonReturn {
             return TimeInterval(box.stringValue) ?? TimeInterval(box.placeholderString!)!
         } else {
             return -1
@@ -177,7 +176,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             normalTexture.state = .on
         default: break
         }
-        viewControllers.forEach{$0.boardTextureView.image = texture}
+        viewControllers.forEach {$0.boardTextureView.image = texture}
     }
     
     @IBAction func restart(_ sender: NSMenuItem) {
@@ -228,7 +227,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         rows.enumerated().forEach { (r, row) in
             row.split(separator: " ").enumerated().forEach { (c, p) in
                 if let piece = Piece(rawValue: String(p)) {
-                    activeBoard?.set((c,r), piece)
+                    activeBoard?.set((c, r), piece)
                     if piece == .none {
                         return
                     }
@@ -244,14 +243,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    
     @IBAction func new(_ sender: NSMenuItem) {
         let dim = getNewGameDimension()
         if dim != -1 {
             let boardWindowController = NSStoryboard(name: "Main", bundle: nil)
                 .instantiateController(withIdentifier: "board-window") as! BoardWindowController
             boardWindowController.board.dimension = dim
-            boardWindowController.fileName = boardWindowController.fileName + "" // Trigger window title update
             boardWindowController.showWindow(self)
             if let frame = activeWindowController?.window?.frame { // There's an insignificant bug here...
                 let newFrame = CGRect(x: frame.minX + 10, y: frame.minY - 10, width: frame.width, height: frame.height)
@@ -281,20 +278,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         accView.addSubview(depthLabel)
         
         let depthBox = NSComboBox(frame: NSRect(x: 0, y: 0, width: 100, height: 24))
-        depthBox.addItems(withObjectValues: [3,4,5,6,7,8,9,10])
+        depthBox.addItems(withObjectValues: [3, 4, 5, 6, 7, 8, 9, 10])
         depthBox.placeholderString = "7"
         accView.addSubview(depthBox)
         
         let breadthBox = NSComboBox(frame: NSRect(x: 150, y: 0, width: 100, height: 24))
-        breadthBox.addItems(withObjectValues: [2,3,4,5])
+        breadthBox.addItems(withObjectValues: [2, 3, 4, 5])
         breadthBox.placeholderString = "3"
         accView.addSubview(breadthBox)
         
         msg.accessoryView?.addSubview(accView)
         msg.accessoryView = accView
-        let response = msg.runModal()
         
-        if (response == .alertFirstButtonReturn) {
+        if msg.runModal() == .alertFirstButtonReturn {
             let d = Int(depthBox.stringValue) ?? Int(depthBox.placeholderString!)!
             let b = Int(breadthBox.stringValue) ?? Int(breadthBox.placeholderString!)!
             return Personality.minimax(depth: d, breadth: b)
@@ -313,13 +309,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         msg.informativeText = "* board dimension must be between between 10 and 19"
         
         let box = NSComboBox(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
-        box.addItems(withObjectValues: ["15 x 15","19 x 19"])
+        box.addItems(withObjectValues: ["15 x 15", "19 x 19"])
         box.placeholderString = "19 x 19"
         
         msg.accessoryView = box
         let response = msg.runModal()
         
-        if (response == .alertFirstButtonReturn) {
+        if response == .alertFirstButtonReturn {
             let dimStr = box.stringValue
             if dimStr == "" { return 19 } else {
                 let idx = box.stringValue.firstIndex(of: "x")
@@ -327,7 +323,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     return Int(dimStr) ?? -1
                 }
                 var num = String(dimStr[..<idx!])
-                num.removeAll{$0 == " "} // Remove spaces
+                num.removeAll {$0 == " "} // Remove spaces
                 return Int(num) ?? -1
             }
         } else {
@@ -338,7 +334,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func boardTexture(_ sender: NSMenuItem) {
         if let controller = activeController {
             let bool = controller.boardTextureView.isHidden
-            viewControllers.forEach{$0.boardTextureView.isHidden = !bool}
+            viewControllers.forEach {$0.boardTextureView.isHidden = !bool}
             toggleTexture.title = bool ? "Hide Board Texture" : "Show Board Texture"
         }
     }
@@ -373,7 +369,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
          error conditions that could cause the creation of the store to fail.
         */
         let container = NSPersistentContainer(name: "Gomoku_Zero")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+        container.loadPersistentStores(completionHandler: { (_, error) in
             if let error = error {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -435,14 +431,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } catch {
             let nserror = error as NSError
 
-            // Customize this code block to include application-specific recovery steps.
-            let result = sender.presentError(nserror)
-            if (result) {
+            if sender.presentError(nserror) {
                 return .terminateCancel
             }
             
             let question = NSLocalizedString("Could not save changes while quitting. Quit anyway?", comment: "Quit without saves error question message")
-            let info = NSLocalizedString("Quitting now will lose any changes you have made since the last successful save", comment: "Quit without saves error question info");
+            let info = NSLocalizedString("Quitting now will lose any changes you have made since the last successful save", comment: "Quit without saves error question info")
             let quitButton = NSLocalizedString("Quit anyway", comment: "Quit anyway button title")
             let cancelButton = NSLocalizedString("Cancel", comment: "Cancel button title")
             let alert = NSAlert()
@@ -461,4 +455,3 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
 }
-

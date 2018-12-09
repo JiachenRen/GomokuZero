@@ -17,7 +17,6 @@ protocol CortexProtocol: CustomStringConvertible {
     var zobrist: Zobrist {get}
     var dim: Int {get}
     
-    
     /// Not the most efficient way, will do for now.
     func genSortedMoves() -> [Move]
     
@@ -29,7 +28,6 @@ protocol CortexProtocol: CustomStringConvertible {
     
     func getMove() -> Move
 }
-
 
 extension CortexProtocol {
     var pieces: [[Piece]] {return delegate.pieces}
@@ -46,7 +44,7 @@ extension CortexProtocol {
         for i in 0..<depth {
             let move = policy.getMove(for: delegate.curPlayer)
             delegate.put(at: move.co)
-            if let _ = hasWinner() {
+            if hasWinner() != nil {
                 heuristicValue = getHeuristicValue()
                 revert(num: i + 1)
                 return heuristicValue
@@ -91,7 +89,7 @@ extension CortexProtocol {
             if let moves = Zobrist.orderedMovesHash[zobrist] {
                 // Restore to current game state.
                 delegate.put(at: co)
-                moves.forEach{(co, score) in scoreMap[co.row][co.col] = score}
+                moves.forEach {(co, score) in scoreMap[co.row][co.col] = score}
                 // Invalidate old moves that are affected by the difference b/w current game state and the old game state.
                 invalidate(&scoreMap, at: co)
             } else {
@@ -122,7 +120,7 @@ extension CortexProtocol {
      - Parameter map: 2D matrix containing coordinates to be marked as outdated
      - Parameter co: The coordinate at which the most recent change is made
      */
-    public func invalidate<T>(_ map: inout [[Optional<T>]], at co: Coordinate) {
+    public func invalidate<T>(_ map: inout [[T?]], at co: Coordinate) {
         for i in -1...1 {
             for q in -1...1 {
                 if i == 0 && q == 0 {
@@ -130,7 +128,7 @@ extension CortexProtocol {
                 }
                 var c = (col: co.col + i, row: co.row + q)
                 var empty = 0
-                var anchor: Piece? = nil
+                var anchor: Piece?
                 loop: while isValid(c, dim) {
                     let piece = zobrist.get(c)
                     switch piece {
@@ -192,10 +190,10 @@ extension CortexProtocol {
      */
     func threatCoupledHeuristic() -> Int {
         var scoreMap = [[Int?]](repeating: [Int?](repeating: nil, count: dim), count: dim)
-        var prevScoreMap: [[Int?]]? = nil
+        var prevScoreMap: [[Int?]]?
         
         func invalidate(_ map: inout [[Int?]], at co: Coordinate) {
-            let dirs = [(0, 1),(1, 0),(1, 1),(-1, -1),(-1, 1),(1, -1),(-1, 0),(0, -1)]
+            let dirs = [(0, 1), (1, 0), (1, 1), (-1, -1), (-1, 1), (1, -1), (-1, 0), (0, -1)]
             dirs.forEach { dir in
                 var co = co
                 while isValid(co, dim) {
@@ -255,8 +253,7 @@ extension CortexProtocol {
     }
 }
 
-
-protocol CortexDelegate {
+protocol CortexDelegate: AnyObject {
     var activeCoordinates: [Coordinate] {get}
     var pieces: [[Piece]] {get}
     var identity: Piece {get}
@@ -273,7 +270,7 @@ protocol CortexDelegate {
 }
 
 class BasicCortex: CortexProtocol {
-    var delegate: CortexDelegate!
+    weak var delegate: CortexDelegate!
     var evaluator: Evaluator
     
     @objc var description: String {
@@ -308,7 +305,7 @@ class BasicCortex: CortexProtocol {
             let move = (co, score)
             moves.append(move)
         }
-        moves.sort{$0.score > $1.score}
+        moves.sort {$0.score > $1.score}
         
         if moves.count == 0 {
             // ZeroPlus is out of moves...
@@ -316,7 +313,8 @@ class BasicCortex: CortexProtocol {
         }
         
         if delegate.strategy.randomizedSelection {
-            moves = differentiate(moves, maxWeight: 10).sorted{$0.score > $1.score}
+            moves = differentiate(moves, maxWeight: 10)
+                .sorted {$0.score > $1.score}
         }
         
         return moves[0]

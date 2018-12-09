@@ -13,7 +13,7 @@ class BoardViewController: NSViewController, BoardViewDelegate {
     @IBOutlet weak var boardView: BoardView!
     @IBOutlet weak var boardTextureView: BoardTextureView!
     
-    var delegate: ViewControllerDelegate?
+    weak var delegate: ViewControllerDelegate?
     var board: Board = Board(dimension: 19)
     var zeroPlus: ZeroPlus {
         return board.zeroPlus
@@ -60,7 +60,7 @@ class BoardViewController: NSViewController, BoardViewDelegate {
 
 }
 
-protocol ViewControllerDelegate {
+protocol ViewControllerDelegate: AnyObject {
     var board: Board {get}
 }
 
@@ -70,7 +70,7 @@ extension BoardViewController: BoardDelegate {
         DispatchQueue.main.async {
             if popDialogue {
                 let msg = winner == .black ? "Black wins!" : winner == .none ? "Draw!" : "White wins!"
-                let _  = dialogue(msg: msg, infoTxt: "Hit Shift + Command + R (⇧⌘R) to restart the game.")
+                _  = dialogue(msg: msg, infoTxt: "Hit Shift + Command + R (⇧⌘R) to restart the game.")
             }
         }
     }

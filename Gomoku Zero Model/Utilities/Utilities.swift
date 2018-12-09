@@ -18,11 +18,11 @@ extension CGFloat {
     
     static func random(min: CGFloat, max: CGFloat) -> CGFloat {
         var min = min, max = max
-        if (max < min) {swap(&min, &max)}
+        if max < min {swap(&min, &max)}
         return min + random() * (max - min)
     }
     
-    private static func swap(_ a: inout CGFloat, _ b: inout CGFloat){
+    private static func swap(_ a: inout CGFloat, _ b: inout CGFloat) {
         let temp = a
         a = b
         b = temp
@@ -30,7 +30,7 @@ extension CGFloat {
 }
 
 extension CGContext {
-    static func point(at point: CGPoint, strokeWeight: CGFloat){
+    static func point(at point: CGPoint, strokeWeight: CGFloat) {
         let circle = NSBezierPath(ovalIn: CGRect(center: point, size: CGSize(width: strokeWeight, height: strokeWeight)))
         circle.fill()
     }
@@ -41,7 +41,7 @@ extension CGContext {
 }
 
 extension CGRect {
-    init(center: CGPoint, size: CGSize){
+    init(center: CGPoint, size: CGSize) {
         self.init(
             origin: CGPoint(
                 x: center.x - size.width / 2,
@@ -62,6 +62,7 @@ extension NSObject {
     }
 }
 
+@discardableResult
 func dialogue(msg: String, infoTxt: String) -> Bool {
     let alert: NSAlert = NSAlert()
     alert.messageText = msg

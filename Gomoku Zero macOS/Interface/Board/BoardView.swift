@@ -4,7 +4,7 @@
 //
 //  Created by Jiachen Ren on 10/5/18.
 //  Copyright © 2018 Jiachen Ren. All rights reserved.
-//
+//  swiftlint:disable type_body_length file_length
 
 import Cocoa
 import CoreGraphics
@@ -85,7 +85,7 @@ import CoreGraphics
                       size: CGSize(width: pieceRadius * 2, height: pieceRadius * 2))
     }
     
-    var delegate: BoardViewDelegate?
+    weak var delegate: BoardViewDelegate?
     var activeMap: [[Bool]]? {
         didSet {
             setNeedsDisplay(bounds)
@@ -211,9 +211,9 @@ import CoreGraphics
         paragraphStyle.alignment = .center
         let radius = pieceRadius / 4 * 3
         let attributes = [
-            NSAttributedString.Key.paragraphStyle  : paragraphStyle,
-            .font            : NSFont.systemFont(ofSize: radius),
-            .foregroundColor : piece == .black ? colorful ? NSColor.green : NSColor.white : colorful ? .red : .black,
+            NSAttributedString.Key.paragraphStyle: paragraphStyle,
+            .font: NSFont.systemFont(ofSize: radius),
+            .foregroundColor: piece == .black ? colorful ? NSColor.green : NSColor.white : colorful ? .red : .black
         ]
         var ctr = onScreen(co)
 //        ctr.x += pieceRadius / 4
@@ -266,7 +266,7 @@ import CoreGraphics
                 let ctr = onScreen(Coordinate(col: col, row: row))
                 let scale = dampenerMap[row][col]
                 var radius = pieceRadius
-                radius = radius * scale
+                radius *= scale
                 let rect = CGRect(center: ctr, size: CGSize(width: radius, height: radius))
                 if scale > 0 {
                     let color: NSColor = board.curPlayer == .black ? .black : .white
@@ -350,7 +350,6 @@ import CoreGraphics
         self.addTrackingArea(trackingArea)
     }
     
-    
     /**
      Draw a half transparent piece at the coordinate that the mouse is hovering over
      */
@@ -399,7 +398,7 @@ import CoreGraphics
     private func pathForGrid() -> NSBezierPath {
         let path = NSBezierPath()
         path.move(to: CGPoint(x: cornerOffset, y: cornerOffset))
-        (0..<dimension).map{CGFloat($0)}.forEach{
+        (0..<dimension).map {CGFloat($0)}.forEach {
             //draw the vertical lines
             path.move(to: CGPoint(x: cornerOffset + $0 * gap, y: cornerOffset))
             path.line(to: CGPoint(x: cornerOffset + $0 * gap, y: bounds.height - cornerOffset))
@@ -419,7 +418,7 @@ import CoreGraphics
     private func drawVertices() {
         self.vertexColor.setFill()
         let vertices = board.dimension == 15 ? gomokuVertices : goVertices
-        vertices.map{onScreen($0)}.forEach {
+        vertices.map {onScreen($0)}.forEach {
             CGContext.fillCircle(center: $0, radius: vertexRadius)
         }
     }
@@ -445,8 +444,7 @@ import CoreGraphics
     }
 }
 
-protocol BoardViewDelegate {
+protocol BoardViewDelegate: AnyObject {
     var board: Board {get}
     func didMouseUpOn(co: Coordinate)
 }
-

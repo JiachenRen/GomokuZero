@@ -5,6 +5,7 @@
 //  Created by Jiachen Ren on 10/7/18.
 //  Copyright © 2018 Jiachen Ren. All rights reserved.
 //
+//  swiftlint:disable cyclomatic_complexity
 
 import Foundation
 

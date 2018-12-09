@@ -17,7 +17,6 @@ class LeftNavController: UINavigationController {
         navigationBar.shadowImage = UIImage()
     }
     
-
     /*
     // MARK: - Navigation
 

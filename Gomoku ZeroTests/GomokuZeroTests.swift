@@ -9,7 +9,7 @@
 import XCTest
 @testable import Gomoku_Zero
 
-class Gomoku_ZeroTests: XCTestCase {
+class GomokuZeroTests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.

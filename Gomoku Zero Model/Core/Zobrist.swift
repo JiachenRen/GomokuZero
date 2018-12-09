@@ -13,17 +13,17 @@ typealias ZobristTable = [[[Int]]]
 class Zobrist: Hashable {
     
     // This is for accomodating different board dimensions
-    private static var tables = Dictionary<Int,ZobristTable>()
+    private static var tables = [Int: ZobristTable]()
     
     /// Hashed heuristic values of nodes
-    static var heuristicHash = Dictionary<Zobrist, Int>()
+    static var heuristicHash = [Zobrist: Int]()
     
     /// A map that records scores for each coordinate for a specific game state.
     /// It is used to elimate re-computations when generating heuristic value of a node.
-    static var scoreMap = Dictionary<Zobrist, [[Int?]]>()
+    static var scoreMap = [Zobrist: [[Int?]]]()
     
     /// Hashed ordered moves
-    static var orderedMovesHash = Dictionary<Zobrist, [Move]>()
+    static var orderedMovesHash = [Zobrist: [Move]]()
     
     /// Slightly boosts performance at a neglegible risk of judging two diffenrent game states to be the same.
     static var strictEqualityCheck = false
@@ -96,10 +96,8 @@ class Zobrist: Hashable {
         if strictEqualityCheck {
             let dim = lhs.dim
             for i in 0..<dim {
-                for q in 0..<dim {
-                    if lhs.matrix[i][q] != rhs.matrix[i][q] {
-                        return false
-                    }
+                for q in 0..<dim where lhs.matrix[i][q] != rhs.matrix[i][q] {
+                    return false
                 }
             }
             return true
@@ -165,19 +163,17 @@ class Zobrist: Hashable {
 
 extension Zobrist: CustomStringConvertible {
     public var description: String {
-        get {
-            var str = ""
-            matrix.forEach { row in
-                row.forEach { col in
-                    switch col {
-                    case .none: str += "- "
-                    case .black: str += "* "
-                    case .white: str += "o "
-                    }
+        var str = ""
+        matrix.forEach { row in
+            row.forEach { col in
+                switch col {
+                case .none: str += "- "
+                case .black: str += "* "
+                case .white: str += "o "
                 }
-                str += "\n"
             }
-            return str
+            str += "\n"
         }
+        return str
     }
 }

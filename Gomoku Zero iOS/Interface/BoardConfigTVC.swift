@@ -22,8 +22,7 @@ class BoardConfigTVC: UITableViewController {
         tableView.separatorStyle = .none
         
         cellConfigs = [
-            SwitchConfig(title: "Animation", isOn: boardVC.boardView.visualizationEnabled) {
-                [unowned self] enabled in
+            SwitchConfig(title: "Animation", isOn: boardVC.boardView.visualizationEnabled) {[unowned self] enabled in
                 let vc = self.boardVC
                 vc.boardView.visualizationEnabled = enabled
                 vc.boardView.activeMapVisible = false
@@ -31,13 +30,11 @@ class BoardConfigTVC: UITableViewController {
                 sharedBoard.zeroPlus.visDelegate = enabled ? vc : nil
                 sharedBoard.zeroPlus2?.visDelegate = enabled ? vc : nil
             },
-            SwitchConfig(title: "Step Number", isOn: boardVC.boardView.overlayStepNumber) {
-                [unowned self] enabled in
+            SwitchConfig(title: "Step Number", isOn: boardVC.boardView.overlayStepNumber) {[unowned self] enabled in
                 let boardView = self.boardVC.boardView
                 boardView?.overlayStepNumber = enabled
             },
-            SwitchConfig(title: "Calc. Duration", isOn: boardVC.boardView.showCalcDuration) {
-                [unowned self] enabled in
+            SwitchConfig(title: "Calc. Duration", isOn: boardVC.boardView.showCalcDuration) {[unowned self] enabled in
                 let boardView = self.boardVC.boardView
                 boardView?.showCalcDuration = enabled
                 if enabled {
@@ -74,7 +71,6 @@ class BoardConfigTVC: UITableViewController {
         return cellConfigs.count
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellConfig = cellConfigs[indexPath.row]
         let gCell = tableView.dequeueReusableCell(withIdentifier: cellConfig.id, for: indexPath)
@@ -86,12 +82,10 @@ class BoardConfigTVC: UITableViewController {
         return cell as! UITableViewCell
     }
     
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-
     /*
     // MARK: - Navigation
 

@@ -79,8 +79,11 @@ class ConfigTVC: UITableViewController {
                     let name = segueCell.segueConfig.subtitle
                     let enabled = self.lastSelected == .black ? self.blackConfig.enabled : self.whiteConfig.enabled
                     let config = Configuration(Algorithm(rawValue: name)!, enabled: enabled)
-                    if self.lastSelected == .black {self.blackConfig = config}
-                    else {self.whiteConfig = config}
+                    if self.lastSelected == .black {
+                        self.blackConfig = config
+                    } else {
+                        self.whiteConfig = config
+                    }
                     self.tableView.reloadData()
                 }
             }

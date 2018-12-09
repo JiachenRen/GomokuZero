@@ -10,7 +10,6 @@ import Foundation
 
 // Figure out the proper weights that should be assigned to each threat pattern through self-play!
 
-
 let initialWeights = Evaluator().weights
 
 let board = Board(dimension: 15)
@@ -33,7 +32,7 @@ board.zeroPlus2 = trainee
 board.restartDelay = 0
 
 var stat = Stat()
-var baseline: Double? = nil
+var baseline: Double?
 var bestWeights = trainee.strategy.weights!
 
 func configure(winner: Piece) {
@@ -48,9 +47,9 @@ func configure(winner: Piece) {
             print("mutation successful, current baseline \(stat.ratio)")
             print("previous baseline \(baseline!)")
             print("best weights: ")
-            bestWeights.sorted{$0.value > $1.value}
-                .map{($0.rawValue, $1)}
-                .forEach{print($0)}
+            bestWeights.sorted {$0.value > $1.value}
+                .map {($0.rawValue, $1)}
+                .forEach {print($0)}
             
             // Update best weights, eventually it would converge with optimal weights
             bestWeights = trainee.strategy.weights!
