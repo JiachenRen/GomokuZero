@@ -7,10 +7,14 @@
 //
 
 import Foundation
+import CoreData
 
 extension Game {
+    static var ctx: NSManagedObjectContext {
+        return AppDelegate.sharedInstance.persistentContainer.viewContext
+    }
+    
     static func save(_ board: Board, name: String? = nil) {
-        let ctx = AppDelegate.sharedInstance.persistentContainer.viewContext
         let game = Game(context: ctx)
         game.data = board.serialize()
         game.name = name
@@ -19,5 +23,9 @@ extension Game {
         } catch let e {
             print(e)
         }
+    }
+    
+    static func retrieve() -> [Game] {
+        return (try? ctx.fetch(Game.fetchRequest())) ?? []
     }
 }

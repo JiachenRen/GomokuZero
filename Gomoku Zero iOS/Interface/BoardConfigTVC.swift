@@ -57,6 +57,9 @@ class BoardConfigTVC: UITableViewController {
             },
             SegueConfig(title: "Themes", selectedIdx: 0, subtitles: [""]) { [unowned self] in
                 self.performSegue(withIdentifier: "theme-segue", sender: nil)
+            },
+            SwitchConfig(title: "Logs", isOn: !BoardViewController.sharedInstance!.consoleTextView.isHidden) {
+                BoardViewController.sharedInstance!.consoleTextView.isHidden = !$0
             }
         ]
     }

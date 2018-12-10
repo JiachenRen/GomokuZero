@@ -26,6 +26,8 @@
 		1F60C3A121690EFD00580C99 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3A021690EFD00580C99 /* Notification.swift */; };
 		1F60C3A921692B0900580C99 /* BoardTextureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F60C3A821692B0900580C99 /* BoardTextureView.swift */; };
 		1F64DC4C216BF38000467F78 /* Zobrist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F64DC4B216BF38000467F78 /* Zobrist.swift */; };
+		1F6CD19F21BDDE2100DFBFDB /* BrowseCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6CD19E21BDDE2100DFBFDB /* BrowseCVC.swift */; };
+		1F6CD1A121BDE25B00DFBFDB /* BrowseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6CD1A021BDE25B00DFBFDB /* BrowseCell.swift */; };
 		1F743CC221AB8C0B00FEE2A5 /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F743CC121AB8C0B00FEE2A5 /* CGPoint.swift */; };
 		1F743CC421AB8C4200FEE2A5 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F743CC321AB8C4200FEE2A5 /* CGRect.swift */; };
 		1F743CC621AB8C6000FEE2A5 /* CGContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F743CC521AB8C6000FEE2A5 /* CGContext.swift */; };
@@ -169,6 +171,8 @@
 		1F60C3A821692B0900580C99 /* BoardTextureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTextureView.swift; sourceTree = "<group>"; };
 		1F60C3AB21694C7100580C99 /* Gomoku Zero macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Gomoku Zero macOS.entitlements"; sourceTree = "<group>"; };
 		1F64DC4B216BF38000467F78 /* Zobrist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zobrist.swift; sourceTree = "<group>"; };
+		1F6CD19E21BDDE2100DFBFDB /* BrowseCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseCVC.swift; sourceTree = "<group>"; };
+		1F6CD1A021BDE25B00DFBFDB /* BrowseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseCell.swift; sourceTree = "<group>"; };
 		1F743CC121AB8C0B00FEE2A5 /* CGPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
 		1F743CC321AB8C4200FEE2A5 /* CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
 		1F743CC521AB8C6000FEE2A5 /* CGContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGContext.swift; sourceTree = "<group>"; };
@@ -320,9 +324,19 @@
 			path = "Gomoku ZeroUITests";
 			sourceTree = "<group>";
 		};
+		1F6CD19D21BDDDEA00DFBFDB /* Browse */ = {
+			isa = PBXGroup;
+			children = (
+				1F6CD19E21BDDE2100DFBFDB /* BrowseCVC.swift */,
+				1F6CD1A021BDE25B00DFBFDB /* BrowseCell.swift */,
+			);
+			path = Browse;
+			sourceTree = "<group>";
+		};
 		1F743CBE21AB874A00FEE2A5 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				1F6CD19D21BDDDEA00DFBFDB /* Browse */,
 				1F743CC021AB8BFD00FEE2A5 /* Extensions */,
 				1FE1ADCD21B60E53008E46AE /* Board */,
 				1FE1ADCE21B60E62008E46AE /* Configuration */,
@@ -602,6 +616,7 @@
 				1F7E4CBA21AB2D2F002AE461 /* Sources */,
 				1F7E4CBB21AB2D2F002AE461 /* Frameworks */,
 				1F7E4CBC21AB2D2F002AE461 /* Resources */,
+				1F6CD1A221BDF1C500DFBFDB /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -731,6 +746,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1F6CD1A221BDF1C500DFBFDB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
 		1FE1AE3C21BD88FF008E46AE /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -809,9 +841,11 @@
 				1FE1AE1721BC1AC2008E46AE /* Threat.swift in Sources */,
 				1FE1AE1821BC1AC2008E46AE /* Evaluator.swift in Sources */,
 				1FE1AE1921BC1AC2008E46AE /* Zobrist.swift in Sources */,
+				1F6CD1A121BDE25B00DFBFDB /* BrowseCell.swift in Sources */,
 				1FE1AE1A21BC1AC2008E46AE /* Cortex.swift in Sources */,
 				1FE1AE1B21BC1AC2008E46AE /* Minimax.swift in Sources */,
 				1FE1AE1C21BC1AC2008E46AE /* ZeroMax.swift in Sources */,
+				1F6CD19F21BDDE2100DFBFDB /* BrowseCVC.swift in Sources */,
 				1FE1AE1D21BC1AC2008E46AE /* IterativeDeepening.swift in Sources */,
 				1FE1AE1E21BC1AC2008E46AE /* NegaScout.swift in Sources */,
 				1FE1AE1F21BC1AC2008E46AE /* MonteCarlo.swift in Sources */,

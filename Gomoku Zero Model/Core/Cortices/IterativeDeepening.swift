@@ -12,6 +12,7 @@ class IterativeDeepeningCortex: MinimaxCortex {
     var completed = false
     var setup: (ZeroPlus, Int) -> ()
     var layers: Layers
+    var bestMove: Move?
     
     init(_ delegate: CortexDelegate, depth: Int, breadth: Int, layers: Layers = .all, _ setup: @escaping (ZeroPlus, Int) -> ()) {
         self.layers = layers
@@ -38,7 +39,7 @@ class IterativeDeepeningCortex: MinimaxCortex {
     
     private func iterativeDeepening(depth: Int, breadth: Int) -> Move? {
         completed = false
-        var bestMove: Move?
+        bestMove = nil
         var workItems = [DispatchWorkItem]()
         var maxDepth = 0
         let group = DispatchGroup()
@@ -50,9 +51,9 @@ class IterativeDeepeningCortex: MinimaxCortex {
                 self.setup(zero, d)
                 let bestForDepth = zero.cortex.getMove()
                 let cancelled = (zero.cortex as! TimeLimitedSearchProtocol).searchCancelledInProgress
-                if d > maxDepth && (bestMove == nil || !cancelled) {
+                if d > maxDepth && (self.bestMove == nil || !cancelled) {
                     // The deepter the depth, the more reliable the generated move.
-                    bestMove = bestForDepth
+                    self.bestMove = bestForDepth
                     maxDepth = d
                 }
                 zero.visDelegate?.activeMapUpdated(activeMap: nil)
@@ -69,7 +70,10 @@ class IterativeDeepeningCortex: MinimaxCortex {
         }
         
         while true {
-            if completed || (delegate.timeout && bestMove != nil) {
+            let shouldTerminate = completed
+                || (delegate.timeout && bestMove != nil)
+                || isTerminal(score: bestMove?.score ?? 0)
+            if shouldTerminate {
                 workItems.forEach {$0.cancel()}
                 break
             }

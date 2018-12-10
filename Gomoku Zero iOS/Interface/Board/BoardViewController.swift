@@ -10,10 +10,11 @@ import UIKit
 
 let sharedBoard = Board(dimension: 15)
 
-class BoardViewController: UIViewController, BoardViewDelegate {
+class BoardViewController: UIViewController, BoardViewDataSource {
     
     @IBOutlet weak var boardImgView: UIImageView!
     @IBOutlet weak var boardView: BoardView!
+    @IBOutlet weak var consoleTextView: UITextView!
     
     @IBOutlet var tapRecognizer: UITapGestureRecognizer!
     @IBOutlet var doubleTouchRecognizer: UITapGestureRecognizer!
@@ -22,7 +23,9 @@ class BoardViewController: UIViewController, BoardViewDelegate {
     @IBOutlet var panRecognizer: UIPanGestureRecognizer!
     @IBOutlet var pinchRecognizer: UIPinchGestureRecognizer!
     
+    static var sharedInstance: BoardViewController?
     weak var delegate: ViewControllerDelegate?
+    var lastMove: Move?
     
     var board: Board = sharedBoard
     var zeroPlus: ZeroPlus {
@@ -39,17 +42,26 @@ class BoardViewController: UIViewController, BoardViewDelegate {
         board.requestZeroBrainStorm()
         
         // Establish delegation with board view (View)
-        boardView.delegate = self
+        boardView.dataSource = self
         
         // Configure gesture recognizer
         tapRecognizer.numberOfTapsRequired = 1
         doubleTouchRecognizer.numberOfTouchesRequired = 2
         tripleTouchRecognizer.numberOfTouchesRequired = 3
+        
+        // Add rounded corner to console
+        consoleTextView.layer.cornerRadius = 10
+        
+        // Link shared instance
+        BoardViewController.sharedInstance = self
     }
     
     @IBAction func didTap(_ sender: UITapGestureRecognizer) {
         let co = boardView.onBoard(sender.location(in: boardView))
         board.put(at: co)
+        
+        // Clear console logs
+        self.consoleTextView.text = ""
         
         // Prevent the player from making a move when the computer is thinking.
         boardView.isUserInteractionEnabled = false
@@ -85,6 +97,7 @@ class BoardViewController: UIViewController, BoardViewDelegate {
         }
         
         boardImgView.frame = boardView.frame
+        consoleTextView.layoutIfNeeded()
         
         // Reset scaling factor
         sender.scale = 1
@@ -112,27 +125,39 @@ extension BoardViewController: BoardDelegate {
     }
     
     func boardDidUpdate(pieces: [[Piece]]) {
-        // Transfer the current arrangement of pieces to board view for display
-        boardView.pieces = pieces
         
         // Make it so that the user can make their move
         DispatchQueue.main.async {[unowned self] in
             self.boardView.isUserInteractionEnabled = true
+            self.boardView.updateDisplay()
         }
+
     }
     
 }
 
 extension BoardViewController: VisualizationDelegate {
     func activeMapUpdated(activeMap: [[Bool]]?) {
-        DispatchQueue.main.async {
-            self.boardView.activeMap = activeMap
-        }
+        // Do nothing
     }
     
     func historyDidUpdate(history: History?) {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async {[unowned self] in
+            if self.consoleTextView.isHidden {return}
             self.boardView.zeroPlusHistory = history
+            if let idc =  self.board.zeroPlus.cortex as? IterativeDeepeningCortex {
+                if let move = idc.bestMove, self.lastMove == nil ||
+                    (move.co != self.lastMove!.co || move.score != self.lastMove!.score) {
+                    self.lastMove = move
+                    
+                    let log = "\ttime = \(self.board.zeroPlus.duration) s\n"
+                        + "\trow = \(move.co.row), "
+                        + "\tcolumn = \(move.co.col)\n"
+                        + "\tscore = \(move.score)\n\n"
+                    
+                    self.consoleTextView.text += log
+                }
+            }
         }
     }
 }

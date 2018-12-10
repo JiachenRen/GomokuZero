@@ -328,7 +328,7 @@ extension Board {
     func load(_ game: String) {
         let segments = game.split(separator: "|")
         dimension = Int(segments[0])!
-        restart() // Reset everything
+        clear() // Reset everything
         history.load(String(segments[1]))
         for co in history.stack { // Replay history
             set(co, curPlayer)

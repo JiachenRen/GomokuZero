@@ -18,6 +18,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pGY-df-7Dm">
+                                <rect key="frame" x="20" y="40" width="335" height="607"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="17"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="board_d" translatesAutoresizingMaskIntoConstraints="NO" id="I2D-VW-Gey">
                                 <rect key="frame" x="19" y="175" width="337.5" height="337.5"/>
                             </imageView>
@@ -32,7 +38,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="pGY-df-7Dm" secondAttribute="bottom" constant="20" id="5Hp-r0-ccq"/>
+                            <constraint firstItem="pGY-df-7Dm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="6R7-TN-vqU"/>
                             <constraint firstItem="I2D-VW-Gey" firstAttribute="centerY" secondItem="2NL-PJ-Jjb" secondAttribute="centerY" id="9qV-BZ-Mt2"/>
+                            <constraint firstItem="pGY-df-7Dm" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="M1w-em-CSb"/>
                             <constraint firstItem="2NL-PJ-Jjb" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="MgM-Iw-yX2"/>
                             <constraint firstItem="I2D-VW-Gey" firstAttribute="width" secondItem="2NL-PJ-Jjb" secondAttribute="width" id="Pdm-mO-N45"/>
                             <constraint firstItem="2NL-PJ-Jjb" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.9" priority="750" id="RKQ-uF-lCE"/>
@@ -42,6 +51,7 @@
                             <constraint firstItem="I2D-VW-Gey" firstAttribute="centerX" secondItem="2NL-PJ-Jjb" secondAttribute="centerX" id="n6d-c5-57g"/>
                             <constraint firstItem="2NL-PJ-Jjb" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.9" priority="750" id="sft-Tl-Hc6"/>
                             <constraint firstItem="2NL-PJ-Jjb" firstAttribute="width" relation="lessThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.9" id="tEm-GD-Koq"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="pGY-df-7Dm" secondAttribute="trailing" constant="20" id="wjI-Jl-bmx"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <connections>
@@ -55,6 +65,7 @@
                     <connections>
                         <outlet property="boardImgView" destination="I2D-VW-Gey" id="GBD-TU-dHK"/>
                         <outlet property="boardView" destination="2NL-PJ-Jjb" id="mVj-3Q-iSB"/>
+                        <outlet property="consoleTextView" destination="pGY-df-7Dm" id="ACM-Ws-Lgb"/>
                         <outlet property="doubleTouchRecognizer" destination="bM6-Mm-Trz" id="4BC-fd-Hph"/>
                         <outlet property="panRecognizer" destination="cTj-FF-4Xo" id="uwA-p2-pN2"/>
                         <outlet property="pinchRecognizer" destination="OvN-Qh-j52" id="a7m-gj-jn6"/>
@@ -89,7 +100,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="952.79999999999995" y="602.24887556221893"/>
+            <point key="canvasLocation" x="953" y="644"/>
         </scene>
         <!--ContainerVC-->
         <scene sceneID="QIx-Ge-P7y">
@@ -321,6 +332,67 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5cW-fD-Mbh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2519" y="-124"/>
+        </scene>
+        <!--Saved Games-->
+        <scene sceneID="KWw-Fa-Kr2">
+            <objects>
+                <collectionViewController title="Saved Games" id="8cu-mH-wVb" customClass="BrowseCVC" customModule="Gomoku_Zero_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="8jb-el-ECz">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9L3-DA-J9I">
+                            <size key="itemSize" width="270" height="310"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="15" minY="15" maxX="15" maxY="15"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="browse-cell" id="aED-dR-WUx" customClass="BrowseCell" customModule="Gomoku_Zero_iOS" customModuleProvider="target">
+                                <rect key="frame" x="52.5" y="15" width="270" height="310"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                    <rect key="frame" x="0.0" y="0.0" width="270" height="310"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aet-nh-Mx8" customClass="BoardView" customModule="Gomoku_Zero_iOS" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="270" height="270"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="aet-nh-Mx8" secondAttribute="height" multiplier="1:1" id="KVt-Oi-Fnc"/>
+                                            </constraints>
+                                        </view>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Saved Game" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CBd-Ra-fl8">
+                                            <rect key="frame" x="86.5" y="280" width="97" height="20"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="aet-nh-Mx8" firstAttribute="width" secondItem="aED-dR-WUx" secondAttribute="width" id="1BJ-kw-JRp"/>
+                                    <constraint firstAttribute="bottom" secondItem="CBd-Ra-fl8" secondAttribute="bottom" constant="10" id="4yl-hz-exd"/>
+                                    <constraint firstItem="CBd-Ra-fl8" firstAttribute="centerX" secondItem="aED-dR-WUx" secondAttribute="centerX" id="cwn-Of-3b6"/>
+                                    <constraint firstItem="aet-nh-Mx8" firstAttribute="top" secondItem="aED-dR-WUx" secondAttribute="top" id="hYJ-0H-YI7"/>
+                                    <constraint firstItem="aet-nh-Mx8" firstAttribute="centerX" secondItem="aED-dR-WUx" secondAttribute="centerX" id="tC5-LP-6Zk"/>
+                                    <constraint firstItem="CBd-Ra-fl8" firstAttribute="top" secondItem="aet-nh-Mx8" secondAttribute="bottom" constant="10" id="tsu-Td-IJh"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="boardView" destination="aet-nh-Mx8" id="XN5-b3-QKQ"/>
+                                    <outlet property="nameLabel" destination="CBd-Ra-fl8" id="gBe-qf-kej"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="8cu-mH-wVb" id="VWc-D2-Uiu"/>
+                            <outlet property="delegate" destination="8cu-mH-wVb" id="d6C-VU-DKv"/>
+                        </connections>
+                    </collectionView>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="e01-Dw-TIM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2517.5999999999999" y="616.64167916041981"/>
         </scene>
         <!--Algorithm-->
         <scene sceneID="aeM-hC-Mro">
@@ -629,6 +701,7 @@
                     <connections>
                         <segue destination="wyh-wM-NpZ" kind="show" identifier="config-segue" id="lkb-P2-glg"/>
                         <segue destination="wtv-gl-6Pe" kind="show" identifier="board-segue" id="g1S-2I-ZMl"/>
+                        <segue destination="8cu-mH-wVb" kind="show" identifier="browse-segue" id="QsG-IC-7IW"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M1B-xO-ekw" userLabel="First Responder" sceneMemberID="firstResponder"/>

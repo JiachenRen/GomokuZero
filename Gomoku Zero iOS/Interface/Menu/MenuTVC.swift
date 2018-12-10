@@ -25,7 +25,8 @@ class MenuTVC: UITableViewController {
         .action(title: "Undo", handler: sharedBoard.undo),
         .action(title: "Redo", handler: sharedBoard.redo),
         .submenu(title: "Board", segueId: "board-segue"),
-        .action(title: "Save", handler: save)
+        .action(title: "Save", handler: save),
+        .submenu(title: "Browse Saved", segueId: "browse-segue")
     ]
     
     override func viewDidLoad() {
@@ -98,6 +99,7 @@ func save() {
     }
     
     alert.addAction(UIAlertAction(title: "Save", style: .default) {_ in
+        ContainerVC.sharedInstance?.alert(title: "Saving...", dismissAfter: 0.5)
         Game.save(sharedBoard, name: alert.textFields![0].text!)
     })
     
