@@ -40,7 +40,7 @@ class ThemeCVC: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let vc = (navigationController?.parent as? ContainerVC)?.mainViewController as? BoardViewController {
+        if let vc = BoardViewController.sharedInstance {
             vc.boardImgView.image = themes[indexPath.row]
         }
         ContainerVC.sharedInstance?.closeLeft()

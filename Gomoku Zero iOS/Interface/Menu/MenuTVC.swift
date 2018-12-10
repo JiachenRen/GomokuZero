@@ -21,7 +21,7 @@ class MenuTVC: UITableViewController {
             sharedBoard.restart()
             ContainerVC.sharedInstance?.closeLeft()
         },
-        .submenu(title: "AI Configuration", segueId: "config-segue"),
+        .submenu(title: "AI Config.", segueId: "config-segue"),
         .action(title: "Undo", handler: sharedBoard.undo),
         .action(title: "Redo", handler: sharedBoard.redo),
         .submenu(title: "Board", segueId: "board-segue"),

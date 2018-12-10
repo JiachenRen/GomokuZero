@@ -25,7 +25,14 @@ class ConfigTVC: UITableViewController {
         
         tableView.separatorStyle = .none
     }
-
+    
+    @IBAction func applyButtonTapped(_ sender: UIBarButtonItem) {
+        alert(title: "AI Config. Updated", dismissAfter: 1)
+        ContainerVC.sharedInstance?.closeLeft()
+        Configuration.apply()
+        sharedBoard.requestZeroBrainStorm()
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {

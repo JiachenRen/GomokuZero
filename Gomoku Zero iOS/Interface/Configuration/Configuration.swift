@@ -145,6 +145,11 @@ extension Configuration {
     static func apply() {
         sharedBoard.zeroXzero = false
         
+        if !Configuration.black.enabled && !Configuration.white.enabled {
+            sharedBoard.zeroIdentity = .none
+            return
+        }
+        
         let zero1 = ZeroPlus()
         zero1.identity = .black
         zero1.visDelegate = sharedBoard.zeroPlus.visDelegate

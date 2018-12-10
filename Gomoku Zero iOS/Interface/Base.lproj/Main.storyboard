@@ -327,7 +327,13 @@
                             <outlet property="delegate" destination="wyh-wM-NpZ" id="gJT-Ue-szu"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Configuration" id="akG-TM-ZqZ"/>
+                    <navigationItem key="navigationItem" title="Configuration" id="akG-TM-ZqZ">
+                        <barButtonItem key="rightBarButtonItem" title="Apply" id="V5A-1X-mdT">
+                            <connections>
+                                <action selector="applyButtonTapped:" destination="wyh-wM-NpZ" id="nVf-cF-U3g"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5cW-fD-Mbh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
