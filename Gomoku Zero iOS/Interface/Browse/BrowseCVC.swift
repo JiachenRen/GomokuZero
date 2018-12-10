@@ -62,3 +62,14 @@ class BrowseCVC: UICollectionViewController {
     }
 
 }
+
+extension BrowseCVC: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        var itemSize = (collectionViewLayout as! UICollectionViewFlowLayout).itemSize
+        let oldWidth = itemSize.width
+        let width = collectionView.bounds.width - 15 * 2
+        itemSize.height *= width / oldWidth
+        itemSize.width = width
+        return itemSize
+    }
+}
