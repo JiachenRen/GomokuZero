@@ -121,13 +121,6 @@
 			remoteGlobalIDString = 1F60C35D2168232C00580C99;
 			remoteInfo = "Gomoku Zero";
 		};
-		1FE1AE1021BC1A3C008E46AE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1F60C3562168232C00580C99 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 1F60C35D2168232C00580C99;
-			remoteInfo = "Gomoku Zero";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -624,7 +617,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				1FE1AE1121BC1A3C008E46AE /* PBXTargetDependency */,
 			);
 			name = "Gomoku Zero iOS";
 			productName = "Gomoku Zero iOS";
@@ -924,11 +916,6 @@
 			isa = PBXTargetDependency;
 			target = 1F60C35D2168232C00580C99 /* Gomoku Zero */;
 			targetProxy = 1F60C37F2168232E00580C99 /* PBXContainerItemProxy */;
-		};
-		1FE1AE1121BC1A3C008E46AE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 1F60C35D2168232C00580C99 /* Gomoku Zero */;
-			targetProxy = 1FE1AE1021BC1A3C008E46AE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

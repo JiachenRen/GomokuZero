@@ -120,7 +120,7 @@ protocol ViewControllerDelegate: AnyObject {
 extension BoardViewController: BoardDelegate {
     func gameHasEnded(winner: Piece, coordinates: [Coordinate], popDialogue: Bool) {
         self.boardView.winningCoordinates = coordinates
-        let w = winner == .black ? "Black Wins!" : "White Wins!"
+        let w = winner == .black ? "Black Wins!" : winner == .none ? "Draw!" : "White Wins!"
         alert(title: w)
     }
     

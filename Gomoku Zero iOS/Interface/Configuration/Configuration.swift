@@ -38,9 +38,9 @@ class Configuration {
         ],
         .monteCarlo: [
             ToggleConfig(title: "Randomized Expansion", isOn: true),
-            StepperConfig(title: "Timeout (s)", min: 1, max: 60, val: 3),
-            StepperConfig(title: "Sim. Depth", min: 1, max: 20, val: 6),
-            StepperConfig(title: "Breadth", min: 1, max: 20, val: 10)
+            StepperConfig(title: "Timeout (s)", min: 1, max: 60, val: 5),
+            StepperConfig(title: "Sim. Depth", min: 1, max: 20, val: 8),
+            StepperConfig(title: "Breadth", min: 1, max: 20, val: 8)
         ],
         .zeroMax: [
             ToggleConfig(title: "Randomized Selection", isOn: true),
