@@ -50,9 +50,20 @@ class BrowseCVC: UICollectionViewController {
         })
         
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive) {[unowned self] _ in
-            Game.ctx.delete(game)
-            self.games = Game.retrieve()
-            collectionView.reloadData()
+            // Delete game from core data
+            do {
+                Game.ctx.delete(game)
+                try Game.ctx.save()
+            } catch let e {
+                print(e)
+            }
+            
+            // Delete game from data source
+            let idx = self.games.firstIndex(of: game)!
+            self.games.remove(at: idx)
+            
+            // Update collection view
+            collectionView.deleteItems(at: [IndexPath(row: idx, section: 0)])
             ContainerVC.sharedInstance?.alert(title: "Deleted \"\(game.name ?? "Untitled")\"")
         })
         

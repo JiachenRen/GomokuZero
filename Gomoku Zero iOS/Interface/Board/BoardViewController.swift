@@ -52,6 +52,9 @@ class BoardViewController: UIViewController, BoardViewDataSource {
         // Add rounded corner to console
         consoleTextView.layer.cornerRadius = 10
         
+        // Make console invisible by default
+        consoleTextView.isHidden = true
+        
         // Link shared instance
         BoardViewController.sharedInstance = self
     }
