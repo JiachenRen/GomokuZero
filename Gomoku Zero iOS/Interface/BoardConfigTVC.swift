@@ -58,6 +58,13 @@ class BoardConfigTVC: UITableViewController {
             SegueConfig(title: "Themes", selectedIdx: 0, subtitles: [""]) { [unowned self] in
                 self.performSegue(withIdentifier: "theme-segue", sender: nil)
             },
+            SwitchConfig(title: "Rounded Corner", isOn: BoardViewConfig.roundedCorner) {
+                BoardViewConfig.roundedCorner = $0
+                if let vc = BoardViewController.sharedInstance {
+                    vc.boardView.setNeedsDisplay()
+                    vc.updateCornerRadius()
+                }
+            },
             SwitchConfig(title: "Logs", isOn: !BoardViewController.sharedInstance!.consoleTextView.isHidden) {
                 BoardViewController.sharedInstance!.consoleTextView.isHidden = !$0
             }

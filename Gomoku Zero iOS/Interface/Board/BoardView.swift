@@ -68,8 +68,14 @@ import UIKit
         super.draw(dirtyRect)
         
         if BoardViewConfig.solidBgd {
-            UIColor(red: 1, green: 0.807, blue: 0.35, alpha: 0.5).withAlphaComponent(BoardViewConfig.bgdAlpha).setFill()
-            UIBezierPath(rect: bounds).fill()
+            UIColor(red: 1, green: 0.807, blue: 0.35, alpha: 0.5)
+                .withAlphaComponent(BoardViewConfig.bgdAlpha)
+                .setFill()
+            if BoardViewConfig.roundedCorner {
+                UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius).fill()
+            } else {
+                UIBezierPath(rect: bounds).fill()
+            }
         }
         
         // Draw board gird lines
@@ -341,7 +347,7 @@ extension BoardView {
     }
     
     var gap: CGFloat {
-        return self.bounds.width / CGFloat(dim)
+        return self.bounds.width / (CGFloat(dim) + cornerOffsetScale * 2 - 1)
     }
     
     var dim: Int {
@@ -356,8 +362,16 @@ extension BoardView {
         return dataSource?.board ?? Board(dimension: 19)
     }
     
+    var cornerOffsetScale: CGFloat {
+        return 0.7
+    }
+    
     var cornerOffset: CGFloat {
-        return gap / 2
+        return gap * cornerOffsetScale
+    }
+    
+    var cornerRadius: CGFloat {
+        return bounds.width * 1 / 20
     }
 }
 
@@ -369,4 +383,5 @@ class BoardViewConfig {
     public static var solidBgd: Bool = true
     public static var bgdAlpha: CGFloat = 1
     public static var themeImage: UIImage = UIImage(named: "board_d")!
+    public static var roundedCorner: Bool = true
 }

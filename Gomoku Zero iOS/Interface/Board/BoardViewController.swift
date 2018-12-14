@@ -49,8 +49,9 @@ class BoardViewController: UIViewController, BoardViewDataSource {
         doubleTouchRecognizer.numberOfTouchesRequired = 2
         tripleTouchRecognizer.numberOfTouchesRequired = 3
         
-        // Add rounded corner to console
+        // Add rounded corners
         consoleTextView.layer.cornerRadius = 10
+        updateCornerRadius()
         
         // Make console invisible by default
         consoleTextView.isHidden = true
@@ -99,11 +100,21 @@ class BoardViewController: UIViewController, BoardViewDataSource {
             boardImgView.setNeedsDisplay()
         }
         
+        // Update frames
         boardImgView.frame = boardView.frame
         consoleTextView.layoutIfNeeded()
         
+        // Update corner radius
+        updateCornerRadius()
+        
         // Reset scaling factor
         sender.scale = 1
+    }
+    
+    /// Update the corner radius of boardImgView based on BoardViewConfig and boardView
+    func updateCornerRadius() {
+        let r = BoardViewConfig.roundedCorner ? boardView.cornerRadius : 0
+        boardImgView.layer.cornerRadius = r
     }
     
     @IBAction func didDoubleTouch(_ sender: UITapGestureRecognizer) {
